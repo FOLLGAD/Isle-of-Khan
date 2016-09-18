@@ -1,5 +1,4 @@
 // gameplay functions
-
 function walk() {
   if (upPressed && !downPressed) {
     idleY = false;
@@ -13,7 +12,6 @@ function walk() {
     charVelY = 0;
     idleY = true;
   }
-
   if (rightPressed && !leftPressed) {
     idleX = false;
     charVelX = walkSpeed;
@@ -27,9 +25,10 @@ function walk() {
     idleX = true;
   }
 
-  if (mouseDown) {
-    //TODO: get direction of mouse in comparison of charX, charY
-
+  if (spacePressed) {
+    attacking = true;
+  } else if (attackingFrame == 0 && !spacePressed){
+    attacking = false;
   }
 
   if (idleX && idleY) {
@@ -49,9 +48,8 @@ function walk() {
       charVelY = -walkSpeed * 0.7;
     }
   }
-
-  charY += charVelY;
   charX += charVelX;
+  charY += charVelY;
 
   if (charX + charWidth > mapSizeX) {
     charX = mapSizeX - charWidth;
@@ -69,10 +67,32 @@ function walk() {
   }else{
     frame = 0;
   }
+  if (attackingFrame + frameAdd * attackingSpeed < 3 && attacking) {
+    attackingFrame += frameAdd * attackingSpeed;
+  } else if (attackingFrame + frameAdd * attackingSpeed >= 3) {
+    attackingFrame = 0;
+    attacking = false;
+  }
+if (attacking) {
+attackingArea();
+}
   drawChar(direction);
 }
-function drawChar(direction, x, y, animation) {
-  if (idle) {
+function drawChar(direction) {
+  if (attacking) {
+    if (direction == "right") {
+      ctx.drawImage(attacking_right, 0, Math.floor(attackingFrame) * 8, 16, 8, charX, charY, charWidth * 2, charHeight);
+    }
+    else if (direction == "left") {
+      ctx.drawImage(attacking_left, 0, Math.floor(attackingFrame) * 8, 16, 8, charX - charWidth, charY, charWidth * 2, charHeight);
+    }
+    else if (direction == "down") {
+      ctx.drawImage(attacking_down, Math.floor(attackingFrame) * 8, 0, 8, 16, charX, charY, charWidth, charHeight * 2);
+    }
+    else if (direction == "up") {
+      ctx.drawImage(attacking_up, Math.floor(attackingFrame) * 8, 0, 8, 16, charX, charY - charHeight, charWidth, charHeight * 2);
+    }
+  } else if (idle) {
     if (direction == "right") {
       ctx.drawImage(idle_right, Math.floor(frame) * 8, 0, 8, 8, charX, charY, charWidth, charHeight );
     }
@@ -99,4 +119,22 @@ function drawChar(direction, x, y, animation) {
       ctx.drawImage(walk_up, Math.floor(frame) * 8, 0, 8, 8, charX, charY, charWidth, charHeight );
     }
   }
+}
+function attackingArea(){
+  if (direction == "up") {
+    attackingX = charX;
+    attackingY = charY - charHeight;
+  } else if (direction == "down") {
+    attackingX = charX;
+    attackingY = charY + charHeight;
+  } else if (direction == "right") {
+    attackingX = charX + charWidth;
+    attackingY = charY;
+  } else if (direction == "left") {
+    attackingX = charX - charWidth;
+    attackingY = charY;
+  }
+
+    ctx.fillStyle = "#000";
+    ctx.fillRect(attackingX, attackingY, 8*8, 8*8);
 }

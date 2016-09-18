@@ -42,7 +42,7 @@ function keyUpHandler(e) {
         frame = 0;
     }
     else if(e.keyCode == 32){
-        spacePressed = false;
+        spacePressed = true;
         frame = 0;
     }
 }

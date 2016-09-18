@@ -1,8 +1,8 @@
 
 // viewPoint, camera
 
-var tileMapWidth = mapArray[0].length;
-var tileMapHeight = mapArray.length;
+tileMapWidth = mapArray[0].length;
+tileMapHeight = mapArray.length;
 
 var mapSizeX = tileMapWidth * tileSize;
 var mapSizeY = tileMapHeight * tileSize;
@@ -14,17 +14,17 @@ var offsetMinY = 0;
 
 var camX = 0;
 var camY = 0;
-/*
+
 function isTileWall(t[i][j]) {
   if (t[i][j] == 3) {
     return true;
   } else {
     return false;
   }
-}*/
+}
 
 function viewPoint() {
-/*
+
   any_collision = false;
 
   for(i = 0; i < tileMapWidth; i++) {
@@ -39,7 +39,7 @@ function viewPoint() {
         }
       }
     }
-  }*/
+  }
 
   camX = charX + charWidth / 2 - canvas.width / 2;
   camY = charY + charHeight / 2 - canvas.height / 2;

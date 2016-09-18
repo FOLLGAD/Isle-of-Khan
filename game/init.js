@@ -1,8 +1,8 @@
-var canvas = document.getElementById("canvas");
-var ctx = canvas.getContext("2d");
 
-//Settings
-var attackingSpeed = 2.5;
+console.log("Init done.");
+var canvas = document.getElementById("canvas");
+console.log(canvas);
+var ctx = canvas.getContext("2d");
 
 var charX = canvas.width / 2;
 var charY = canvas.height / 2;
@@ -23,7 +23,6 @@ var walkSpeed = 5;
 var frameAdd = 0.1;
 
 var frame = 0;
-var attackingFrame = 0;
 var direction = "up";
 var arrows = [];
 var points = 0;
@@ -57,7 +56,4 @@ var idle_left = document.getElementById("idle_left");
 var idle_up = document.getElementById("idle_up");
 var tile_map = document.getElementById("tile_map");
 var crosshair = document.getElementById("crosshair");
-var attacking_up = document.getElementById("attacking_up");
-var attacking_down = document.getElementById("attacking_down");
-var attacking_left = document.getElementById("attacking_left");
-var attacking_right = document.getElementById("attacking_right");
+var hitting_up = document.getElementById("hitting_up");

@@ -12,7 +12,7 @@ function drawMap (){
   posY = 0;
 }
 function drawCrossHair() {
-  ctx.drawImage(crosshair, mousePosX + camX - 7 / 2 * 8, mousePosY + camY - 7 / 2 * 8, 7 * 8, 7 * 8)
+  ctx.drawImage(crosshair, mousePosX + camX - 0, mousePosY + camY, 5 * 6, 6 * 6)
 }
 
 // update, tick
