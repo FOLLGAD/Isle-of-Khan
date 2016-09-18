@@ -130,8 +130,6 @@ function walk() {
   drawChar(direction);
 }
 
-
-
 // update, tick
 
 function update() {
