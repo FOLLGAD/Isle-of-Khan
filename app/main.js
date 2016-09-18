@@ -6,12 +6,8 @@ define(function (require) {
     var keyHandler = require('./keyHandler');
     var map = require('./map');
     var viewPoint = require('./viewPoint');
-<<<<<<< HEAD
     var keyHandlers = require('./keyHandler');
     var character = require('./character');
     var coin = require('./coin');
     var update = require('./update');
 });
-=======
-});
->>>>>>> origin/master
