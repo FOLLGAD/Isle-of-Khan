@@ -3,7 +3,7 @@ define(function (require) {
     // with a relative require call,
     // like:
     var init = require('./init');
-    var keyHandlers = require('./keyHandler');
+    var keyHandler = require('./keyHandler');
     var map = require('./map');
     var viewPoint = require('./viewPoint');
 });
