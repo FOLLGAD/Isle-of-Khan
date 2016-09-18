@@ -6,5 +6,7 @@ define(function (require) {
     var map = require('./map');
     var viewPoint = require('./viewPoint');
     var keyHandlers = require('./keyHandler');
+    var character = require('./character');
+    var coin = require('./coin');
     var update = require('./update');
 });
