@@ -4,6 +4,10 @@ var ctx = canvas.getContext("2d");
 //Settings
 var attackingSpeed = 2;
 
+var fps = 60;
+var walkSpeed = 5;
+var frameAdd = 0.1;
+
 var charX = canvas.width / 2;
 var charY = canvas.height / 2;
 var charVelX = 0;
@@ -13,14 +17,10 @@ var charHeight = 64;
 
 var posX = 0;
 var posY = 0;
-var tileSize = 64;
+var tileSize = 8*8;
 
 var mousePosX = 0;
 var mousePosY = 0;
-
-var fps = 60;
-var walkSpeed = 5;
-var frameAdd = 0.1;
 
 var frame = 0;
 var attackingFrame = 0;
@@ -39,12 +39,13 @@ var downPressed = false;
 
 var spacePressed = false;
 
+var collisionY = false;
+var collisionX = false;
+var collision = false;
+
 // textures and resources
 
 ctx.imageSmoothingEnabled = false;
-
-var img = new Image();
-img.src = "resources/crosshair.png";
 
 var coin = document.getElementById("coin");
 var walk_right = document.getElementById("walk_right");

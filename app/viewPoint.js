@@ -14,32 +14,53 @@ var offsetMinY = 0;
 
 var camX = 0;
 var camY = 0;
-/*
-function isTileWall(t[i][j]) {
-  if (t[i][j] == 3) {
+
+function isTileWall(i, j) {
+  if (mapArray[i][j] == 3) {
     return true;
   } else {
     return false;
   }
-}*/
+}
+
+// checkar om spelaren går in i en vägg och sätter collision = true och annat skit
+
+function checkTileCollision(i, j) {
+  if(charX + charVelX + charWidth > j * tileSize && charX + charVelX < j * tileSize + tileSize) {
+    collisionY = true;
+  }
+  if(charY + charVelY + charHeight  > i * tileSize && charY + charVelY < i * tileSize + tileSize) {
+    collisionX = true;
+  }
+  if (collisionX && collisionY) {
+    collision = true;
+
+    if(charVelX > 0) {
+      charX = j * tileSize - charWidth;
+    } else if (charVelX < 0) {
+      charX = j * tileSize + tileSize;
+    }
+
+    if(charVelY > 0) {
+      charY = i * tileSize - charHeight;
+    } else if (charVelY < 0) {
+      charY = i * tileSize + tileSize;
+    }
+  }
+  console.log(collision, collisionX, collisionY);
+  collisionX = false;
+  collisionY = false;
+}
+
+function drawCollision() {
+  ctx.rect(charX, charY, charWidth, charHeight);
+  ctx.stroke();
+  ctx.rect(567, 64, tileSize, tileSize);
+  ctx.stroke();
+}
 
 function viewPoint() {
-/*
-  any_collision = false;
 
-  for(i = 0; i < tileMapWidth; i++) {
-    for(j = 0; j < tileMapHeight; j++) {
-      tile t = tilemap.tile_at(i, j)
-      if(isTileWall()) {
-        x_overlaps = (object.left < t.right) && (object.right > t.left)
-        y_overlaps = (object.top < t.bottom) && (object.bottom > t.top)
-        collision = x_overlaps && y_overlaps
-        if(collision) {
-          any_collision = true
-        }
-      }
-    }
-  }*/
 
   camX = charX + charWidth / 2 - canvas.width / 2;
   camY = charY + charHeight / 2 - canvas.height / 2;
