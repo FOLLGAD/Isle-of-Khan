@@ -119,6 +119,7 @@ function drawChar(direction) {
       ctx.drawImage(walk_up, Math.floor(frame) * 8, 0, 8, 8, charX, charY, charWidth, charHeight );
     }
   }
+  //TODO: lägga till indivuella ben, så man kan gå &  slå samtidigt;
 }
 function attackingArea(){
   if (direction == "up") {
@@ -135,6 +136,6 @@ function attackingArea(){
     attackingY = charY;
   }
 
-    ctx.fillStyle = "#000";
-    ctx.fillRect(attackingX, attackingY, 8*8, 8*8);
+    //ctx.fillStyle = "#000";
+    //ctx.fillRect(attackingX, attackingY, 8*8, 8*8);
 }

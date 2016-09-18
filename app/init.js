@@ -2,7 +2,7 @@ var canvas = document.getElementById("canvas");
 var ctx = canvas.getContext("2d");
 
 //Settings
-var attackingSpeed = 2.5;
+var attackingSpeed = 2;
 
 var charX = canvas.width / 2;
 var charY = canvas.height / 2;
