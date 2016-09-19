@@ -12,14 +12,14 @@ function drawMap (){
   posY = 0;
 }
 function drawCrossHair() {
-  ctx.drawImage(crosshair, mousePosX + camX - 7 / 2 * 8, mousePosY + camY - 7 / 2 * 8, 7 * 8, 7 * 8)
+  ctx.drawImage(crosshair, mousePosX + camX - 0, mousePosY + camY, 5 * 6, 6 * 6)
 }
 
 // update, tick
 function update() {
   //TODO:0 enemies & HP
-  //TODO:10 slå med musklick/space
-  //TODO:20 slåanimation
+  //DONE:10 slå med musklick/space
+  //DONE:0 slåanimation
   ctx.save();
   viewPoint();
   ctx.clearRect(-camX, -camY, canvas.width, canvas.height); //Clears viewPoint
@@ -28,7 +28,7 @@ function update() {
   walk();
   ctx.fillText(camX + ", " + camY, camX + 100, camY + 100);
   drawCrossHair();
-  ctx.fillText(charX + ", " + charY, 200, 200);
+  ctx.fillText(charX + ", " + charY, camX + 100, camY + 200);
   ctx.restore();
 }
 

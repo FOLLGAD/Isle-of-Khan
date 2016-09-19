@@ -1,5 +1,4 @@
 // gameplay functions
-
 function walk() {
   if (upPressed && !downPressed) {
     idleY = false;
@@ -13,7 +12,6 @@ function walk() {
     charVelY = 0;
     idleY = true;
   }
-
   if (rightPressed && !leftPressed) {
     idleX = false;
     charVelX = walkSpeed;
@@ -27,9 +25,10 @@ function walk() {
     idleX = true;
   }
 
-  if (mouseDown) {
-    //TODO: get direction of mouse in comparison of charX, charY
-
+  if (spacePressed) {
+    attacking = true;
+  } else if (attackingFrame == 0 && !spacePressed){
+    attacking = false;
   }
 
   if (idleX && idleY) {
@@ -37,6 +36,7 @@ function walk() {
   } else {
     idle = false;
   }
+
   if (charVelX != 0 && charVelY != 0) {
     if (charVelX > 0) {
       charVelX = walkSpeed * 0.7;
@@ -50,8 +50,23 @@ function walk() {
     }
   }
 
-  charY += charVelY;
-  charX += charVelX;
+  collision = false;
+
+  for(i = 0; i < tileMapWidth; i++) {
+    for(j = 0; j < tileMapHeight; j++) {
+      if(isTileWall(i, j)) {
+        checkTileCollision(i, j);
+      }
+    }
+  }
+
+  if(attacking) {
+    charX += charVelX * 0.5;
+    charY += charVelY * 0.5;
+  } else if (!collision) {
+    charX += charVelX;
+    charY += charVelY;
+  }
 
   if (charX + charWidth > mapSizeX) {
     charX = mapSizeX - charWidth;
@@ -64,15 +79,51 @@ function walk() {
     charY = 0;
   }
 
-  if (frame + frameAdd < 4) {
+  if (!idle && frame + frameAdd < 4) {
     frame += frameAdd;
   }else{
     frame = 0;
   }
+  if (attackingFrame + frameAdd * attackingSpeed < 3 && attacking) {
+    attackingFrame += frameAdd * attackingSpeed;
+  } else if (attackingFrame + frameAdd * attackingSpeed >= 3) {
+    attackingFrame = 0;
+    attacking = false;
+  }
+  
+  if (attacking) {
+    attackingArea();
+  }
   drawChar(direction);
 }
-function drawChar(direction, x, y, animation) {
-  if (idle) {
+function drawChar(direction) {
+  if (attacking) {
+    if (direction == "right") {
+      if (Math.floor(frame) == 1 || Math.floor(frame) == 3) {
+        ctx.drawImage(legs, 0 * 8, 0, 8, 8, charX, charY, charWidth*2, charHeight*2 );
+        console.log("fameboi");
+      }
+      ctx.drawImage(attacking_right, 0, Math.floor(attackingFrame) * 8, 16, 8, charX, charY, charWidth * 2, charHeight);
+    }
+    else if (direction == "left") {
+      if (Math.floor(frame) == 1 || Math.floor(frame) == 3) {
+        ctx.drawImage(legs, Math.floor(frame/2) * 8, 0, 8, 8, charX, charY, charWidth, charHeight );
+      }
+      ctx.drawImage(attacking_left, 0, Math.floor(attackingFrame) * 8, 16, 8, charX - charWidth, charY, charWidth * 2, charHeight);
+    }
+    else if (direction == "down") {
+      if (Math.floor(frame) == 1 || Math.floor(frame) == 3) {
+        ctx.drawImage(legs, Math.floor(frame/2) * 8, 0, 8, 8, charX, charY, charWidth, charHeight );
+      }
+      ctx.drawImage(attacking_down, Math.floor(attackingFrame) * 8, 0, 8, 16, charX, charY, charWidth, charHeight * 2);
+    }
+    else if (direction == "up") {
+      if (Math.floor(frame) == 1 || Math.floor(frame) == 3) {
+        ctx.drawImage(legs, Math.floor(frame/2) * 8, 0, 8, 8, charX, charY, charWidth, charHeight );
+      }
+      ctx.drawImage(attacking_up, Math.floor(attackingFrame) * 8, 0, 8, 16, charX, charY - charHeight, charWidth, charHeight * 2);
+    }
+  } else if (idle) {
     if (direction == "right") {
       ctx.drawImage(idle_right, Math.floor(frame) * 8, 0, 8, 8, charX, charY, charWidth, charHeight );
     }
@@ -99,4 +150,23 @@ function drawChar(direction, x, y, animation) {
       ctx.drawImage(walk_up, Math.floor(frame) * 8, 0, 8, 8, charX, charY, charWidth, charHeight );
     }
   }
+  //TODO:10 lägga till indivuella ben, så man kan gå &  slå samtidigt; (typ fixat, men funkar inte)
+}
+function attackingArea(){
+  if (direction == "up") {
+    attackingX = charX;
+    attackingY = charY - charHeight;
+  } else if (direction == "down") {
+    attackingX = charX;
+    attackingY = charY + charHeight;
+  } else if (direction == "right") {
+    attackingX = charX + charWidth;
+    attackingY = charY;
+  } else if (direction == "left") {
+    attackingX = charX - charWidth;
+    attackingY = charY;
+  }
+
+    //ctx.fillStyle = "#000";
+    //ctx.fillRect(attackingX, attackingY, 8*8, 8*8);
 }

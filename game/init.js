@@ -1,12 +1,8 @@
+
+console.log("Init done.");
 var canvas = document.getElementById("canvas");
+console.log(canvas);
 var ctx = canvas.getContext("2d");
-
-//Settings
-var attackingSpeed = 2;
-
-var fps = 60;
-var walkSpeed = 5;
-var frameAdd = 0.1;
 
 var charX = canvas.width / 2;
 var charY = canvas.height / 2;
@@ -17,13 +13,16 @@ var charHeight = 64;
 
 var posX = 0;
 var posY = 0;
-var tileSize = 8*8;
+var tileSize = 64;
 
 var mousePosX = 0;
 var mousePosY = 0;
 
+var fps = 60;
+var walkSpeed = 5;
+var frameAdd = 0.1;
+
 var frame = 0;
-var attackingFrame = 0;
 var direction = "up";
 var arrows = [];
 var points = 0;
@@ -39,13 +38,12 @@ var downPressed = false;
 
 var spacePressed = false;
 
-var collisionY = false;
-var collisionX = false;
-var collision = false;
-
 // textures and resources
 
 ctx.imageSmoothingEnabled = false;
+
+var img = new Image();
+img.src = "resources/crosshair.png";
 
 var coin = document.getElementById("coin");
 var walk_right = document.getElementById("walk_right");
@@ -58,7 +56,4 @@ var idle_left = document.getElementById("idle_left");
 var idle_up = document.getElementById("idle_up");
 var tile_map = document.getElementById("tile_map");
 var crosshair = document.getElementById("crosshair");
-var attacking_up = document.getElementById("attacking_up");
-var attacking_down = document.getElementById("attacking_down");
-var attacking_left = document.getElementById("attacking_left");
-var attacking_right = document.getElementById("attacking_right");
+var hitting_up = document.getElementById("hitting_up");

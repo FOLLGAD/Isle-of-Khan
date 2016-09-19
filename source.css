@@ -16,3 +16,6 @@ grass_tile {
   width: 128px;
   height: 128px;
 }
+body {
+  background: #333333;
+}
