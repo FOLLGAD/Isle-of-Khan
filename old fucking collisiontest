@@ -1,0 +1,51 @@
+// checkar om spelaren går in i en vägg och sätter collision = true och annat skit
+
+function checkTileCollision(i, j) {
+  collisionY = false;
+  collisionX = false;
+  if(charX + charVelX + charWidth > j * tileSize && charX + charVelX < j * tileSize + tileSize) {
+    collisionY = true;
+  }
+  if(charY + charVelY + charHeight  > i * tileSize && charY + charVelY < i * tileSize + tileSize) {
+    collisionX = true;
+  }
+
+  //TODO: fixa så att skiten funkar
+  //TODO: Om charY + velY inte hamnar i en wall-tile, så ska den kunna gå. Samma med charX, velX
+console.log(charVelX, charVelY)
+  if (collisionX && collisionY) {
+    canGoY = false;
+    canGoX = false;
+    console.log("collision true");
+    console.log(charX);
+    console.log(charY);
+    if ((charX + charWidth - charVelX > j * tileSize && charX - charVelX < j * tileSize + tileSize)) {
+      //charVelX ska inte förändras
+      canGoX = false;
+      console.log("charX");
+    } else if ((charY -charVelY + charHeight > i * tileSize && charY -charVelY < i * tileSize + tileSize)) {
+      //charVelY ska inte förändras
+      canGoY = false;
+      console.log("charY");
+    }
+    if(!canGoX) {
+      if (charVelX > 0) {
+        charX = j * tileSize - charWidth;
+        charVelX = 0;
+      } else if (charVelX < 0) {
+        charX = j * tileSize + tileSize;
+        charVelX = 0;
+      }
+    }
+    if(!canGoY) {
+      if(charVelY > 0) {
+        charY = i * tileSize - charHeight;
+        charVelY = 0;
+      } else if (charVelY < 0) {
+        charY = i * tileSize + tileSize;
+        charVelY = 0;
+      }
+    }
+    console.log(canGoX, canGoY);
+  }
+}

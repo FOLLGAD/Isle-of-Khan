@@ -25,7 +25,10 @@ function update() {
   ctx.clearRect(-camX, -camY, canvas.width, canvas.height); //Clears viewPoint
   drawMap();
   drawCoin();
+  drawCollision();
   walk();
+  checkCharCollision();
+  drawChar();
   ctx.fillText(camX + ", " + camY, camX + 100, camY + 100);
   drawCrossHair();
   ctx.fillText(charX + ", " + charY, camX + 100, camY + 200);

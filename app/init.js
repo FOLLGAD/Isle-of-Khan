@@ -15,6 +15,9 @@ var charVelY = 0;
 var charWidth = 64;
 var charHeight = 64;
 
+var tileX = new Array;
+var tileY = new Array;
+
 var posX = 0;
 var posY = 0;
 var tileSize = 8*8;

@@ -23,44 +23,61 @@ function isTileWall(i, j) {
   }
 }
 
-// checkar om spelaren går in i en vägg och sätter collision = true och annat skit
+function tilesSurrounding() {
+  tileX[0] = (charX - charX % tileSize) / tileSize;
+  tileY[0] = (charY - charY % tileSize) / tileSize;
+  tileX[1] = tileX[0] + 1;
+  tileY[1] = tileY[0];
+  tileX[2] = tileX[0];
+  tileY[2] = tileY[0] + 1;
+  tileX[3] = tileX[1];
+  tileY[3] = tileY[2];
+  console.log(tileX, tileY);
+}
+
+function checkCharCollision() {
+  tilesSurrounding();
+  for(i = 0; i < 4; i++) {
+      if(isTileWall(tileX[i], tileY[i])) {
+        checkTileCollision(tileX[i], tileY[i]);
+        ctx.beginPath();
+        ctx.rect(tileX[i]*tileSize, tileY[i]*tileSize, tileSize, tileSize);
+        ctx.closePath();
+        ctx.stroke();
+        console.log("collision at " + tileX[i], tileY[i]);
+    }
+  }
+}
 
 function checkTileCollision(i, j) {
-  if(charX + charVelX + charWidth > j * tileSize && charX + charVelX < j * tileSize + tileSize) {
-    collisionY = true;
-  }
-  if(charY + charVelY + charHeight  > i * tileSize && charY + charVelY < i * tileSize + tileSize) {
-    collisionX = true;
-  }
-  if (collisionX && collisionY) {
-    collision = true;
+  var colDistanceX = (i * tileSize + tileSize / 2) - (charX + charWidth / 2);
+  var colDistanceY = (j * tileSize + tileSize / 2) - (charY + charHeight / 2);
+  console.log((j * tileSize + tileSize / 2));
+  console.log((charY + charHeight / 2))
+  charVelY = 0;
+  charVelX = 0;
 
-    if(charVelX > 0) {
-      charX = j * tileSize - charWidth;
-    } else if (charVelX < 0) {
-      charX = j * tileSize + tileSize;
-    }
+  ctx.beginPath();
+  ctx.rect((j * tileSize + tileSize / 2), (charY + charHeight / 2), charWidth, charHeight);
+  ctx.closePath();
+  ctx.stroke();
 
-    if(charVelY > 0) {
-      charY = i * tileSize - charHeight;
-    } else if (charVelY < 0) {
-      charY = i * tileSize + tileSize;
-    }
+  if (Math.abs(colDistanceX) < Math.abs(colDistanceY)) {
+    // Flyttas till höger/vänster , X-led
+    console.log("fuck");
+    console.log(colDistanceX);
+    charY += colDistanceX;
+  } else {
+    // Flyttas till ner/upp , Y-led
+    console.log("you");
+    charX += colDistanceY;
   }
-  console.log(collision, collisionX, collisionY);
-  collisionX = false;
-  collisionY = false;
 }
 
 function drawCollision() {
-  ctx.rect(charX, charY, charWidth, charHeight);
-  ctx.stroke();
-  ctx.rect(567, 64, tileSize, tileSize);
-  ctx.stroke();
 }
 
 function viewPoint() {
-
 
   camX = charX + charWidth / 2 - canvas.width / 2;
   camY = charY + charHeight / 2 - canvas.height / 2;

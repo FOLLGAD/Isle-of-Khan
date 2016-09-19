@@ -50,20 +50,10 @@ function walk() {
     }
   }
 
-  collision = false;
-
-  for(i = 0; i < tileMapWidth; i++) {
-    for(j = 0; j < tileMapHeight; j++) {
-      if(isTileWall(i, j)) {
-        checkTileCollision(i, j);
-      }
-    }
-  }
-
   if(attacking) {
     charX += charVelX * 0.5;
     charY += charVelY * 0.5;
-  } else if (!collision) {
+  } else {
     charX += charVelX;
     charY += charVelY;
   }
@@ -90,13 +80,12 @@ function walk() {
     attackingFrame = 0;
     attacking = false;
   }
-  
+
   if (attacking) {
     attackingArea();
   }
-  drawChar(direction);
 }
-function drawChar(direction) {
+function drawChar() {
   if (attacking) {
     if (direction == "right") {
       if (Math.floor(frame) == 1 || Math.floor(frame) == 3) {
