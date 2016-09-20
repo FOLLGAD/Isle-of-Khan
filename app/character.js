@@ -50,6 +50,7 @@ function walk() {
     }
   }
 
+  // Sätter position på karaktär beroende på charVel.
   if(attacking) {
     charX += charVelX * 0.5;
     charY += charVelY * 0.5;
@@ -74,6 +75,7 @@ function walk() {
   }else{
     frame = 0;
   }
+
   if (attackingFrame + frameAdd * attackingSpeed < 3 && attacking) {
     attackingFrame += frameAdd * attackingSpeed;
   } else if (attackingFrame + frameAdd * attackingSpeed >= 3) {
@@ -86,6 +88,7 @@ function walk() {
   }
 }
 function drawChar() {
+  //TODO:0 lägga till indivuella ben, så man kan gå &  slå samtidigt; (typ fixat, men funkar inte)
   if (attacking) {
     if (direction == "right") {
       if (Math.floor(frame) == 1 || Math.floor(frame) == 3) {
@@ -139,8 +142,16 @@ function drawChar() {
       ctx.drawImage(walk_up, Math.floor(frame) * 8, 0, 8, 8, charX, charY, charWidth, charHeight );
     }
   }
-  //TODO:10 lägga till indivuella ben, så man kan gå &  slå samtidigt; (typ fixat, men funkar inte)
 }
+
+function drawHp() {
+  ctx.beginPath();
+  ctx.fillStyle = "#4400ff";
+  ctx.fillRect(charX - 20, charY + charWidth / 2 - 100, hp * 10, 10);
+  ctx.fillStyle = "#000";
+  ctx.closePath();
+}
+
 function attackingArea(){
   if (direction == "up") {
     attackingX = charX;

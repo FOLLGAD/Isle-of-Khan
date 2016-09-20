@@ -33,10 +33,9 @@ function tilesSurrounding() {
   tileX[3] = tileX[1];
   tileY[3] = tileY[2];
   ctx.beginPath();
-  ctx.rect(tileX[0]*tileSize, tileY[0]*tileSize, tileSize*2, tileSize*2);
+  ctx.rect(tileX[0] * tileSize, tileY[0] * tileSize, tileSize * 2, tileSize * 2);
   ctx.closePath();
   ctx.stroke();
-  console.log(tileX, tileY);
 }
 
 function checkCharCollision() {
@@ -44,7 +43,6 @@ function checkCharCollision() {
   for(i = 0; i < 4; i++) {
       if(isTileWall(tileX[i], tileY[i])) {
         checkTileCollision(tileX[i], tileY[i]);
-        console.log("collision at " + tileX[i], tileY[i]);
     }
   }
 }
@@ -52,24 +50,31 @@ function checkCharCollision() {
 function checkTileCollision(i, j) {
   var colDistanceX = (i * tileSize + tileSize / 2) - (charX + charWidth / 2);
   var colDistanceY = (j * tileSize + tileSize / 2) - (charY + charHeight / 2);
-  console.log((j * tileSize + tileSize / 2));
-  console.log((charY + charHeight / 2))
-  charVelY = 0;
-  charVelX = 0;
 
   ctx.beginPath();
-  ctx.rect((j * tileSize + tileSize / 2), (charY + charHeight / 2), charWidth, charHeight);
+  ctx.rect((i * tileSize + tileSize / 2), (charY + charHeight / 2), charWidth, charHeight);
   ctx.closePath();
   ctx.stroke();
 
   if (Math.abs(colDistanceX) < Math.abs(colDistanceY)) {
-    // Flyttas till höger/vänster , X-led
-    console.log(colDistanceX);
-    charX += colDistanceX;
-  } else {
     // Flyttas till ner/upp , Y-led
-    console.log("you");
-    charY += colDistanceY;
+    if (colDistanceY > 0) {
+      charY = j * tileSize - charWidth;
+      console.log("1");
+    } else {
+      charY = j * tileSize + tileSize;
+      console.log("2");
+    }
+  } else {
+    // Flyttas till höger/vänster , X-led
+    if (colDistanceX > 0) {
+      charX = i * tileSize - charHeight;
+      console.log("3");
+    } else {
+      charX = i * tileSize + tileSize;
+      console.log("4");
+    }
+
   }
 }
 

@@ -8,6 +8,8 @@ var fps = 60;
 var walkSpeed = 5;
 var frameAdd = 0.1;
 
+var hp = 10;
+
 var charX = canvas.width / 2;
 var charY = canvas.height / 2;
 var charVelX = 0;
@@ -42,8 +44,6 @@ var downPressed = false;
 
 var spacePressed = false;
 
-var collisionY = false;
-var collisionX = false;
 var collision = false;
 
 // textures and resources

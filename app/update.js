@@ -17,12 +17,12 @@ function drawCrossHair() {
 
 // update, tick
 function update() {
-  //TODO:0 enemies & HP
+  //TODO:10 enemies & HP
   //DONE:10 slå med musklick/space
   //DONE:0 slåanimation
   ctx.save();
-  viewPoint();
   ctx.clearRect(-camX, -camY, canvas.width, canvas.height); //Clears viewPoint
+  viewPoint();
   drawMap();
   drawCoin();
   drawCollision();
@@ -30,6 +30,7 @@ function update() {
   checkCharCollision();
   drawChar();
   ctx.fillText(camX + ", " + camY, camX + 100, camY + 100);
+  drawHp();
   drawCrossHair();
   ctx.fillText(charX + ", " + charY, camX + 100, camY + 200);
   ctx.restore();
