@@ -22,6 +22,10 @@ function keyDownHandler(e) {
     else if (e.keyCode == 32){
         spacePressed = true;
     }
+    else if (e.keyCode == 86) {
+        vPressed = true;
+        spawnMonster();
+    }
 }
 
 function keyUpHandler(e) {
@@ -44,6 +48,9 @@ function keyUpHandler(e) {
     else if(e.keyCode == 32){
         spacePressed = false;
         frame = 0;
+    }
+    else if(e.keyCode == 86) {
+        vPressed = false;
     }
 }
 

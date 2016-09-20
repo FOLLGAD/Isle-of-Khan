@@ -15,17 +15,20 @@ function drawCrossHair() {
   ctx.drawImage(crosshair, mousePosX + camX - 0, mousePosY + camY, 5 * 6, 6 * 6)
 }
 
+
+// for testing;
+function spawnMonster() {
+
+}
+
 // update, tick
 function update() {
-  //TODO:10 enemies & HP
-  //DONE:10 slå med musklick/space
-  //DONE:0 slåanimation
+  //DONE: HP-bar
   ctx.save();
   ctx.clearRect(-camX, -camY, canvas.width, canvas.height); //Clears viewPoint
   viewPoint();
   drawMap();
   drawCoin();
-  drawCollision();
   walk();
   checkCharCollision();
   drawChar();

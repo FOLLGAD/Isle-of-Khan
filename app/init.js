@@ -8,17 +8,22 @@ var fps = 60;
 var walkSpeed = 5;
 var frameAdd = 0.1;
 
+var charX = 10 * 64;
+var charY = 10 * 64;
+
 var hp = 10;
 
-var charX = canvas.width / 2;
-var charY = canvas.height / 2;
+//
+
 var charVelX = 0;
 var charVelY = 0;
 var charWidth = 64;
 var charHeight = 64;
 
-var tileX = new Array;
-var tileY = new Array;
+var tileX = [];
+var tileY = [];
+
+var enemies = [];
 
 var posX = 0;
 var posY = 0;
