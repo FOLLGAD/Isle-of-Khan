@@ -16,7 +16,7 @@ var camX = 0;
 var camY = 0;
 
 function isTileWall(i, j) {
-  if (mapArray[i][j] == 3) {
+  if (mapArray[j][i] == 3) {
     return true;
   } else {
     return false;
@@ -32,6 +32,10 @@ function tilesSurrounding() {
   tileY[2] = tileY[0] + 1;
   tileX[3] = tileX[1];
   tileY[3] = tileY[2];
+  ctx.beginPath();
+  ctx.rect(tileX[0]*tileSize, tileY[0]*tileSize, tileSize*2, tileSize*2);
+  ctx.closePath();
+  ctx.stroke();
   console.log(tileX, tileY);
 }
 
@@ -40,10 +44,6 @@ function checkCharCollision() {
   for(i = 0; i < 4; i++) {
       if(isTileWall(tileX[i], tileY[i])) {
         checkTileCollision(tileX[i], tileY[i]);
-        ctx.beginPath();
-        ctx.rect(tileX[i]*tileSize, tileY[i]*tileSize, tileSize, tileSize);
-        ctx.closePath();
-        ctx.stroke();
         console.log("collision at " + tileX[i], tileY[i]);
     }
   }
@@ -64,13 +64,12 @@ function checkTileCollision(i, j) {
 
   if (Math.abs(colDistanceX) < Math.abs(colDistanceY)) {
     // Flyttas till höger/vänster , X-led
-    console.log("fuck");
     console.log(colDistanceX);
-    charY += colDistanceX;
+    charX += colDistanceX;
   } else {
     // Flyttas till ner/upp , Y-led
     console.log("you");
-    charX += colDistanceY;
+    charY += colDistanceY;
   }
 }
 
