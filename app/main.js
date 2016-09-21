@@ -11,4 +11,5 @@ define(function (require) {
     var coin = require('./coin');
     var update = require('./update');
     var enemies = require('./enemy');
+    var projectiles = require('./projectiles');
 });

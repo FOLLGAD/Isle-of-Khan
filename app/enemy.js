@@ -1,4 +1,4 @@
-//TODO: add enemies;
+//TODO:0 add enemies;
 function enemyObj(posX, posY) {
   this.posX = posX;
   this.posY = posY;
@@ -11,13 +11,21 @@ function tickEnemies() {
     enemies[i].posX += enemies[i].velX;
     enemies[i].posY += enemies[i].velY;
     checkForCollision(i);
+    if (enemies[i].posX < 0 || enemies[i].posX > mapSizeX || enemies[i].posY < 0 || enemies[i].posY > mapSizeY) {
+      enemies.splice(i, 1);
+    }
   }
 }
 
 function checkForCollision(i) {
   if (enemies[i].posX < charX + charWidth && enemies[i].posX + enemyWidth > charX) {
     if (enemies[i].posY < charY + charHeight && enemies[i].posY + enemyHeight > charY) {
-      hp -= 1;
+      let d = new Date();
+      if (d.getTime() - 500 > lastHit || lastHit == 0) {
+        hp -= 1;
+        canGetDmg = false;
+        lastHit = d.getTime();
+      }
     }
   }
 }

@@ -1,6 +1,9 @@
 let canvas = document.getElementById("canvas");
 let ctx = canvas.getContext("2d");
 
+ctx.canvas.width  = window.innerWidth;
+ctx.canvas.height = window.innerHeight;
+
 //Settings
 let attackingSpeed = 2;
 
@@ -8,14 +11,17 @@ let fps = 60;
 let walkSpeed = 5;
 let frameAdd = 0.1;
 
-let charX = 10 * 64;
-let charY = 10 * 64;
+let charSpawnX = 10 * 64;
+let charSpawnY = 10 * 64;
 
 let hp = 10;
 
 //
 
 let menuActive = false;
+
+let charX = charSpawnX;
+let charY = charSpawnY;
 
 let charVelX = 0;
 let charVelY = 0;
@@ -56,6 +62,10 @@ let spacePressed = false;
 
 let collision = false;
 
+let canGetDmg = true;
+
+let lastHit = 0;
+
 // textures and resources
 
 ctx.imageSmoothingEnabled = false;
@@ -79,3 +89,4 @@ let tree = document.getElementById("tree");
 let options = document.getElementById("options");
 let enemy = document.getElementById("enemy");
 let legs = document.getElementById("legs");
+ctx.drawImage(legs, camX + 500, camY + 500, charWidth*2, charHeight);

@@ -1,9 +1,8 @@
 // update, tick
 function update() {
-  //DONE: HP-bar
-  resize();
+  //DONE:0 HP-bar
   ctx.save();
-  ctx.imageSmoothingEnabled = false;
+  resize();
   viewPoint();
   ctx.clearRect(-camX, -camY, canvas.width, canvas.height); //Clears viewPoint
   drawMap();
@@ -16,6 +15,8 @@ function update() {
   drawTrees();
   ctx.fillText(camX + ", " + camY, camX + 100, camY + 100);
   drawHp();
+  drawGui();
+  ctx.drawImage(legs, charX, charY, charWidth*2, charHeight);
   if(menuActive) {menuUpdate();}
   drawCrossHair();
   ctx.fillText(charX + ", " + charY, camX + 100, camY + 200);
@@ -26,19 +27,23 @@ setInterval(update, 1000/fps);
 
 // draw functions
 
-  //resize canvas to window size
+//resize canvas to window size
 function resize() {
   ctx.canvas.width  = window.innerWidth;
   ctx.canvas.height = window.innerHeight;
+  ctx.imageSmoothingEnabled = false;
 }
 
-//TODO: lägg till så att endast tiles synliga på canvas + buffer på ett block blir rendered varje frame
+//DONE:20 lägg till så att endast tiles synliga på canvas + buffer på ett block blir rendered varje frame
 function drawMap(){
-  var posX = 0;
-  var posY = 0;
+  let posX = 0;
+  let posY = 0;
   for (var i = 0; i < mapArray.length; i++) {
     for (var j = 0; j < mapArray[i].length; j++) {
-      ctx.drawImage(tile_map, (mapArray[i][j] % 2) * 8, Math.floor(mapArray[i][j] / 2) * 8, 8, 8, posX, posY, tileSize + 1, tileSize + 1);
+      //laddar endast synliga tiles
+      if ((j - 1) * tileSize < camX + ctx.canvas.width && (j + 1) * tileSize > camX && (i - 1) * tileSize < camY + ctx.canvas.height && (i + 1) * tileSize > camY) {
+        ctx.drawImage(tile_map, (mapArray[i][j] % 8) * 8, Math.floor(mapArray[i][j] / 8) * 8, 8, 8, posX, posY, tileSize + 1, tileSize + 1);
+      }
       posX += tileSize;
     }
     posX = 0;

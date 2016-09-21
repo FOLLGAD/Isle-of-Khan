@@ -23,6 +23,8 @@ function checkCharCollision() {
   }
 }
 
+//checks which tiles are in direct collision with the player
+
 function tilesSurrounding() {
   tileX[0] = (charX - charX % tileSize) / tileSize;
   tileY[0] = (charY - charY % tileSize) / tileSize;
@@ -39,7 +41,7 @@ function isTileWall(i, j) {
     return true;
   } else if (j >= tileMapHeight || j < 0) {
     return true;
-  } else if (mapArray[j][i] == 3) {
+  } else if (mapArray[j][i] == 6 || mapArray[j][i] == 7) {
     return true;
   } else {
     return false;
@@ -57,7 +59,7 @@ function checkTileCollision(i, j) {
     } else {
       charY = j * tileSize + tileSize;
     }
-  } else {
+  } else if (Math.abs(colDistanceX) > Math.abs(colDistanceY)) {
     // Flyttas till höger/vänster , X-led
     if (colDistanceX > 0) {
       charX = i * tileSize - charHeight;
@@ -67,14 +69,14 @@ function checkTileCollision(i, j) {
   }
 }
 
-//DONE ladda träden som separata object som ritas efter karaktären, så det ser ut som att man är bakom.
+//DONE:10 ladda träden som separata object som ritas efter karaktären, så det ser ut som att man är bakom dem.
 
 function drawTrees() {
   var posX = 0;
   var posY = 0;
   for (var i = 0; i < mapArray.length; i++) {
     for (var j = 0; j < mapArray[i].length; j++) {
-      if(mapArray[i][j] == 3) {
+      if(mapArray[i][j] == 6) {
         ctx.drawImage(tree, j * tileSize, i * tileSize - tileSize, tileSize, tileSize * 2);
       }
       posX += tileSize;
@@ -85,8 +87,8 @@ function drawTrees() {
 }
 
 function viewPoint() {
-  camX = charX + charWidth / 2 - canvas.width / 2;
-  camY = charY + charHeight / 2 - canvas.height / 2;
+  camX = charX + charWidth / 2 - ctx.canvas.width / 2;
+  camY = charY + charHeight / 2 - ctx.canvas.height / 2;
 
   if (camX > offsetMaxX) {
     camX = offsetMaxX;
@@ -99,4 +101,10 @@ function viewPoint() {
     camY = offsetMinY;
   }
   ctx.translate(-camX, -camY);
+}
+
+function drawGui() {
+  ctx.font = "40px Courier";
+  ctx.fillText("Coins: " + points, camX + 50, camY + 80);
+  ctx.font = "20px Courier";
 }

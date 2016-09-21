@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html>
 <head>
-<link rel="icon" type="image/x-icon" href="resources/favicon.ico"></link>
+<title>Isle of Khan</title>
+<link rel="icon" type="image/png" href="resources/favicon.png"></link>
 <link rel="stylesheet" type="text/css" href="source.css"></link>
 
+<img style="display:none" id="legs" srcs="resources/legs.png"></img>
 <img style="display:none" id="walk_up" src="resources/walk_up.png"></img>
 <img style="display:none" id="walk_down" src="resources/walk_down.png"></img>
 <img style="display:none" id="walk_left" src="resources/walk_left.png"></img>
@@ -27,11 +29,9 @@
 <img style="display:none" id="attacking_left" src="resources/attacking_left_lofse.png"></img>
 <img style="display:none" id="attacking_right" src="resources/attacking_right_lofse.png"></img>
 
-<img style="display:none" id="legs" srcs="resources/legs.png"></img>
-
 </head>
 <body oncontextmenu="return false;">
-<canvas id="canvas" width="1200" height="1000"></canvas>
+<canvas id="canvas"></canvas>
 </body>
 
 <script data-main="app" src="lib/require.js"></script>

@@ -1,5 +1,11 @@
 // gameplay functions
 function walk() {
+  if (hp <= 0) {
+    charX = charSpawnX;
+    charY = charSpawnY;
+    hp = 10;
+  }
+
   if (upPressed && !downPressed) {
     idleY = false;
     charVelY = -walkSpeed;
@@ -88,7 +94,7 @@ function walk() {
   }
 }
 function drawChar() {
-  //TODO:0 lägga till indivuella ben, så man kan gå &  slå samtidigt; (typ fixat, men funkar inte)
+  //TODO:10 lägga till indivuella ben, så man kan gå &  slå samtidigt; (typ fixat, men funkar inte)
 
   if (attacking) {
     if (direction == "right") {
@@ -142,19 +148,21 @@ function drawChar() {
       ctx.drawImage(walk_up, Math.floor(frame) * 8, 0, 8, 8, charX, charY, charWidth, charHeight );
     }
   }
-  ctx.drawImage(legs, charX, charY, charWidth*2, charHeight);
-  
+
   //funkar inte fuckk
 }
 
 function drawHp() {
-  ctx.beginPath();
-  ctx.fillStyle = "#000";
-  ctx.fillRect(charX - 20 - 1, charY + charWidth / 2 - 100 - 1, hp * 10 + 2, 12);
-  ctx.fillStyle = "red";
-  ctx.fillRect(charX - 20, charY + charWidth / 2 - 100, hp * 10, 10);
-  ctx.closePath();
-  ctx.fillStyle = "#000";
+  d = new Date();
+  if (d.getTime() - 2000 < lastHit || hp < 8) {
+    ctx.beginPath();
+    ctx.fillStyle = "#000";
+    ctx.fillRect(charX - 20 - 1, charY + charWidth / 2 - 100 - 1, 10 * 10 + 2, 12);
+    ctx.fillStyle = "green";
+    ctx.fillRect(charX - 20, charY + charWidth / 2 - 100, hp * 10, 10);
+    ctx.closePath();
+    ctx.fillStyle = "#000";
+  }
 }
 
 function attackingArea(){
