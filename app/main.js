@@ -10,4 +10,5 @@ define(function (require) {
     var character = require('./character');
     var coin = require('./coin');
     var update = require('./update');
+    var enemies = require('./enemy');
 });

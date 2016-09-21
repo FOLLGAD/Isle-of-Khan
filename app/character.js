@@ -89,6 +89,7 @@ function walk() {
 }
 function drawChar() {
   //TODO:0 lägga till indivuella ben, så man kan gå &  slå samtidigt; (typ fixat, men funkar inte)
+
   if (attacking) {
     if (direction == "right") {
       if (Math.floor(frame) == 1 || Math.floor(frame) == 3) {
@@ -141,7 +142,8 @@ function drawChar() {
       ctx.drawImage(walk_up, Math.floor(frame) * 8, 0, 8, 8, charX, charY, charWidth, charHeight );
     }
   }
-  ctx.drawImage(legs, 8, 0, 8, 8, charX + 120, charY + 120, charWidth, charHeight );
+  ctx.drawImage(legs, charX, charY, charWidth*2, charHeight);
+  
   //funkar inte fuckk
 }
 
@@ -169,7 +171,8 @@ function attackingArea(){
     attackingX = charX - charWidth;
     attackingY = charY;
   }
-
+/*
     ctx.fillStyle = "#000";
     ctx.fillRect(attackingX, attackingY, 8*8, 8*8);
+*/
 }

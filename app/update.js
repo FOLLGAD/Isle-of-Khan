@@ -1,13 +1,17 @@
 // update, tick
 function update() {
   //DONE: HP-bar
+  resize();
   ctx.save();
-  ctx.clearRect(-camX, -camY, canvas.width, canvas.height); //Clears viewPoint
+  ctx.imageSmoothingEnabled = false;
   viewPoint();
+  ctx.clearRect(-camX, -camY, canvas.width, canvas.height); //Clears viewPoint
   drawMap();
   drawCoin();
+  tickEnemies();
   walk();
   checkCharCollision();
+  drawEnemies();
   drawChar();
   drawTrees();
   ctx.fillText(camX + ", " + camY, camX + 100, camY + 100);
@@ -22,8 +26,13 @@ setInterval(update, 1000/fps);
 
 // draw functions
 
+  //resize canvas to window size
+function resize() {
+  ctx.canvas.width  = window.innerWidth;
+  ctx.canvas.height = window.innerHeight;
+}
 
-//TODO: lägg till så att endast tiles synliga på canvas + buffer på ett block laddas
+//TODO: lägg till så att endast tiles synliga på canvas + buffer på ett block blir rendered varje frame
 function drawMap(){
   var posX = 0;
   var posY = 0;
@@ -39,11 +48,6 @@ function drawMap(){
 
 function drawCrossHair() {
   ctx.drawImage(crosshair, mousePosX + camX - 0, mousePosY + camY, 5 * 6, 6 * 6);
-
-}
-
-// for testing;
-function spawnMonster() {
 
 }
 

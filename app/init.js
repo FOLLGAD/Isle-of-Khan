@@ -22,6 +22,9 @@ let charVelY = 0;
 let charWidth = 64;
 let charHeight = 64;
 
+let enemyWidth = 64;
+let enemyHeight = 64;
+
 let tileX = [];
 let tileY = [];
 
@@ -46,6 +49,8 @@ let rightPressed = false;
 let upPressed = false;
 let leftPressed = false;
 let downPressed = false;
+
+let vPressed = false;
 
 let spacePressed = false;
 
@@ -72,3 +77,5 @@ let attacking_left = document.getElementById("attacking_left");
 let attacking_right = document.getElementById("attacking_right");
 let tree = document.getElementById("tree");
 let options = document.getElementById("options");
+let enemy = document.getElementById("enemy");
+let legs = document.getElementById("legs");
