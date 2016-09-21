@@ -92,7 +92,6 @@ function drawChar() {
   if (attacking) {
     if (direction == "right") {
       if (Math.floor(frame) == 1 || Math.floor(frame) == 3) {
-        ctx.drawImage(legs, 0 * 8, 0, 8, 8, charX, charY, charWidth*2, charHeight*2 );
         console.log("fameboi");
       }
       ctx.drawImage(attacking_right, 0, Math.floor(attackingFrame) * 8, 16, 8, charX, charY, charWidth * 2, charHeight);
@@ -142,14 +141,18 @@ function drawChar() {
       ctx.drawImage(walk_up, Math.floor(frame) * 8, 0, 8, 8, charX, charY, charWidth, charHeight );
     }
   }
+  ctx.drawImage(legs, 8, 0, 8, 8, charX + 120, charY + 120, charWidth, charHeight );
+  //funkar inte fuckk
 }
 
 function drawHp() {
   ctx.beginPath();
-  ctx.fillStyle = "#4400ff";
-  ctx.fillRect(charX - 20, charY + charWidth / 2 - 100, hp * 10, 10);
   ctx.fillStyle = "#000";
+  ctx.fillRect(charX - 20 - 1, charY + charWidth / 2 - 100 - 1, hp * 10 + 2, 12);
+  ctx.fillStyle = "red";
+  ctx.fillRect(charX - 20, charY + charWidth / 2 - 100, hp * 10, 10);
   ctx.closePath();
+  ctx.fillStyle = "#000";
 }
 
 function attackingArea(){
@@ -167,6 +170,6 @@ function attackingArea(){
     attackingY = charY;
   }
 
-    //ctx.fillStyle = "#000";
-    //ctx.fillRect(attackingX, attackingY, 8*8, 8*8);
+    ctx.fillStyle = "#000";
+    ctx.fillRect(attackingX, attackingY, 8*8, 8*8);
 }

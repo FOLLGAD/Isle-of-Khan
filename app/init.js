@@ -1,72 +1,74 @@
-var canvas = document.getElementById("canvas");
-var ctx = canvas.getContext("2d");
+let canvas = document.getElementById("canvas");
+let ctx = canvas.getContext("2d");
 
 //Settings
-var attackingSpeed = 2;
+let attackingSpeed = 2;
 
-var fps = 60;
-var walkSpeed = 5;
-var frameAdd = 0.1;
+let fps = 60;
+let walkSpeed = 5;
+let frameAdd = 0.1;
 
-var charX = 10 * 64;
-var charY = 10 * 64;
+let charX = 10 * 64;
+let charY = 10 * 64;
 
-var hp = 10;
+let hp = 10;
 
 //
 
-var charVelX = 0;
-var charVelY = 0;
-var charWidth = 64;
-var charHeight = 64;
+let menuActive = false;
 
-var tileX = [];
-var tileY = [];
+let charVelX = 0;
+let charVelY = 0;
+let charWidth = 64;
+let charHeight = 64;
 
-var enemies = [];
+let tileX = [];
+let tileY = [];
 
-var posX = 0;
-var posY = 0;
-var tileSize = 8*8;
+let enemies = [];
 
-var mousePosX = 0;
-var mousePosY = 0;
+let tileSize = 8*8;
 
-var frame = 0;
-var attackingFrame = 0;
-var direction = "up";
-var arrows = [];
-var points = 0;
-var idle = true;
-var idleX = true;
-var idleY = true;
-var attacking = false;
+let mousePosX = 0;
+let mousePosY = 0;
 
-var rightPressed = false;
-var upPressed = false;
-var leftPressed = false;
-var downPressed = false;
+let frame = 0;
+let attackingFrame = 0;
+let direction = "up";
+let arrows = [];
+let points = 0;
+let idle = true;
+let idleX = true;
+let idleY = true;
+let attacking = false;
 
-var spacePressed = false;
+let rightPressed = false;
+let upPressed = false;
+let leftPressed = false;
+let downPressed = false;
 
-var collision = false;
+let spacePressed = false;
+
+let collision = false;
 
 // textures and resources
 
 ctx.imageSmoothingEnabled = false;
 
-var coin = document.getElementById("coin");
-var walk_right = document.getElementById("walk_right");
-var walk_down = document.getElementById("walk_down");
-var walk_left = document.getElementById("walk_left");
-var walk_up = document.getElementById("walk_up");
-var idle_right = document.getElementById("idle_right");
-var idle_down = document.getElementById("idle_down");
-var idle_left = document.getElementById("idle_left");
-var idle_up = document.getElementById("idle_up");
-var tile_map = document.getElementById("tile_map");
-var crosshair = document.getElementById("crosshair");
-var attacking_up = document.getElementById("attacking_up");
-var attacking_down = document.getElementById("attacking_down");
-var attacking_left = document.getElementById("attacking_left");
-var attacking_right = document.getElementById("attacking_right");
+let coin = document.getElementById("coin");
+let walk_right = document.getElementById("walk_right");
+let walk_down = document.getElementById("walk_down");
+let walk_left = document.getElementById("walk_left");
+let walk_up = document.getElementById("walk_up");
+let idle_right = document.getElementById("idle_right");
+let idle_down = document.getElementById("idle_down");
+let idle_left = document.getElementById("idle_left");
+let idle_up = document.getElementById("idle_up");
+let tile_map = document.getElementById("tile_map");
+let crosshair = document.getElementById("crosshair");
+let attacking_up = document.getElementById("attacking_up");
+let attacking_down = document.getElementById("attacking_down");
+let attacking_left = document.getElementById("attacking_left");
+let attacking_right = document.getElementById("attacking_right");
+let tree = document.getElementById("tree");
+let options = document.getElementById("options");

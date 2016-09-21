@@ -35,7 +35,6 @@ function tilesSurrounding() {
 }
 
 function isTileWall(i, j) {
-  console.log(j, tileMapHeight);
   if (i >= tileMapWidth || i < 0) {
     return true;
   } else if (j >= tileMapHeight || j < 0) {
@@ -65,6 +64,23 @@ function checkTileCollision(i, j) {
     } else {
       charX = i * tileSize + tileSize;
     }
+  }
+}
+
+//DONE ladda träden som separata object som ritas efter karaktären, så det ser ut som att man är bakom.
+
+function drawTrees() {
+  var posX = 0;
+  var posY = 0;
+  for (var i = 0; i < mapArray.length; i++) {
+    for (var j = 0; j < mapArray[i].length; j++) {
+      if(mapArray[i][j] == 3) {
+        ctx.drawImage(tree, j * tileSize, i * tileSize - tileSize, tileSize, tileSize * 2);
+      }
+      posX += tileSize;
+    }
+    posX = 0;
+    posY += tileSize;
   }
 }
 

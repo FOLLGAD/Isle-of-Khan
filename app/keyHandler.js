@@ -6,6 +6,10 @@ document.addEventListener('mousemove', nameMousePos, false);
 document.addEventListener("mousedown", mouseDown, false);
 document.addEventListener("mouseup", mouseUp, false);
 
+document.addEventListener('click', function(e) {
+  console.log('click: ' + e.offsetX + '/' + e.offsetY);
+});
+
 function keyDownHandler(e) {
     if(e.keyCode == 68) {
         rightPressed = true;
@@ -25,6 +29,10 @@ function keyDownHandler(e) {
     else if (e.keyCode == 86) {
         vPressed = true;
         spawnMonster();
+    }
+    else if (e.keyCode == 27) {
+        menuToggle();
+        console.log("esc pressed");
     }
 }
 
