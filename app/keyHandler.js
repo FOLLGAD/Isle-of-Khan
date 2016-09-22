@@ -2,12 +2,10 @@
 
 document.addEventListener("keydown", keyDownHandler, false);
 document.addEventListener("keyup", keyUpHandler, false);
+document.addEventListener("mousedown", mouseDownHandler, false);
+document.addEventListener("mouseup", mouseUpHandler, false);
 document.addEventListener('mousemove', nameMousePos, false);
-document.addEventListener("mousedown", mouseDown, false);
-document.addEventListener("mouseup", mouseUp, false);
-
 document.addEventListener('click', function(e) {
-  console.log('click: ' + e.offsetX + '/' + e.offsetY);
 });
 
 function keyDownHandler(e) {
@@ -32,7 +30,6 @@ function keyDownHandler(e) {
     }
     else if (e.keyCode == 27) {
         menuToggle();
-        console.log("esc pressed");
     }
 }
 
@@ -78,12 +75,10 @@ function getMousePos(e) {
   }
 }
 
-function mouseDown() {
+function mouseDownHandler() {
   mouseDown = true;
-  console.log("mouseDown = " + mouseDown + " at " + mousePosX, mousePosY);
 }
 
-function mouseUp() {
+function mouseUpHandler() {
   mouseDown = false;
-  console.log("mouseDown = " + mouseDown + " at " + mousePosX, mousePosY);
 }

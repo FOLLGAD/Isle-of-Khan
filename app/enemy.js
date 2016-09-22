@@ -1,4 +1,4 @@
-//TODO:0 add enemies;
+//DONE:40 add enemies;
 function enemyObj(posX, posY) {
   this.posX = posX;
   this.posY = posY;

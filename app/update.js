@@ -9,17 +9,19 @@ function update() {
   drawCoin();
   tickEnemies();
   walk();
+  activate();
   checkCharCollision();
   drawEnemies();
+  tickArrows();
   drawChar();
   drawTrees();
-  ctx.fillText(camX + ", " + camY, camX + 100, camY + 100);
   drawHp();
   drawGui();
   ctx.drawImage(legs, charX, charY, charWidth*2, charHeight);
   if(menuActive) {menuUpdate();}
   drawCrossHair();
-  ctx.fillText(charX + ", " + charY, camX + 100, camY + 200);
+  ctx.fillText(camX + ", " + camY, camX + 50, camY + 120);
+  ctx.fillText(charX + ", " + charY, camX + 50, camY + 140);
   ctx.restore();
 }
 
@@ -34,7 +36,7 @@ function resize() {
   ctx.imageSmoothingEnabled = false;
 }
 
-//DONE:20 lägg till så att endast tiles synliga på canvas + buffer på ett block blir rendered varje frame
+//DONE:30 lägg till så att endast tiles synliga på canvas + buffer på ett block blir rendered varje frame
 function drawMap(){
   let posX = 0;
   let posY = 0;

@@ -1,4 +1,15 @@
-// gameplay functions
+// Character object, för storage av alla tillstånd av char
+let Character = {
+  posX: spawnPointX,
+  posY: spawnPointY,
+  height: 64,
+  width: 64,
+  velX: 0,
+  velY: 0
+}
+
+// TODO: Fixa karaktärens jittery movement när man ändrar hastighet
+
 function walk() {
   if (hp <= 0) {
     charX = charSpawnX;
@@ -57,7 +68,8 @@ function walk() {
   }
 
   // Sätter position på karaktär beroende på charVel.
-  if(attacking) {
+  let d = new Date();
+  if(attacking || lastActivate + 600 > d.getTime()) {
     charX += charVelX * 0.5;
     charY += charVelY * 0.5;
   } else {
@@ -94,8 +106,7 @@ function walk() {
   }
 }
 function drawChar() {
-  //TODO:10 lägga till indivuella ben, så man kan gå &  slå samtidigt; (typ fixat, men funkar inte)
-
+/*
   if (attacking) {
     if (direction == "right") {
       if (Math.floor(frame) == 1 || Math.floor(frame) == 3) {
@@ -148,8 +159,9 @@ function drawChar() {
       ctx.drawImage(walk_up, Math.floor(frame) * 8, 0, 8, 8, charX, charY, charWidth, charHeight );
     }
   }
+*/
 
-  //funkar inte fuckk
+  ctx.drawImage(char, charX, charY - charHeight, charWidth, charHeight * 2);
 }
 
 function drawHp() {

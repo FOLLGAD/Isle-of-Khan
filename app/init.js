@@ -16,6 +16,8 @@ let charSpawnY = 10 * 64;
 
 let hp = 10;
 
+let arrowSpeed = 20;
+
 //
 
 let menuActive = false;
@@ -28,13 +30,12 @@ let charVelY = 0;
 let charWidth = 64;
 let charHeight = 64;
 
+let enemies = [];
 let enemyWidth = 64;
 let enemyHeight = 64;
 
 let tileX = [];
 let tileY = [];
-
-let enemies = [];
 
 let tileSize = 8*8;
 
@@ -44,7 +45,6 @@ let mousePosY = 0;
 let frame = 0;
 let attackingFrame = 0;
 let direction = "up";
-let arrows = [];
 let points = 0;
 let idle = true;
 let idleX = true;
@@ -55,6 +55,7 @@ let rightPressed = false;
 let upPressed = false;
 let leftPressed = false;
 let downPressed = false;
+let mouseDown = false;
 
 let vPressed = false;
 
@@ -65,6 +66,13 @@ let collision = false;
 let canGetDmg = true;
 
 let lastHit = 0;
+
+let bowSelected = true;
+let arrows = [];
+let arrowWidth = 32;
+let arrowHeight = 32;
+
+let lastActivate = 0;
 
 // textures and resources
 
@@ -89,4 +97,6 @@ let tree = document.getElementById("tree");
 let options = document.getElementById("options");
 let enemy = document.getElementById("enemy");
 let legs = document.getElementById("legs");
-ctx.drawImage(legs, camX + 500, camY + 500, charWidth*2, charHeight);
+let char = document.getElementById("char");
+let arrow = document.getElementById("arrow");
+let bow = document.getElementById("bow");

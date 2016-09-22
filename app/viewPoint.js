@@ -15,7 +15,7 @@ var camX = 0;
 var camY = 0;
 
 function checkCharCollision() {
-  tilesSurrounding();
+  tilesSurrounding(charX, charY, Character);
   for(i = 0; i < 4; i++) {
     if(isTileWall(tileX[i], tileY[i])) {
       checkTileCollision(tileX[i], tileY[i]);
@@ -25,7 +25,7 @@ function checkCharCollision() {
 
 //checks which tiles are in direct collision with the player
 
-function tilesSurrounding() {
+function tilesSurrounding(x, y, object) {
   tileX[0] = (charX - charX % tileSize) / tileSize;
   tileY[0] = (charY - charY % tileSize) / tileSize;
   tileX[1] = tileX[0] + 1;
@@ -69,7 +69,7 @@ function checkTileCollision(i, j) {
   }
 }
 
-//DONE:10 ladda träden som separata object som ritas efter karaktären, så det ser ut som att man är bakom dem.
+//DONE:20 ladda träden som separata object som ritas efter karaktären, så det ser ut som att man är bakom dem.
 
 function drawTrees() {
   var posX = 0;
@@ -77,7 +77,7 @@ function drawTrees() {
   for (var i = 0; i < mapArray.length; i++) {
     for (var j = 0; j < mapArray[i].length; j++) {
       if(mapArray[i][j] == 6) {
-        ctx.drawImage(tree, j * tileSize, i * tileSize - tileSize, tileSize, tileSize * 2);
+        ctx.drawImage(tree, j * tileSize, i * tileSize - tileSize, tileSize, tileSize);
       }
       posX += tileSize;
     }
