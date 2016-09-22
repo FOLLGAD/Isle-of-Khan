@@ -8,7 +8,6 @@ ctx.canvas.height = window.innerHeight;
 let attackingSpeed = 2;
 
 let fps = 60;
-let walkSpeed = 5;
 let frameAdd = 0.1;
 
 let charSpawnX = 10 * 64;
@@ -22,11 +21,6 @@ let arrowSpeed = 20;
 
 let menuActive = false;
 
-let charX = charSpawnX;
-let charY = charSpawnY;
-
-let charVelX = 0;
-let charVelY = 0;
 let charWidth = 64;
 let charHeight = 64;
 
@@ -44,9 +38,7 @@ let mousePosY = 0;
 
 let frame = 0;
 let attackingFrame = 0;
-let direction = "up";
 let points = 0;
-let idle = true;
 let idleX = true;
 let idleY = true;
 let attacking = false;
@@ -69,8 +61,6 @@ let lastHit = 0;
 
 let bowSelected = true;
 let arrows = [];
-let arrowWidth = 32;
-let arrowHeight = 32;
 
 let lastActivate = 0;
 

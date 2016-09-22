@@ -60,13 +60,13 @@ function keyUpHandler(e) {
 }
 
 function nameMousePos(e) {
-  var mousePos = getMousePos(e);
+  let mousePos = getMousePos(e);
   mousePosX = mousePos.x;
   mousePosY = mousePos.y;
 }
 
 function getMousePos(e) {
-  var rect = canvas.getBoundingClientRect();
+  let rect = canvas.getBoundingClientRect();
   scaleX = canvas.width / rect.width;    // relationship bitmap vs. element for X
   scaleY = canvas.height / rect.height;  // relationship bitmap vs. element for Y
   return {

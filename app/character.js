@@ -1,195 +1,237 @@
 // Character object, för storage av alla tillstånd av char
 let Character = {
-  posX: spawnPointX,
-  posY: spawnPointY,
+  posX: charSpawnX,
+  posY: charSpawnY,
   height: 64,
   width: 64,
   velX: 0,
-  velY: 0
+  velY: 0,
+
+  walkSpeed: 5,
+  direction: "up",
+  hp: 10,
+  idle: true,
+
+  img: char,
+
+  spawnX: charSpawnX,
+  spawnY: charSpawnY,
+
+  attacking: false,
+
+  tick: function() {
+    walk();
+    if (Character.hp <= 0) {
+      Character.respawn();
+      Character.hp = 10;
+    }
+    checkObjectCollision(Character);
+  },
+
+  respawn: function() {
+    Character.posX = Character.spawnX;
+    Character.posY = Character.spawnY;
+  },
+
+  collision: function(i, j, colDistanceX, colDistanceY) {
+    let colDistanceX = (i * tileSize + tileSize / 2) - (Character.posX + Character.width / 2);
+    let colDistanceY = (j * tileSize + tileSize / 2) - (Character.posY + Character.height / 2);
+
+    if (Math.abs(colDistanceX) < Math.abs(colDistanceY)) {
+      // Flyttas till ner/upp , Y-led
+      if (colDistanceY > 0) {
+        Character.posY = j * tileSize - Character.width;
+      } else {
+        Character.posY = j * tileSize + tileSize;
+      }
+    } else if (Math.abs(colDistanceX) > Math.abs(colDistanceY)) {
+      // Flyttas till höger/vänster , X-led
+      if (colDistanceX > 0) {
+        Character.posX = i * tileSize - Character.height;
+      } else {
+        Character.posX = i * tileSize + tileSize;
+      }
+    }
+
+  }
 }
 
 // TODO: Fixa karaktärens jittery movement när man ändrar hastighet
 
 function walk() {
-  if (hp <= 0) {
-    charX = charSpawnX;
-    charY = charSpawnY;
-    hp = 10;
-  }
-
   if (upPressed && !downPressed) {
     idleY = false;
-    charVelY = -walkSpeed;
-    direction = "up";
+    Character.velY = -Character.walkSpeed;
+    Character.direction = "up";
   } else if (downPressed && !upPressed) {
     idleY = false;
-    charVelY = walkSpeed;
-    direction = "down";
+    Character.velY = Character.walkSpeed;
+    Character.direction = "down";
   } else {
-    charVelY = 0;
+    Character.velY = 0;
     idleY = true;
   }
   if (rightPressed && !leftPressed) {
     idleX = false;
-    charVelX = walkSpeed;
-    direction = "right";
+    Character.velX = Character.walkSpeed;
+    Character.direction = "right";
   } else if (leftPressed && !rightPressed) {
     idleX = false;
-    charVelX = -walkSpeed;
-    direction = "left";
+    Character.velX = -Character.walkSpeed;
+    Character.direction = "left";
   } else {
-    charVelX = 0;
+    Character.velX = 0;
     idleX = true;
   }
 
   if (spacePressed) {
-    attacking = true;
+    Character.attacking = true;
   } else if (attackingFrame == 0 && !spacePressed){
-    attacking = false;
+    Character.attacking = false;
   }
 
   if (idleX && idleY) {
-    idle = true;
+    Character.idle = true;
   } else {
-    idle = false;
+    Character.idle = false;
   }
 
-  if (charVelX != 0 && charVelY != 0) {
-    if (charVelX > 0) {
-      charVelX = walkSpeed * 0.7;
+  if (Character.velX != 0 && Character.velY != 0) {
+    if (Character.velX > 0) {
+      Character.velX = Character.walkSpeed * 0.7;
     } else {
-      charVelX = -walkSpeed * 0.7;
+      Character.velX = -Character.walkSpeed * 0.7;
     }
-    if (charVelY > 0) {
-      charVelY = walkSpeed * 0.7;
+    if (Character.velY > 0) {
+      Character.velY = Character.walkSpeed * 0.7;
     } else {
-      charVelY = -walkSpeed * 0.7;
+      Character.velY = -Character.walkSpeed * 0.7;
     }
   }
 
   // Sätter position på karaktär beroende på charVel.
   let d = new Date();
-  if(attacking || lastActivate + 600 > d.getTime()) {
-    charX += charVelX * 0.5;
-    charY += charVelY * 0.5;
+  if(Character.attacking || lastActivate + 600 > d.getTime()) {
+    Character.posX += Character.velX * 0.5;
+    Character.posY += Character.velY * 0.5;
   } else {
-    charX += charVelX;
-    charY += charVelY;
+    Character.posX += Character.velX;
+    Character.posY += Character.velY;
   }
 
-  if (charX + charWidth > mapSizeX) {
-    charX = mapSizeX - charWidth;
-  } else if (charX < 0) {
-    charX = 0;
+  if (Character.posX + Character.width > mapSizeX) {
+    Character.posX = mapSizeX - Character.width;
+  } else if (Character.posX < 0) {
+    Character.posX = 0;
   }
-  if (charY + charHeight > mapSizeY) {
-    charY = mapSizeY - charHeight;
-  } else if (charY < 0) {
-    charY = 0;
+  if (Character.posY + Character.height > mapSizeY) {
+    Character.posY = mapSizeY - Character.height;
+  } else if (Character.posY < 0) {
+    Character.posY = 0;
   }
 
-  if (!idle && frame + frameAdd < 4) {
+  if (!Character.idle && frame + frameAdd < 4) {
     frame += frameAdd;
   }else{
     frame = 0;
   }
 
-  if (attackingFrame + frameAdd * attackingSpeed < 3 && attacking) {
+  if (attackingFrame + frameAdd * attackingSpeed < 3 && Character.attacking) {
     attackingFrame += frameAdd * attackingSpeed;
   } else if (attackingFrame + frameAdd * attackingSpeed >= 3) {
     attackingFrame = 0;
-    attacking = false;
+    Character.attacking = false;
   }
 
-  if (attacking) {
+  if (Character.attacking) {
     attackingArea();
   }
 }
 function drawChar() {
 /*
-  if (attacking) {
-    if (direction == "right") {
+  if (Character.attacking) {
+    if (Character.direction == "right") {
       if (Math.floor(frame) == 1 || Math.floor(frame) == 3) {
         console.log("fameboi");
       }
-      ctx.drawImage(attacking_right, 0, Math.floor(attackingFrame) * 8, 16, 8, charX, charY, charWidth * 2, charHeight);
+      ctx.drawImage(attacking_right, 0, Math.floor(attackingFrame) * 8, 16, 8, Character.posX, Character.posY, Character.width * 2, Character.height);
     }
-    else if (direction == "left") {
+    else if (Character.direction == "left") {
       if (Math.floor(frame) == 1 || Math.floor(frame) == 3) {
-        ctx.drawImage(legs, Math.floor(frame/2) * 8, 0, 8, 8, charX, charY, charWidth, charHeight );
+        ctx.drawImage(legs, Math.floor(frame/2) * 8, 0, 8, 8, Character.posX, Character.posY, Character.width, Character.height );
       }
-      ctx.drawImage(attacking_left, 0, Math.floor(attackingFrame) * 8, 16, 8, charX - charWidth, charY, charWidth * 2, charHeight);
+      ctx.drawImage(attacking_left, 0, Math.floor(attackingFrame) * 8, 16, 8, Character.posX - Character.width, Character.posY, Character.width * 2, Character.height);
     }
-    else if (direction == "down") {
+    else if (Character.direction == "down") {
       if (Math.floor(frame) == 1 || Math.floor(frame) == 3) {
-        ctx.drawImage(legs, Math.floor(frame/2) * 8, 0, 8, 8, charX, charY, charWidth, charHeight );
+        ctx.drawImage(legs, Math.floor(frame/2) * 8, 0, 8, 8, Character.posX, Character.posY, Character.width, Character.height );
       }
-      ctx.drawImage(attacking_down, Math.floor(attackingFrame) * 8, 0, 8, 16, charX, charY, charWidth, charHeight * 2);
+      ctx.drawImage(attacking_down, Math.floor(attackingFrame) * 8, 0, 8, 16, Character.posX, Character.posY, Character.width, Character.height * 2);
     }
-    else if (direction == "up") {
+    else if (Character.direction == "up") {
       if (Math.floor(frame) == 1 || Math.floor(frame) == 3) {
-        ctx.drawImage(legs, Math.floor(frame/2) * 8, 0, 8, 8, charX, charY, charWidth, charHeight );
+        ctx.drawImage(legs, Math.floor(frame/2) * 8, 0, 8, 8, Character.posX, Character.posY, Character.width, Character.height );
       }
-      ctx.drawImage(attacking_up, Math.floor(attackingFrame) * 8, 0, 8, 16, charX, charY - charHeight, charWidth, charHeight * 2);
+      ctx.drawImage(attacking_up, Math.floor(attackingFrame) * 8, 0, 8, 16, Character.posX, Character.posY - Character.height, Character.width, Character.height * 2);
     }
-  } else if (idle) {
-    if (direction == "right") {
-      ctx.drawImage(idle_right, Math.floor(frame) * 8, 0, 8, 8, charX, charY, charWidth, charHeight );
+  } else if (Character.idle) {
+    if (Character.direction == "right") {
+      ctx.drawImage(idle_right, Math.floor(frame) * 8, 0, 8, 8, Character.posX, Character.posY, Character.width, Character.height );
     }
-    else if (direction == "left") {
-      ctx.drawImage(idle_left, Math.floor(frame) * 8, 0, 8, 8, charX, charY, charWidth, charHeight );
+    else if (Character.direction == "left") {
+      ctx.drawImage(idle_left, Math.floor(frame) * 8, 0, 8, 8, Character.posX, Character.posY, Character.width, Character.height );
     }
-    else if (direction == "down") {
-      ctx.drawImage(idle_down, Math.floor(frame) * 8, 0, 8, 8, charX, charY, charWidth, charHeight );
+    else if (Character.direction == "down") {
+      ctx.drawImage(idle_down, Math.floor(frame) * 8, 0, 8, 8, Character.posX, Character.posY, Character.width, Character.height );
     }
-    else if (direction == "up") {
-      ctx.drawImage(idle_up, Math.floor(frame) * 8, 0, 8, 8, charX, charY, charWidth, charHeight );
+    else if (Character.direction == "up") {
+      ctx.drawImage(idle_up, Math.floor(frame) * 8, 0, 8, 8, Character.posX, Character.posY, Character.width, Character.height );
     }
   } else {
-    if (direction == "right") {
-      ctx.drawImage(walk_right, Math.floor(frame) * 8, 0, 8, 8, charX, charY, charWidth, charHeight );
+    if (Character.direction == "right") {
+      ctx.drawImage(walk_right, Math.floor(frame) * 8, 0, 8, 8, Character.posX, Character.posY, Character.width, Character.height );
     }
-    else if (direction == "left") {
-      ctx.drawImage(walk_left, Math.floor(frame) * 8, 0, 8, 8, charX, charY, charWidth, charHeight );
+    else if (Character.direction == "left") {
+      ctx.drawImage(walk_left, Math.floor(frame) * 8, 0, 8, 8, Character.posX, Character.posY, Character.width, Character.height );
     }
-    else if (direction == "down") {
-      ctx.drawImage(walk_down, Math.floor(frame) * 8, 0, 8, 8, charX, charY, charWidth, charHeight );
+    else if (Character.direction == "down") {
+      ctx.drawImage(walk_down, Math.floor(frame) * 8, 0, 8, 8, Character.posX, Character.posY, Character.width, Character.height );
     }
-    else if (direction == "up") {
-      ctx.drawImage(walk_up, Math.floor(frame) * 8, 0, 8, 8, charX, charY, charWidth, charHeight );
+    else if (Character.direction == "up") {
+      ctx.drawImage(walk_up, Math.floor(frame) * 8, 0, 8, 8, Character.posX, Character.posY, Character.width, Character.height );
     }
   }
 */
 
-  ctx.drawImage(char, charX, charY - charHeight, charWidth, charHeight * 2);
+  ctx.drawImage(char, Character.posX, Character.posY - Character.height, Character.width, Character.height * 2);
 }
 
 function drawHp() {
   d = new Date();
-  if (d.getTime() - 2000 < lastHit || hp < 8) {
+  if (d.getTime() - 2000 < lastHit || Character.hp < 8) {
     ctx.beginPath();
     ctx.fillStyle = "#000";
-    ctx.fillRect(charX - 20 - 1, charY + charWidth / 2 - 100 - 1, 10 * 10 + 2, 12);
+    ctx.fillRect(Character.posX - 20 - 1, Character.posY + Character.width / 2 - 100 - 1, 10 * 10 + 2, 12);
     ctx.fillStyle = "green";
-    ctx.fillRect(charX - 20, charY + charWidth / 2 - 100, hp * 10, 10);
+    ctx.fillRect(Character.posX - 20, Character.posY + Character.width / 2 - 100, Character.hp * 10, 10);
     ctx.closePath();
     ctx.fillStyle = "#000";
   }
 }
 
 function attackingArea(){
-  if (direction == "up") {
-    attackingX = charX;
-    attackingY = charY - charHeight;
-  } else if (direction == "down") {
-    attackingX = charX;
-    attackingY = charY + charHeight;
-  } else if (direction == "right") {
-    attackingX = charX + charWidth;
-    attackingY = charY;
-  } else if (direction == "left") {
-    attackingX = charX - charWidth;
-    attackingY = charY;
+  if (Character.direction == "up") {
+    attackingX = Character.posX;
+    attackingY = Character.posY - Character.height;
+  } else if (Character.direction == "down") {
+    attackingX = Character.posX;
+    attackingY = Character.posY + Character.height;
+  } else if (Character.direction == "right") {
+    attackingX = Character.posX + Character.width;
+    attackingY = Character.posY;
+  } else if (Character.direction == "left") {
+    attackingX = Character.posX - Character.width;
+    attackingY = Character.posY;
   }
 /*
     ctx.fillStyle = "#000";

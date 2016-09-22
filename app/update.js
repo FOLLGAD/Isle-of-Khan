@@ -10,18 +10,18 @@ function update() {
   tickEnemies();
   walk();
   activate();
-  checkCharCollision();
+  Character.tick();
   drawEnemies();
   tickArrows();
   drawChar();
   drawTrees();
   drawHp();
   drawGui();
-  ctx.drawImage(legs, charX, charY, charWidth*2, charHeight);
+  ctx.drawImage(legs, Character.posX, Character.posY, Character.width*2, Character.height);
   if(menuActive) {menuUpdate();}
   drawCrossHair();
   ctx.fillText(camX + ", " + camY, camX + 50, camY + 120);
-  ctx.fillText(charX + ", " + charY, camX + 50, camY + 140);
+  ctx.fillText(Character.posX + ", " + Character.posY, camX + 50, camY + 140);
   ctx.restore();
 }
 
@@ -40,8 +40,8 @@ function resize() {
 function drawMap(){
   let posX = 0;
   let posY = 0;
-  for (var i = 0; i < mapArray.length; i++) {
-    for (var j = 0; j < mapArray[i].length; j++) {
+  for (let i = 0; i < mapArray.length; i++) {
+    for (let j = 0; j < mapArray[i].length; j++) {
       //laddar endast synliga tiles
       if ((j - 1) * tileSize < camX + ctx.canvas.width && (j + 1) * tileSize > camX && (i - 1) * tileSize < camY + ctx.canvas.height && (i + 1) * tileSize > camY) {
         ctx.drawImage(tile_map, (mapArray[i][j] % 8) * 8, Math.floor(mapArray[i][j] / 8) * 8, 8, 8, posX, posY, tileSize + 1, tileSize + 1);
