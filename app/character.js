@@ -18,6 +18,10 @@ let Character = {
   spawnY: charSpawnY,
 
   attacking: false,
+  canSwim: false,
+
+  // activation delay för bågen i millisekunder
+  activationDelay: 200,
 
   tick: function() {
     walk();
@@ -49,7 +53,6 @@ let Character = {
         Character.posX = i * tileSize + tileSize;
       }
     }
-
   }
 }
 

@@ -14,6 +14,7 @@ function update() {
   drawEnemies();
   tickArrows();
   drawChar();
+  Wizard.draw();
   drawTrees();
   drawHp();
   drawGui();
@@ -75,4 +76,8 @@ function menuUpdate() {
   ctx.fillRect(camX + canvas.width/2-150-100, camY + 300, 200, 50);
   ctx.fillStyle = "#888";
   ctx.fillText("Spawn enemy", camX + canvas.width/2-150-100 + 30, camY + 300 + 30, 200, 50);
+}
+
+function getRandom() {
+  return Math.random();
 }

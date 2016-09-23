@@ -16,9 +16,9 @@ let camY = 0;
 
 function checkObjectCollision(object) {
   tilesSurrounding(object.posX, object.posY);
-  for(i = 0; i < 4; i++) {
-    if(isTileWall(tileX[i], tileY[i])) {
-      checkTileCollision(tileX[i], tileY[i], object);
+  for (let o = 0; o < 4; o++) {
+    if (isTileWall(tileX[o], tileY[o], object.canSwim)) {
+      checkTileCollision(tileX[o], tileY[o], object);
     }
   }
 }
@@ -36,11 +36,14 @@ function tilesSurrounding(posX, posY) {
   tileY[3] = tileY[2];
 }
 
-function isTileWall(i, j) {
+function isTileWall(i, j, canSwim) {
   if (i >= tileMapWidth || i < 0 || j >= tileMapHeight || j < 0) {
+    return false;
+  }
+  if (mapArray[j][i] == 6) {
     return true;
-  } else if (mapArray[j][i] == 6 || mapArray[j][i] == 7) {
-    return true;
+  } else if (mapArray[j][i] == 7) {
+    return !canSwim;
   } else {
     return false;
   }
@@ -48,8 +51,8 @@ function isTileWall(i, j) {
 
 function checkTileCollision(i, j, object) {
   let colDistanceX = (i * tileSize + tileSize / 2) - (object.posX + object.width / 2);
-  let colDistanceY = (j * tileSize + tileSize / 2) - (object.posY + object.height / 2);
-  if (Math.abs(colDistanceX) < object.width && Math.abs(colDistanceY) < object.height) {
+  let colDistanceY = (j * tileSize + tileSize / 2) - (object.posY + object.width / 2);
+  if (Math.abs(colDistanceX) < object.width/2 + tileSize / 2 && Math.abs(colDistanceY) < object.width / 2 + tileSize / 2) {
     object.collision(i, j, colDistanceX, colDistanceY);
   }
 }
@@ -93,4 +96,5 @@ function drawGui() {
   ctx.font = "40px Courier";
   ctx.fillText("Coins: " + points, camX + 50, camY + 80);
   ctx.font = "20px Courier";
+
 }

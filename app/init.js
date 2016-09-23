@@ -89,3 +89,4 @@ let legs = document.getElementById("legs");
 let char = document.getElementById("char");
 let arrow = document.getElementById("arrow");
 let bow = document.getElementById("bow");
+let wizard = document.getElementById("wizard");

@@ -12,4 +12,5 @@ define(function (require) {
     let update = require('./update');
     let enemies = require('./enemy');
     let projectiles = require('./projectiles');
+    let npc = require('./npc');
 });
