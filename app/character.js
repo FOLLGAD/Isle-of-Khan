@@ -34,9 +34,6 @@ let Character = {
   },
 
   collision: function(i, j, colDistanceX, colDistanceY) {
-    let colDistanceX = (i * tileSize + tileSize / 2) - (Character.posX + Character.width / 2);
-    let colDistanceY = (j * tileSize + tileSize / 2) - (Character.posY + Character.height / 2);
-
     if (Math.abs(colDistanceX) < Math.abs(colDistanceY)) {
       // Flyttas till ner/upp , Y-led
       if (colDistanceY > 0) {

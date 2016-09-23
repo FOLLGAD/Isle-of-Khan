@@ -49,7 +49,6 @@ function isTileWall(i, j) {
 function checkTileCollision(i, j, object) {
   let colDistanceX = (i * tileSize + tileSize / 2) - (object.posX + object.width / 2);
   let colDistanceY = (j * tileSize + tileSize / 2) - (object.posY + object.height / 2);
-  console.log(colDistanceX, object.width, object.height);
   if (Math.abs(colDistanceX) < object.width && Math.abs(colDistanceY) < object.height) {
     object.collision(i, j, colDistanceX, colDistanceY);
   }

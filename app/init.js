@@ -60,7 +60,6 @@ let canGetDmg = true;
 let lastHit = 0;
 
 let bowSelected = true;
-let arrows = [];
 
 let lastActivate = 0;
 
