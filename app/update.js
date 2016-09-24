@@ -1,3 +1,5 @@
+//TODO: lägg till så att alla entities blir rendered i olika ordning beroende på sina Y-värden så det ser ut som att man är bakom den
+
 // update, tick
 function update() {
   //DONE:0 HP-bar
@@ -8,8 +10,10 @@ function update() {
   drawMap();
   drawCoin();
   tickEnemies();
-  walk();
   activate();
+  spawnCoin();
+  drawCoin();
+  spawnMonster();
   Character.tick();
   drawEnemies();
   tickArrows();

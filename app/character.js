@@ -7,7 +7,7 @@ let Character = {
   velX: 0,
   velY: 0,
 
-  walkSpeed: 5,
+  walkSpeed: 7,
   direction: "up",
   hp: 10,
   idle: true,
@@ -19,6 +19,9 @@ let Character = {
 
   attacking: false,
   canSwim: false,
+
+  // Amount of inaccuracy for the bow, default = 0.05
+  bowInaccuracy: 0.05,
 
   // activation delay för bågen i millisekunder
   activationDelay: 200,
@@ -147,6 +150,21 @@ function walk() {
     attackingArea();
   }
 }
+
+function activate() {
+  let d = new Date();
+  if (mouseDown) {
+    if (lastActivate + Character.activationDelay < d.getTime()) {
+      if (bowSelected) {
+        let direction = Math.atan2(camX - Character.posX - Character.width / 2 + mousePosX, camY - Character.posY - Character.height/2 + mousePosY);
+        direction += (getRandom()*2 - 1) * Character.bowInaccuracy;
+        arrows.push(new arrowObj(Character.posX + Character.width / 2, Character.posY + Character.height / 2, direction, arrowSpeed));
+        lastActivate = d.getTime();
+      }
+    }
+  }
+}
+
 function drawChar() {
 /*
   if (Character.attacking) {
@@ -204,19 +222,6 @@ function drawChar() {
 */
 
   ctx.drawImage(char, Character.posX, Character.posY - Character.height, Character.width, Character.height * 2);
-}
-
-function drawHp() {
-  d = new Date();
-  if (d.getTime() - 2000 < lastHit || Character.hp < 8) {
-    ctx.beginPath();
-    ctx.fillStyle = "#000";
-    ctx.fillRect(Character.posX - 20 - 1, Character.posY + Character.width / 2 - 100 - 1, 10 * 10 + 2, 12);
-    ctx.fillStyle = "green";
-    ctx.fillRect(Character.posX - 20, Character.posY + Character.width / 2 - 100, Character.hp * 10, 10);
-    ctx.closePath();
-    ctx.fillStyle = "#000";
-  }
 }
 
 function attackingArea(){

@@ -17,6 +17,8 @@ function arrowObj(posX, posY, direction, vel) {
   this.height = arrowHeight;
   this.img = arrow;
   this.canSwim = true;
+  this.penetration = 1;
+  this.dmg = 4;
   this.collision = function() {
     let index = arrows.indexOf(this);
     arrows.splice(index, 1);
@@ -24,15 +26,34 @@ function arrowObj(posX, posY, direction, vel) {
 }
 
 function tickArrows() {
-  // För någon dum jävla anledning måste dessa vara i olika for-loops. Ta bort dom på egen risk D;
+  // check collision with enemies
+  for (j = 0; j < arrows.length; j++) {
+     for (i = 0; i < enemies.length; i++) {
+       if (enemies[i].posX < arrows[j].posX + arrows[j].width
+          && enemies[i].posX + enemies[i].width > arrows[j].posX
+          && enemies[i].posY < arrows[j].posY + arrows[j].height
+          && enemies[i].posY + enemies[i].height > arrows[j].posY) {
+          enemies[i].hp -= arrows[j].dmg;
+          arrows[j].penetration -= 1;
+          if (arrows[j].penetration < 0) {
+            arrows.splice(j, 1);
+            i = 100;
+            j = 100;
+          }
+       }
+     }
+  }
   for (i = 0; i < arrows.length; i++) {
       arrows[i].posX += arrows[i].velX;
       arrows[i].posY += arrows[i].velY;
+      if (arrows[i].penetration < 0) {
+        arrows.splice(i, 1);
+      }
   }
-  for(i = 0; i < arrows.length; i++) {
+  for (i = 0; i < arrows.length; i++) {
     checkObjectCollision(arrows[i]);
   }
-  for(i = 0; i < arrows.length; i++) {
+  for (i = 0; i < arrows.length; i++) {
     if (arrows[i].posX > mapSizeX
       || arrows[i].posX < 0
       || arrows[i].posY > mapSizeY
@@ -48,23 +69,8 @@ function tickArrows() {
   drawArrows();
 }
 
-function activate() {
-  let d = new Date();
-  if (mouseDown) {
-    if (lastActivate + Character.activationDelay < d.getTime()) {
-      if (bowSelected) {
-        let direction = Math.atan2(camX - Character.posX - Character.width / 2 + mousePosX, camY - Character.posY - Character.height/2 + mousePosY);
-        direction += (getRandom()*2 - 1)/20;
-        arrows.push(new arrowObj(Character.posX + Character.width / 2, Character.posY + Character.height / 2, direction, arrowSpeed));
-        lastActivate = d.getTime();
-      }
-    }
-  }
-}
-
 function drawArrows() {
   for(i = 0; i < arrows.length; i++) {
-    ctx.fillRect(arrows[i].posX - 5, arrows[i].posY - 5, 10, 10);
     ctx.save();
     ctx.translate(arrows[i].posX, arrows[i].posY);
     ctx.rotate(Math.PI - arrows[i].direction);

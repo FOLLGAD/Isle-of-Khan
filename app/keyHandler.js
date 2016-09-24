@@ -26,7 +26,6 @@ function keyDownHandler(e) {
     }
     else if (e.keyCode == 86) {
         vPressed = true;
-        spawnMonster();
     }
     else if (e.keyCode == 27) {
         menuToggle();

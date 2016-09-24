@@ -13,4 +13,6 @@ define(function (require) {
     let enemies = require('./enemy');
     let projectiles = require('./projectiles');
     let npc = require('./npc');
+    let gui = require('./gui');
+    let collision = require('./collision');
 });
