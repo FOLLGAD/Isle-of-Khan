@@ -1,7 +1,7 @@
 // for testing;
 function spawnMonster() {
   //pusha ett nytt enemy-object i en array
-  if (enemies.length < 10 && vPressed) {
+  if (enemies.length < 1000 && vPressed) {
     enemies.push(new enemyObj(camX + mousePosX - enemyWidth / 2, camY + mousePosY - enemyHeight / 2));
   }
 }

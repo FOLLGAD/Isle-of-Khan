@@ -27,8 +27,8 @@ function arrowObj(posX, posY, direction, vel) {
 
 function tickArrows() {
   // check collision with enemies
-  for (j = 0; j < arrows.length; j++) {
-     for (i = 0; i < enemies.length; i++) {
+  for (i = 0; i < enemies.length; i++) {
+     for (j = 0; j < arrows.length; j++) {
        if (enemies[i].posX < arrows[j].posX + arrows[j].width
           && enemies[i].posX + enemies[i].width > arrows[j].posX
           && enemies[i].posY < arrows[j].posY + arrows[j].height
