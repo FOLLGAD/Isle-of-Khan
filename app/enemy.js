@@ -15,6 +15,7 @@ function enemyObj(posX, posY) {
   this.noticeDistance = 1000;
   this.loseDistance = this.noticeDistance + 200;
   this.canHitPlayer = true;
+  this.dmgAnim = 0;
 
   this.collision = function(i, j, colDistanceX, colDistanceY) {
     if (Math.abs(colDistanceX) < Math.abs(colDistanceY)) {
@@ -55,6 +56,7 @@ function tickEnemies() {
     enemies[i].posY -= enemies[i].velY;
     enemies[i].velX = 0;
     enemies[i].velY = 0;
+    enemies[i].dmgAnim -= 1;
     checkObjectCollision(enemies[i]);
     checkForPlayerDmg(i);
     if (enemies[i].posX < 0 || enemies[i].posX > mapSizeX || enemies[i].posY < 0 || enemies[i].posY > mapSizeY) {
@@ -72,5 +74,10 @@ function tickEnemies() {
 function drawEnemies() {
   for (let i = 0; i < enemies.length; i++) {
     ctx.drawImage(enemy, enemies[i].posX, enemies[i].posY, enemyWidth, enemyHeight);
+    if (enemies[i].dmgAnim > 0) {
+      ctx.globalAlpha = 0.2;
+      ctx.fillStyle = "#FF0000";
+      ctx.fillRect(enemies[i].posX, enemies[i].posY, enemies[i].width, enemies[i].height);
+    }
   }
 }

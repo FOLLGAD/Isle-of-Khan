@@ -33,6 +33,7 @@ function tickArrows() {
           && enemies[i].posX + enemies[i].width > arrows[j].posX
           && enemies[i].posY < arrows[j].posY + arrows[j].height
           && enemies[i].posY + enemies[i].height > arrows[j].posY) {
+          enemies[i].dmgAnim = 30;
           enemies[i].hp -= arrows[j].dmg;
           arrows[j].penetration -= 1;
           if (arrows[j].penetration < 0) {

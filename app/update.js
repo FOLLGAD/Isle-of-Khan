@@ -13,7 +13,6 @@ function update() {
   activate();
   spawnCoin();
   drawCoin();
-  spawnMonster();
   Character.tick();
   drawEnemies();
   tickArrows();
