@@ -25,6 +25,8 @@ let Character = {
 
   // activation delay för bågen i millisekunder
   activationDelay: 200,
+  // tid som char går sakta efter att ha avfyrat bågen
+  activationSlowdownTime: 250,
 
   tick: function() {
     walk();
@@ -114,7 +116,7 @@ function walk() {
 
   // Sätter position på karaktär beroende på charVel.
   let d = new Date();
-  if(Character.attacking || lastActivate + 600 > d.getTime()) {
+  if(Character.attacking || lastActivate + Character.activationSlowdownTime > d.getTime()) {
     Character.posX += Character.velX * 0.5;
     Character.posY += Character.velY * 0.5;
   } else {
@@ -158,7 +160,7 @@ function activate() {
       if (bowSelected) {
         let direction = Math.atan2(camX - Character.posX - Character.width / 2 + mousePosX, camY - Character.posY - Character.height/2 + mousePosY);
         direction += (getRandom()*2 - 1) * Character.bowInaccuracy;
-        arrows.push(new arrowObj(Character.posX + Character.width / 2, Character.posY + Character.height / 2, direction, arrowSpeed));
+        arrows.push(new Arrow(Character.posX + Character.width / 2, Character.posY + Character.height / 2, direction, arrowSpeed));
         lastActivate = d.getTime();
       }
     }

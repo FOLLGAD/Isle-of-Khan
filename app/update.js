@@ -8,11 +8,9 @@ function update() {
   viewPoint();
   ctx.clearRect(-camX, -camY, canvas.width, canvas.height); //Clears viewPoint
   drawMap();
-  drawCoin();
+  tickCoin();
   tickEnemies();
   activate();
-  spawnCoin();
-  drawCoin();
   Character.tick();
   drawEnemies();
   tickArrows();

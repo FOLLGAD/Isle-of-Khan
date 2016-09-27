@@ -2,14 +2,14 @@
 function spawnMonster() {
   //pusha ett nytt enemy-object i en array
   if (enemies.length < 1000 && vPressed) {
-    enemies.push(new enemyObj(camX + mousePosX - enemyWidth / 2, camY + mousePosY - enemyHeight / 2));
+    enemies.push(new Enemy(camX + mousePosX - enemyWidth / 2, camY + mousePosY - enemyHeight / 2));
   }
 }
 // for testing;
-function spawnCoin() {
+function spawnCoinAtCursor() {
   //pusha ett nytt enemy-object i en array
-  if (enemies.length < 10) {
-    coins.push(new Coin(camX + mousePosX - enemyWidth / 2, camY + mousePosY - enemyHeight / 2));
+  if (coins.length < 10000) {
+    coins.push(new Coin(camX + mousePosX - 32 / 2, camY + mousePosY - 32 / 2));
   }
 }
 

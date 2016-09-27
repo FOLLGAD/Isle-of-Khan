@@ -5,7 +5,7 @@ let arrows = [];
 let arrowWidth = 16;
 let arrowHeight = 32;
 
-function arrowObj(posX, posY, direction, vel) {
+function Arrow(posX, posY, direction, vel) {
   this.direction = direction;
   this.posX = posX;
   this.posY = posY;
@@ -15,7 +15,7 @@ function arrowObj(posX, posY, direction, vel) {
   this.posY0 = this.posY;
   this.width = arrowWidth;
   this.height = arrowHeight;
-  this.img = arrow;
+  this.img = arrowimg;
   this.canSwim = true;
   this.penetration = 1;
   this.dmg = 4;
@@ -27,23 +27,28 @@ function arrowObj(posX, posY, direction, vel) {
 
 function tickArrows() {
   // check collision with enemies
-  for (i = 0; i < enemies.length; i++) {
-     for (j = 0; j < arrows.length; j++) {
-       if (enemies[i].posX < arrows[j].posX + arrows[j].width
-          && enemies[i].posX + enemies[i].width > arrows[j].posX
-          && enemies[i].posY < arrows[j].posY + arrows[j].height
-          && enemies[i].posY + enemies[i].height > arrows[j].posY) {
-          enemies[i].dmgAnim = 30;
-          enemies[i].hp -= arrows[j].dmg;
-          arrows[j].penetration -= 1;
-          if (arrows[j].penetration < 0) {
-            arrows.splice(j, 1);
-            i = 100;
-            j = 100;
-          }
-       }
-     }
+for (i = 0; i < enemies.length; i++) {
+  let breakFor = false;
+   for (j = 0; j < arrows.length; j++) {
+     if (enemies[i].posX < arrows[j].posX + arrows[j].width
+        && enemies[i].posX + enemies[i].width > arrows[j].posX
+        && enemies[i].posY < arrows[j].posY + arrows[j].height
+        && enemies[i].posY + enemies[i].height > arrows[j].posY) {
+        enemies[i].dmgAnim = 30;
+        enemies[i].hp -= arrows[j].dmg;
+        arrows[j].penetration -= 1;
+        if (arrows[j].penetration < 0) {
+          arrows.splice(j, 1);
+          j -= 1;
+        }
+        if (enemies[i].hp < 0) {
+          enemies.splice(i, 1);
+          i -= 1;
+        }
+      }
+    }
   }
+
   for (i = 0; i < arrows.length; i++) {
       arrows[i].posX += arrows[i].velX;
       arrows[i].posY += arrows[i].velY;

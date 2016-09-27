@@ -33,6 +33,12 @@ function keyDownHandler(e) {
     else if (e.keyCode == 27) {
         menuToggle();
     }
+    else if (e.keyCode == 67) {
+      if (!cPressed) {
+        spawnCoinAtCursor();
+        cPressed = true;
+      }
+    }
 }
 
 function keyUpHandler(e) {
@@ -58,6 +64,9 @@ function keyUpHandler(e) {
     }
     else if(e.keyCode == 86) {
         vPressed = false;
+    }
+    else if(e.keyCode == 67) {
+        cPressed = false;
     }
 }
 

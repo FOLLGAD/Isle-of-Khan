@@ -8,8 +8,8 @@ define(function (require) {
     let viewPoint = require('./viewPoint');
     let keyHandlers = require('./keyHandler');
     let character = require('./character');
-    let coin = require('./coin');
     let update = require('./update');
+    let coin = require('./coin');
     let enemies = require('./enemy');
     let projectiles = require('./projectiles');
     let npc = require('./npc');

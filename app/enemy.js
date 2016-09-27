@@ -1,7 +1,7 @@
 //DONE:40 add enemies;
-let enemyWidth = 128;
-let enemyHeight = 128;
-function enemyObj(posX, posY) {
+let enemyWidth = 64;
+let enemyHeight = 64;
+function Enemy(posX, posY) {
   this.posX = posX;
   this.posY = posY;
   this.velX = 0;
@@ -14,8 +14,9 @@ function enemyObj(posX, posY) {
   this.dmg = 2;
   this.noticeDistance = 1000;
   this.loseDistance = this.noticeDistance + 200;
-  this.canHitPlayer = true;
+  this.canHitPlayer = 0;
   this.dmgAnim = 0;
+  this.img = enemyimg;
 
   this.collision = function(i, j, colDistanceX, colDistanceY) {
     if (Math.abs(colDistanceX) < Math.abs(colDistanceY)) {
@@ -73,11 +74,20 @@ function tickEnemies() {
 
 function drawEnemies() {
   for (let i = 0; i < enemies.length; i++) {
-    ctx.drawImage(enemy, enemies[i].posX, enemies[i].posY, enemyWidth, enemyHeight);
+    ctx.drawImage(enemies[i].img, enemies[i].posX, enemies[i].posY, enemyWidth, enemyHeight);
     if (enemies[i].dmgAnim > 0) {
-      ctx.globalAlpha = 0.2;
+      ctx.globalAlpha = 0.4;
       ctx.fillStyle = "#FF0000";
       ctx.fillRect(enemies[i].posX, enemies[i].posY, enemies[i].width, enemies[i].height);
+      ctx.globalAlpha = 1;
+      ctx.fillStyle = "#000";
     }
   }
+}
+
+setInterval(spawnEnemy, 2000);
+
+function spawnEnemy() {
+  enemies.push(new Enemy(Math.round(getRandom()*tileMapWidth)*tileSize, Math.round(getRandom()*tileMapWidth)*tileSize));
+  console.log("enemy spawned at ", enemies[enemies.length-1].posX, enemies[enemies.length-1].posY);
 }
