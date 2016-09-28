@@ -1,3 +1,4 @@
+let canActive = true;
 //DONE:40 add enemies;
 let enemyWidth = 64;
 let enemyHeight = 64;
@@ -6,17 +7,20 @@ function Enemy(posX, posY) {
   this.posY = posY;
   this.velX = 0;
   this.velY = 0;
+  this.accX = 0;
+  this.accY = 0;
   this.width = enemyWidth;
   this.height = enemyHeight;
   this.active = false;
   this.speed = 5;
   this.hp = 10;
-  this.dmg = 2;
+  this.dmg = 1;
   this.noticeDistance = 1000;
   this.loseDistance = this.noticeDistance + 200;
   this.canHitPlayer = 0;
   this.dmgAnim = 0;
   this.img = enemyimg;
+  this.canActive = true;
 
   this.collision = function(i, j, colDistanceX, colDistanceY) {
     if (Math.abs(colDistanceX) < Math.abs(colDistanceY)) {
@@ -38,6 +42,10 @@ function Enemy(posX, posY) {
 }
 
 function tickEnemies() {
+  if (enemies.length != 0) {
+    console.log(enemies[0].accX, enemies[0].accY, enemies[0].velX, enemies[0].velY);
+  }
+
   for (let i = 0; i < enemies.length; i++) {
     if (Math.abs(enemies[i].posX - Character.posX) < Character.width && Math.abs(enemies[i].posY - Character.posY) < Character.height) {
       enemies[i].active = false;
@@ -46,23 +54,23 @@ function tickEnemies() {
     } else if (enemies[i].active && (Math.abs(enemies[i].posX - Character.posX) > enemies[i].loseDistance && Math.abs(enemies[i].posY - Character.posY) < enemies[i].loseDistance)) {
       enemies[i].active = false;
     }
-    if (enemies[i].active) {
+
+    if (enemies[i].active && canActive) {
       let direction = Math.atan2(-Character.posX - Character.width / 2 + enemies[i].posX + enemies[i].width / 2, -Character.posY - Character.height / 2 + enemies[i].posY + enemies[i].height / 2);
       enemies[i].velX = Math.sin(direction) * enemies[i].speed;
       enemies[i].velY = Math.cos(direction) * enemies[i].speed;
     } else {
-
+      enemies[i].velX = 0;
+      enemies[i].velY = 0;
     }
+
     enemies[i].posX -= enemies[i].velX;
     enemies[i].posY -= enemies[i].velY;
-    enemies[i].velX = 0;
-    enemies[i].velY = 0;
+
     enemies[i].dmgAnim -= 1;
     checkObjectCollision(enemies[i]);
     checkForPlayerDmg(i);
-    if (enemies[i].posX < 0 || enemies[i].posX > mapSizeX || enemies[i].posY < 0 || enemies[i].posY > mapSizeY) {
-    }
-    if (enemies[i].hp < 0) {
+    if (enemies[i].posX < 0 || enemies[i].posX > mapSizeX || enemies[i].posY < 0 || enemies[i].posY > mapSizeY || enemies[i].hp <= 0) {
       enemies.splice(i, 1);
     }
   }
@@ -90,4 +98,8 @@ setInterval(spawnEnemy, 2000);
 function spawnEnemy() {
   enemies.push(new Enemy(Math.round(getRandom()*tileMapWidth)*tileSize, Math.round(getRandom()*tileMapWidth)*tileSize));
   console.log("enemy spawned at ", enemies[enemies.length-1].posX, enemies[enemies.length-1].posY);
+}
+
+function toggleEnemies() {
+    canActive = !canActive;
 }

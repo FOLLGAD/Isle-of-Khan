@@ -17,8 +17,8 @@ function Arrow(posX, posY, direction, vel) {
   this.height = arrowHeight;
   this.img = arrowimg;
   this.canSwim = true;
-  this.penetration = 1;
-  this.dmg = 4;
+  this.penetration = 0;
+  this.dmg = 10;
   this.collision = function() {
     let index = arrows.indexOf(this);
     arrows.splice(index, 1);
@@ -34,6 +34,8 @@ for (i = 0; i < enemies.length; i++) {
         && enemies[i].posX + enemies[i].width > arrows[j].posX
         && enemies[i].posY < arrows[j].posY + arrows[j].height
         && enemies[i].posY + enemies[i].height > arrows[j].posY) {
+        enemies[i].velX -= arrows[j].velX*5;
+        enemies[i].velY -= arrows[j].velY*5;
         enemies[i].dmgAnim = 30;
         enemies[i].hp -= arrows[j].dmg;
         arrows[j].penetration -= 1;
@@ -44,6 +46,7 @@ for (i = 0; i < enemies.length; i++) {
         if (enemies[i].hp < 0) {
           enemies.splice(i, 1);
           i -= 1;
+        } else {
         }
       }
     }

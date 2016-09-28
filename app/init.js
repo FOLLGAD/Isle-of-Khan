@@ -49,6 +49,7 @@ let downPressed = false;
 let mouseDown = false;
 let vPressed = false;
 let cPressed = false;
+let bPressed = false;
 let spacePressed = false;
 
 let collision = false;

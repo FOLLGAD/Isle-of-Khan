@@ -21,9 +21,9 @@ let Character = {
   canSwim: false,
 
   // Amount of inaccuracy for the bow, default = 0.05
-  bowInaccuracy: 0.05,
+  bowInaccuracy: 0.0,
 
-  // activation delay för bågen i millisekunder
+  // activation delay för bågen i millisekunder, default = 200
   activationDelay: 200,
   // tid som char går sakta efter att ha avfyrat bågen
   activationSlowdownTime: 250,

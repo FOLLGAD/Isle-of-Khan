@@ -39,6 +39,13 @@ function keyDownHandler(e) {
         cPressed = true;
       }
     }
+    else if (e.keyCode == 66) {
+      if (!bPressed) {
+        toggleEnemies();
+        bPressed = true;
+        console.log(bPressed);
+      }
+    }
 }
 
 function keyUpHandler(e) {
@@ -67,6 +74,9 @@ function keyUpHandler(e) {
     }
     else if(e.keyCode == 67) {
         cPressed = false;
+    }
+    else if(e.keyCode == 66) {
+        bPressed = false;
     }
 }
 
