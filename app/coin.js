@@ -31,5 +31,4 @@ setInterval(spawnCoin, 1000);
 
 function spawnCoin() {
   coins.push(new Coin(Math.round(getRandom()*tileMapWidth)*tileSize + 16, Math.round(getRandom()*tileMapWidth)*tileSize + 16));
-  console.log("coin spawned at ", coins[coins.length-1].posX, coins[coins.length-1].posY);
 }

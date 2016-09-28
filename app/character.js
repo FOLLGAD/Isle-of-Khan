@@ -6,8 +6,8 @@ let Character = {
   width: 64,
   velX: 0,
   velY: 0,
-
-  walkSpeed: 7,
+  //walkspeed default = 7
+  walkSpeed: 8,
   direction: "up",
   hp: 10,
   idle: true,
@@ -24,9 +24,9 @@ let Character = {
   bowInaccuracy: 0.0,
 
   // activation delay för bågen i millisekunder, default = 200
-  activationDelay: 200,
+  activationDelay: 500,
   // tid som char går sakta efter att ha avfyrat bågen
-  activationSlowdownTime: 250,
+  activationSlowdownTime: 550,
 
   tick: function() {
     walk();
@@ -58,6 +58,9 @@ let Character = {
         Character.posX = i * tileSize + tileSize;
       }
     }
+  },
+  draw: function() {
+    ctx.drawImage(Character.img, Character.posX, Character.posY - Character.height, Character.width, Character.height * 2);
   }
 }
 
@@ -147,27 +150,26 @@ function walk() {
     attackingFrame = 0;
     Character.attacking = false;
   }
-
-  if (Character.attacking) {
-    attackingArea();
-  }
 }
 
 function activate() {
   let d = new Date();
   if (mouseDown) {
-    if (lastActivate + Character.activationDelay < d.getTime()) {
-      if (bowSelected) {
+    if (bowSelected) {
+      if (lastActivate + Character.activationDelay < d.getTime()) {
         let direction = Math.atan2(camX - Character.posX - Character.width / 2 + mousePosX, camY - Character.posY - Character.height/2 + mousePosY);
         direction += (getRandom()*2 - 1) * Character.bowInaccuracy;
         arrows.push(new Arrow(Character.posX + Character.width / 2, Character.posY + Character.height / 2, direction, arrowSpeed));
         lastActivate = d.getTime();
       }
     }
+  } else if (spacePressed && lastActivate + 100 < d.getTime()) {
+    attackingArea();
   }
 }
 
 function drawChar() {
+  Character.draw();
 /*
   if (Character.attacking) {
     if (Character.direction == "right") {
@@ -222,8 +224,6 @@ function drawChar() {
     }
   }
 */
-
-  ctx.drawImage(char, Character.posX, Character.posY - Character.height, Character.width, Character.height * 2);
 }
 
 function attackingArea(){
@@ -240,8 +240,6 @@ function attackingArea(){
     attackingX = Character.posX - Character.width;
     attackingY = Character.posY;
   }
-/*
-    ctx.fillStyle = "#000";
-    ctx.fillRect(attackingX, attackingY, 8*8, 8*8);
-*/
+  ctx.fillStyle = "#000";
+  ctx.fillRect(attackingX, attackingY, 8*8, 8*8);
 }

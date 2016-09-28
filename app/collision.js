@@ -41,8 +41,8 @@ function checkTileCollision(i, j, object) {
 }
 
 function checkForPlayerDmg(i) {
-  if (enemies[i].posX < Character.posX + charWidth && enemies[i].posX + enemyWidth > Character.posX) {
-    if (enemies[i].posY < Character.posY + charHeight && enemies[i].posY + enemyHeight > Character.posY) {
+  if (enemies[i].posX < Character.posX + Character.width && enemies[i].posX + enemies[i].width > Character.posX) {
+    if (enemies[i].posY < Character.posY + Character.height && enemies[i].posY + enemies[i].height > Character.posY) {
       let d = new Date();
       if (d.getTime() - 500 > lastHit || lastHit == 0) {
         Character.hp -= enemies[i].dmg;

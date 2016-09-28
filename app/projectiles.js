@@ -18,10 +18,17 @@ function Arrow(posX, posY, direction, vel) {
   this.img = arrowimg;
   this.canSwim = true;
   this.penetration = 0;
-  this.dmg = 10;
+  this.dmg = 2;
   this.collision = function() {
     let index = arrows.indexOf(this);
     arrows.splice(index, 1);
+  }
+  this.draw = function() {
+    ctx.save();
+    ctx.translate(this.posX, this.posY);
+    ctx.rotate(Math.PI - this.direction);
+    ctx.drawImage(this.img, -this.width / 2, -this.height / 2, this.width, this.height);
+    ctx.restore();
   }
 }
 
@@ -34,8 +41,8 @@ for (i = 0; i < enemies.length; i++) {
         && enemies[i].posX + enemies[i].width > arrows[j].posX
         && enemies[i].posY < arrows[j].posY + arrows[j].height
         && enemies[i].posY + enemies[i].height > arrows[j].posY) {
-        enemies[i].velX -= arrows[j].velX*5;
-        enemies[i].velY -= arrows[j].velY*5;
+        enemies[i].velX -= arrows[j].velX / 2;
+        enemies[i].velY -= arrows[j].velY / 2;
         enemies[i].dmgAnim = 30;
         enemies[i].hp -= arrows[j].dmg;
         arrows[j].penetration -= 1;
@@ -51,7 +58,6 @@ for (i = 0; i < enemies.length; i++) {
       }
     }
   }
-
   for (i = 0; i < arrows.length; i++) {
       arrows[i].posX += arrows[i].velX;
       arrows[i].posY += arrows[i].velY;
@@ -74,16 +80,5 @@ for (i = 0; i < enemies.length; i++) {
       ) {
       arrows.splice(i, 1);
     }
-  }
-  drawArrows();
-}
-
-function drawArrows() {
-  for(i = 0; i < arrows.length; i++) {
-    ctx.save();
-    ctx.translate(arrows[i].posX, arrows[i].posY);
-    ctx.rotate(Math.PI - arrows[i].direction);
-    ctx.drawImage(arrows[i].img, -arrows[i].width / 2, -arrows[i].height / 2, arrows[i].width, arrows[i].height);
-    ctx.restore();
   }
 }

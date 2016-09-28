@@ -1,30 +1,67 @@
 //TODO: lägg till så att alla entities blir rendered i olika ordning beroende på sina Y-värden så det ser ut som att man är bakom den
 
 // update, tick
+
+// TODO: lägg alla draw-funktioner i separat så att frames inte är bundna med ticks
+
 function update() {
   //DONE:0 HP-bar
   ctx.save();
   resize();
-  viewPoint();
-  ctx.clearRect(-camX, -camY, canvas.width, canvas.height); //Clears viewPoint
-  drawMap();
+
+  Character.tick();
   tickCoin();
   tickEnemies();
-  activate();
-  Character.tick();
-  drawEnemies();
   tickArrows();
-  drawChar();
-  Wizard.draw();
-  drawTrees();
+  activate();
+  // Tick all objects before viewPoint.
+    viewPoint();
+    ctx.clearRect(-camX, -camY, canvas.width, canvas.height); //Clears viewPoint
+    drawMap();
+  // Draw all objects after viewPoint.
+  draw();
   drawHp();
   drawGui();
-  ctx.drawImage(legs, Character.posX, Character.posY, Character.width*2, Character.height);
-  if(menuActive) {menuUpdate();}
-  drawCrossHair();
-  ctx.fillText(camX + ", " + camY, camX + 50, camY + 120);
-  ctx.fillText(Character.posX + ", " + Character.posY, camX + 50, camY + 140);
+  if (menuActive) { menuUpdate(); }
+  drawCursor();
+
+    ctx.fillText(camX + ", " + camY, camX + 50, camY + 120);
+    ctx.fillText(Character.posX + ", " + Character.posY, camX + 50, camY + 140);
+
   ctx.restore();
+}
+
+//  Vad ska drawas?
+// 1. Map
+// 2. Alla entities (enemies, character, projectiles), inklusive träd, ska drawas i ordning från posY = 0 till posY = canvas.height
+   // Varje entitys ska börja vid ((posY eller posY + height))??
+// 3. HP-mätare, GUI
+// 4. ESC-meny
+// 5. Cursor
+
+//TODO: gör träd transparent om man är bakom dem
+
+function draw() {
+  // Drawar alla entities efter värdet på dess posY, från högt till lågt
+  // Lägger först alla objekt som ska målas i en och samma array, och sorterar dem efter storlek på posY, och callar sist alla deras individuella draw()-funktioner.
+  let drawOrder = [];
+  drawOrder.push(Character);
+  drawOrder.push(Wizard);
+  for (i = 0; i < treesArray.length; i++) {
+    drawOrder.push(treesArray[i]);
+  }
+  for (i = 0; i < enemies.length; i++) {
+    drawOrder.push(enemies[i]);
+  }
+  for (i = 0; i < arrows.length; i++) {
+    drawOrder.push(arrows[i]);
+  }
+  drawOrder.sort(function(a, b) {
+    return (a.posY + a.height) - (b.posY + b.height);
+  });
+  for (i = 0; i < drawOrder.length; i++) {
+    drawOrder[i].draw();
+  }
 }
 
 setInterval(update, 1000/fps);
@@ -36,13 +73,15 @@ function resize() {
   ctx.canvas.width  = window.innerWidth;
   ctx.canvas.height = window.innerHeight;
   ctx.imageSmoothingEnabled = false;
+  offsetMaxX = mapSizeX - canvas.width;
+  offsetMaxY = mapSizeY - canvas.height;
 }
 
 //DONE:30 lägg till så att endast tiles synliga på canvas + buffer på ett block blir rendered varje frame
 function drawMap(){
-  let posX = 0;
-  let posY = 0;
   for (let i = 0; i < mapArray.length; i++) {
+    let posX = 0;
+    let posY = i * tileSize;
     for (let j = 0; j < mapArray[i].length; j++) {
       //laddar endast synliga tiles
       if ((j - 1) * tileSize < camX + ctx.canvas.width && (j + 1) * tileSize > camX && (i - 1) * tileSize < camY + ctx.canvas.height && (i + 1) * tileSize > camY) {
@@ -50,14 +89,13 @@ function drawMap(){
       }
       posX += tileSize;
     }
-    posX = 0;
-    posY += tileSize;
   }
 }
 
-function drawCrossHair() {
-  ctx.drawImage(crosshair, mousePosX + camX - 0, mousePosY + camY, 5 * 6, 6 * 6);
+//DONE:20 ladda träden som separata object som ritas efter karaktären, så det ser ut som att man är bakom dem.
 
+function drawCursor() {
+  ctx.drawImage(crosshair, mousePosX + camX - 0, mousePosY + camY, 5 * 6, 6 * 6);
 }
 
 function menuToggle() {

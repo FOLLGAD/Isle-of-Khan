@@ -2,9 +2,9 @@ define(function (require) {
     // Load any app-specific modules
     // with a relative require call,
     // like:
+    let map = require('./map');
     let init = require('./init');
     let keyHandler = require('./keyHandler');
-    let map = require('./map');
     let viewPoint = require('./viewPoint');
     let keyHandlers = require('./keyHandler');
     let character = require('./character');

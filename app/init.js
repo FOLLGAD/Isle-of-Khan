@@ -59,7 +59,6 @@ let bowSelected = true;
 let lastActivate = 0;
 
 // textures and resources
-
 ctx.imageSmoothingEnabled = false;
 
 let coin = document.getElementById("coin");
@@ -85,3 +84,33 @@ let char = document.getElementById("char");
 let arrowimg = document.getElementById("arrow");
 let bow = document.getElementById("bow");
 let wizard = document.getElementById("wizard");
+
+let treesArray = [];
+
+function placeTrees() {
+  let posX = 0;
+  let posY = 0;
+  for (let i = 0; i < mapArray.length; i++) {
+    for (let j = 0; j < mapArray[i].length; j++) {
+      if (mapArray[i][j] == 6) {
+        console.log("placing tree at ", i * tileSize, j * tileSize);
+        treesArray.push({
+          posX: j * tileSize,
+          posY: i * tileSize - tileSize,
+          height: 128,
+          width: 64,
+          img: tree,
+          draw: function() {
+            ctx.drawImage(this.img, this.posX, this.posY, this.width, this.height);
+          },
+
+        });
+      }
+      posX += tileSize;
+    }
+    posX = 0;
+    posY += tileSize;
+  }
+}
+
+placeTrees();

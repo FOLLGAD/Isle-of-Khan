@@ -14,25 +14,6 @@ let offsetMinY = 0;
 let camX = 0;
 let camY = 0;
 
-//DONE:20 ladda träden som separata object som ritas efter karaktären, så det ser ut som att man är bakom dem.
-
-
-
-function drawTrees() {
-  let posX = 0;
-  let posY = 0;
-  for (let i = 0; i < mapArray.length; i++) {
-    for (let j = 0; j < mapArray[i].length; j++) {
-      if(mapArray[i][j] == 6) {
-        ctx.drawImage(tree, j * tileSize, i * tileSize - tileSize, tileSize, tileSize);
-      }
-      posX += tileSize;
-    }
-    posX = 0;
-    posY += tileSize;
-  }
-}
-
 function viewPoint() {
   camX = Character.posX + Character.width / 2 - ctx.canvas.width / 2;
   camY = Character.posY + Character.height / 2 - ctx.canvas.height / 2;
