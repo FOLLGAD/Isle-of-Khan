@@ -73,8 +73,6 @@ function tickEnemies() {
       enemies[i].active = false;
     }
 
-    // Speed = maxSpeed eller nuvarande?
-
     if (enemies[i].active && canActive) {
       let direction = Math.atan2(-Character.posX - Character.width / 2 + enemies[i].posX + enemies[i].width / 2, -Character.posY - Character.height / 2 + enemies[i].posY + enemies[i].height / 2);
       enemies[i].accX = Math.sin(direction) * enemies[i].speed;
@@ -103,7 +101,7 @@ function tickEnemies() {
     enemies[i].dmgAnim -= 1;
     checkObjectCollision(enemies[i]);
     checkForPlayerDmg(i);
-    if (enemies[i].posX < 0 || enemies[i].posX > mapSizeX || enemies[i].posY < 0 || enemies[i].posY > mapSizeY || enemies[i].hp <= 0) {
+    if (enemies[i].hp <= 0) {
       enemies.splice(i, 1);
     }
   }
@@ -130,7 +128,7 @@ setInterval(spawnEnemy, 2000);
 
 function spawnEnemy() {
   let rand = (getRandom()+ 1) * 2 * tileSize;
-  enemies.push(new Enemy(Math.round(getRandom()*tileMapWidth)*tileSize, Math.round(getRandom()*tileMapWidth)*tileSize, rand, rand));
+  enemies.push(new Enemy(Math.round(getRandom() * tileMapWidth) * tileSize, Math.round(getRandom() * tileMapWidth) * tileSize, rand, rand));
 }
 
 function toggleEnemies() {

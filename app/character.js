@@ -20,6 +20,8 @@ let Character = {
   attacking: false,
   canSwim: false,
 
+  knockBack: 2,
+
   // Amount of inaccuracy for the bow, default = 0.05
   bowInaccuracy: 0.0,
 

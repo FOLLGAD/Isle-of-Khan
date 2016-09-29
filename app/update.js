@@ -92,20 +92,7 @@ function drawMap(){
   }
 }
 
-//DONE:20 ladda träden som separata object som ritas efter karaktären, så det ser ut som att man är bakom dem.
-
-function drawCursor() {
-  ctx.drawImage(crosshair, mousePosX + camX - 0, mousePosY + camY, 5 * 6, 6 * 6);
-}
-
-function menuToggle() {
-  if (menuActive) {
-    menuActive = false;
-  } else {
-    menuActive = true;
-  }
-  menu = true;
-}
+// TODO: Lägg alla clickables som objekt i en array, och använd sedan x och y-pos för att räkna ut kollision med musklick
 
 function menuUpdate() {
   ctx.fillStyle = "rgba(0, 0, 0, 0.6)";

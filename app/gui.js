@@ -34,3 +34,16 @@ function drawHp() {
     ctx.fillStyle = "#000";
   }
 }
+
+function drawCursor() {
+  ctx.drawImage(crosshair, mousePosX + camX - 0, mousePosY + camY, 5 * 6, 6 * 6);
+}
+
+function menuToggle() {
+  if (menuActive) {
+    menuActive = false;
+  } else {
+    menuActive = true;
+  }
+  menu = true;
+}

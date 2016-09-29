@@ -34,18 +34,20 @@ function Arrow(posX, posY, direction, vel) {
 
 function tickArrows() {
   // check collision with enemies
-for (i = 0; i < enemies.length; i++) {
-  let breakFor = false;
-   for (j = 0; j < arrows.length; j++) {
-     if (enemies[i].posX < arrows[j].posX + arrows[j].width
-        && enemies[i].posX + enemies[i].width > arrows[j].posX
-        && enemies[i].posY < arrows[j].posY + arrows[j].height
-        && enemies[i].posY + enemies[i].height > arrows[j].posY) {
-        enemies[i].velX -= arrows[j].velX / 2;
-        enemies[i].velY -= arrows[j].velY / 2;
+  for (i = 0; i < enemies.length; i++) {
+    let breakFor = false;
+      for (j = 0; j < arrows.length; j++) {
+        if (enemies[i].posX < arrows[j].posX + arrows[j].width
+         && enemies[i].posX + enemies[i].width > arrows[j].posX
+         && enemies[i].posY < arrows[j].posY + arrows[j].height
+         && enemies[i].posY + enemies[i].height > arrows[j].posY) {
+
+        enemies[i].velX -= arrows[j].velX * Character.knockBack;
+        enemies[i].velY -= arrows[j].velY * Character.knockBack;
         enemies[i].dmgAnim = 30;
         enemies[i].hp -= arrows[j].dmg;
         arrows[j].penetration -= 1;
+
         if (arrows[j].penetration < 0) {
           arrows.splice(j, 1);
           j -= 1;
@@ -53,17 +55,16 @@ for (i = 0; i < enemies.length; i++) {
         if (enemies[i].hp < 0) {
           enemies.splice(i, 1);
           i -= 1;
-        } else {
         }
       }
     }
   }
   for (i = 0; i < arrows.length; i++) {
-      arrows[i].posX += arrows[i].velX;
-      arrows[i].posY += arrows[i].velY;
-      if (arrows[i].penetration < 0) {
-        arrows.splice(i, 1);
-      }
+    arrows[i].posX += arrows[i].velX;
+    arrows[i].posY += arrows[i].velY;
+    if (arrows[i].penetration < 0) {
+      arrows.splice(i, 1);
+    }
   }
   for (i = 0; i < arrows.length; i++) {
     checkObjectCollision(arrows[i]);

@@ -103,7 +103,6 @@ function placeTrees() {
           draw: function() {
             ctx.drawImage(this.img, this.posX, this.posY, this.width, this.height);
           },
-
         });
       }
       posX += tileSize;
