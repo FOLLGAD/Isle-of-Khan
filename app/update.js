@@ -8,11 +8,10 @@ function update() {
   ctx.save();
   resize();
 
-  Character.tick();
+  chars[0].tick();
   tickCoin();
   tickEnemies();
   tickArrows();
-  activate();
   // Tick all objects before viewPoint.
     viewPoint();
     drawMap();
@@ -20,11 +19,9 @@ function update() {
   draw();
   drawHp();
   drawGui();
+  
   if (menuActive) { menuUpdate(); }
   drawCursor();
-
-    ctx.fillText(camX + ", " + camY, camX + 50, camY + 120);
-    ctx.fillText(Character.posX + ", " + Character.posY, camX + 50, camY + 140);
 
   ctx.restore();
 }
@@ -43,7 +40,7 @@ function draw() {
   // Drawar alla entities efter värdet på dess posY, från högt till lågt
   // Lägger först alla objekt som ska målas i en och samma array, och sorterar dem efter storlek på posY, och callar sist alla deras individuella draw()-funktioner.
   let drawOrder = [];
-  drawOrder.push(Character);
+  drawOrder.push(chars[0]);
   drawOrder.push(Wizard);
   for (i = 0; i < treesArray.length; i++) {
     drawOrder.push(treesArray[i]);
@@ -94,16 +91,6 @@ function drawMap(){
 }
 
 // TODO: Lägg alla clickables som objekt i en array, och använd sedan x och y-pos för att räkna ut kollision med musklick
-
-function menuUpdate() {
-  ctx.fillStyle = "rgba(0, 0, 0, 0.6)";
-  ctx.fillRect(camX, camY, canvas.width, canvas.height);
-  ctx.drawImage(options, 0, 0, 70, 8, camX + canvas.width/2 - 70*8/2, camY + 100, 70*8, 8*8);
-  ctx.fillStyle = "#fff";
-  ctx.fillRect(camX + canvas.width/2-150-100, camY + 300, 200, 50);
-  ctx.fillStyle = "#888";
-  ctx.fillText("Spawn enemy", camX + canvas.width/2-150-100 + 30, camY + 300 + 30, 200, 50);
-}
 
 function getRandom() {
   return Math.random();

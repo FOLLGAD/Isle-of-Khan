@@ -10,7 +10,7 @@ function Coin(posX, posY) {
     ctx.drawImage(this.img, this.posX, this.posY, this.width, this.height);
   }
   this.checkPlayer = function() {
-    if (this.posX < Character.posX + Character.width && this.posX + this.width > Character.posX && this.posY < Character.posY + Character.height && this.posY + this.height > Character.posY) {
+    if (this.posX < chars[0].posX + chars[0].width && this.posX + this.width > chars[0].posX && this.posY < chars[0].posY + chars[0].height && this.posY + this.height > chars[0].posY) {
       money++;
       let index = coins.indexOf(this);
       coins.splice(index, 1);

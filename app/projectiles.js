@@ -19,9 +19,11 @@ function Arrow(posX, posY, direction, vel) {
   this.canSwim = true;
   this.penetration = 0;
   this.dmg = 2;
+  this.range = 0;
   this.collision = function() {
     let index = arrows.indexOf(this);
     arrows.splice(index, 1);
+    return true;
   }
   this.draw = function() {
     ctx.save();
@@ -42,8 +44,8 @@ function tickArrows() {
          && enemies[i].posY < arrows[j].posY + arrows[j].height
          && enemies[i].posY + enemies[i].height > arrows[j].posY) {
 
-        enemies[i].velX -= arrows[j].velX * Character.knockBack;
-        enemies[i].velY -= arrows[j].velY * Character.knockBack;
+        enemies[i].velX -= arrows[j].velX * chars[0].knockBack;
+        enemies[i].velY -= arrows[j].velY * chars[0].knockBack;
         enemies[i].dmgAnim = 30;
         enemies[i].hp -= arrows[j].dmg;
         arrows[j].penetration -= 1;
@@ -70,16 +72,12 @@ function tickArrows() {
     checkObjectCollision(arrows[i]);
   }
   for (i = 0; i < arrows.length; i++) {
-    if (arrows[i].posX > mapSizeX
-      || arrows[i].posX < 0
-      || arrows[i].posY > mapSizeY
-      || arrows[i].posY < 0
-      || arrows[i].posX < arrows[i].posX0 - 1500
-      || arrows[i].posX > arrows[i].posX0 + 1500
-      || arrows[i].posY < arrows[i].posY0 - 1500
-      || arrows[i].posY > arrows[i].posY0 + 1500
-      ) {
-      arrows.splice(i, 1);
+    if (arrows[i].range != 0 && ( arrows[i].posX < arrows[i].posX0 - arrows[i].range
+      || arrows[i].posX > arrows[i].posX0 + arrows[i].range
+      || arrows[i].posY < arrows[i].posY0 - arrows[i].range
+      || arrows[i].posY > arrows[i].posY0 + arrows[i].range ))
+      {
+        arrows.splice(i, 1);
     }
   }
 }
