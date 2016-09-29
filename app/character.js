@@ -1,4 +1,4 @@
-// Character object, för storage av alla tillstånd av char
+﻿// Character object, för storage av alla tillstånd av char
 let Character = {
   posX: charSpawnX,
   posY: charSpawnY,
@@ -24,7 +24,7 @@ let Character = {
   bowInaccuracy: 0.0,
 
   // activation delay för bågen i millisekunder, default = 200
-  activationDelay: 500,
+  activationDelay: 1,
   // tid som char går sakta efter att ha avfyrat bågen
   activationSlowdownTime: 550,
 

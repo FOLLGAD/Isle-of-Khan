@@ -1,4 +1,4 @@
-let canActive = true;
+﻿let canActive = true;
 //DONE:40 add enemies;
 let enemyWidth = 64;
 let enemyHeight = 64;
@@ -126,7 +126,7 @@ function drawEnemies() {
   }
 }
 
-setInterval(spawnEnemy, 2000);
+setInterval(spawnEnemy, 1);
 
 function spawnEnemy() {
   let rand = (getRandom()+ 1) * 2 * tileSize;
