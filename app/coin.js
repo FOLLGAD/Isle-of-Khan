@@ -6,7 +6,7 @@ function Coin(posX, posY) {
   this.width = 32;
   this.img = coin;
   this.pickUp = false;
-  this.drawCoin = function() {
+  this.draw = function() {
     ctx.drawImage(this.img, this.posX, this.posY, this.width, this.height);
   }
   this.checkPlayer = function() {
@@ -23,7 +23,7 @@ function tickCoin() {
     coins[i].checkPlayer();
   }
   for (i = 0; i < coins.length; i++) {
-    coins[i].drawCoin();
+    coins[i].draw();
   }
 }
 

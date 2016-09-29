@@ -5,7 +5,6 @@
 // TODO: lägg alla draw-funktioner i separat så att frames inte är bundna med ticks
 
 function update() {
-  //DONE:0 HP-bar
   ctx.save();
   resize();
 
@@ -16,7 +15,6 @@ function update() {
   activate();
   // Tick all objects before viewPoint.
     viewPoint();
-    ctx.clearRect(-camX, -camY, canvas.width, canvas.height); //Clears viewPoint
     drawMap();
   // Draw all objects after viewPoint.
   draw();
@@ -55,6 +53,9 @@ function draw() {
   }
   for (i = 0; i < arrows.length; i++) {
     drawOrder.push(arrows[i]);
+  }
+  for (i = 0; i < coins.length; i++) {
+    drawOrder.push(coins[i]);
   }
   drawOrder.sort(function(a, b) {
     return (a.posY + a.height) - (b.posY + b.height);

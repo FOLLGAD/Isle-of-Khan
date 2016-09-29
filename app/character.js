@@ -1,68 +1,71 @@
 // Character object, för storage av alla tillstånd av char
-let Character = {
-  posX: charSpawnX,
-  posY: charSpawnY,
-  height: 64,
-  width: 64,
-  velX: 0,
-  velY: 0,
+
+let chars = [];
+
+function Character() {
+  this.posX = charSpawnX;
+  this.posY = charSpawnY;
+  this.height = 64;
+  this.width = 64;
+  this.velX = 0;
+  this.velY = 0;
   //walkspeed default = 7
-  walkSpeed: 8,
-  direction: "up",
-  hp: 10,
-  idle: true,
+  this.walkSpeed = 8;
+  this.direction = "up";
+  this.hp = 10;
+  this.idle = true;
 
-  img: char,
+  this.img = char;
 
-  spawnX: charSpawnX,
-  spawnY: charSpawnY,
+  this.spawnX = charSpawnX;
+  this.spawnY = charSpawnY;
 
-  attacking: false,
-  canSwim: false,
+  this.attacking = false;
+  this.canSwim = false;
 
-  knockBack: 2,
+  this.knockBack = 2;
 
-  // Amount of inaccuracy for the bow, default = 0.05
-  bowInaccuracy: 0.0,
+  // Amount of inaccuracy for the bow; default = 0.05
+  this.bowInaccuracy = 0.0;
 
-  // activation delay för bågen i millisekunder, default = 200
-  activationDelay: 500,
+  // activation delay för bågen i millisekunder; default = 200
+  this.activationDelay = 500;
   // tid som char går sakta efter att ha avfyrat bågen
-  activationSlowdownTime: 550,
+  this.activationSlowdownTime = 550;
 
-  tick: function() {
+  this.tick = function() {
     walk();
     if (Character.hp <= 0) {
       Character.respawn();
       Character.hp = 10;
     }
     checkObjectCollision(Character);
+  }
+
+  this.respawn = function() {
+    this.posX = this.spawnX;
+    this.posY = this.spawnY;
   },
 
-  respawn: function() {
-    Character.posX = Character.spawnX;
-    Character.posY = Character.spawnY;
-  },
-
-  collision: function(i, j, colDistanceX, colDistanceY) {
+  this.collision = function(i, j, colDistanceX, colDistanceY) {
     if (Math.abs(colDistanceX) < Math.abs(colDistanceY)) {
       // Flyttas till ner/upp , Y-led
       if (colDistanceY > 0) {
-        Character.posY = j * tileSize - Character.width;
+        this.posY = j * tileSize - this.width;
       } else {
-        Character.posY = j * tileSize + tileSize;
+        this.posY = j * tileSize + tileSize;
       }
     } else if (Math.abs(colDistanceX) > Math.abs(colDistanceY)) {
       // Flyttas till höger/vänster , X-led
       if (colDistanceX > 0) {
-        Character.posX = i * tileSize - Character.height;
+        this.posX = i * tileSize - this.height;
       } else {
-        Character.posX = i * tileSize + tileSize;
+        this.posX = i * tileSize + tileSize;
       }
     }
   },
-  draw: function() {
-    ctx.drawImage(Character.img, Character.posX, Character.posY - Character.height, Character.width, Character.height * 2);
+  this.draw = function() {
+    ctx.drawImage(this.img, this.posX, this.posY - this.height, this.width, this.height * 2);
   }
 }
 
