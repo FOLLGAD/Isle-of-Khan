@@ -16,8 +16,6 @@ let charSpawnY = 10 * tileSize;
 
 let hp = 10;
 
-let arrowSpeed = 20;
-
 //
 
 let menuActive = false;
@@ -38,8 +36,6 @@ let mousePosY;
 let frame = 0;
 let attackingFrame = 0;
 let money = 0;
-let idleX = true;
-let idleY = true;
 let attacking = false;
 
 let rightPressed = false;
@@ -84,6 +80,7 @@ let char = document.getElementById("char");
 let arrowimg = document.getElementById("arrow");
 let bow = document.getElementById("bow");
 let wizard = document.getElementById("wizard");
+let menuButtonimg = document.getElementById("menuButton");
 
 let treesArray = [];
 
@@ -103,7 +100,6 @@ function placeTrees() {
           draw: function() {
             ctx.drawImage(this.img, this.posX, this.posY, this.width, this.height);
           },
-
         });
       }
       posX += tileSize;

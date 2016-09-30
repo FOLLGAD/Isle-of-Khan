@@ -6,11 +6,11 @@ function Coin(posX, posY) {
   this.width = 32;
   this.img = coin;
   this.pickUp = false;
-  this.drawCoin = function() {
+  this.draw = function() {
     ctx.drawImage(this.img, this.posX, this.posY, this.width, this.height);
   }
   this.checkPlayer = function() {
-    if (this.posX < Character.posX + Character.width && this.posX + this.width > Character.posX && this.posY < Character.posY + Character.height && this.posY + this.height > Character.posY) {
+    if (this.posX < chars[0].posX + chars[0].width && this.posX + this.width > chars[0].posX && this.posY < chars[0].posY + chars[0].height && this.posY + this.height > chars[0].posY) {
       money++;
       let index = coins.indexOf(this);
       coins.splice(index, 1);
@@ -23,7 +23,7 @@ function tickCoin() {
     coins[i].checkPlayer();
   }
   for (i = 0; i < coins.length; i++) {
-    coins[i].drawCoin();
+    coins[i].draw();
   }
 }
 

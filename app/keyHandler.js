@@ -102,4 +102,5 @@ function mouseDownHandler() {
 
 function mouseUpHandler() {
   mouseDown = false;
+  checkMenuClick();
 }

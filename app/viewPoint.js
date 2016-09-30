@@ -15,8 +15,8 @@ let camX = 0;
 let camY = 0;
 
 function viewPoint() {
-  camX = Character.posX + Character.width / 2 - ctx.canvas.width / 2;
-  camY = Character.posY + Character.height / 2 - ctx.canvas.height / 2;
+  camX = chars[0].posX + chars[0].width / 2 - ctx.canvas.width / 2;
+  camY = chars[0].posY + chars[0].height / 2 - ctx.canvas.height / 2;
 
   if (camX > offsetMaxX) {
     camX = offsetMaxX;
