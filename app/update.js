@@ -1,5 +1,3 @@
-//TODO: lägg till så att alla entities blir rendered i olika ordning beroende på sina Y-värden så det ser ut som att man är bakom den
-
 // update, tick
 
 // TODO: lägg alla draw-funktioner i separat så att frames inte är bundna med ticks
@@ -19,17 +17,15 @@ function update() {
   draw();
   drawHp();
   drawGui();
-  
+
   if (menuActive) { menuUpdate(); }
   drawCursor();
 
   ctx.restore();
 }
 
-//  Vad ska drawas?
 // 1. Map
 // 2. Alla entities (enemies, character, projectiles), inklusive träd, ska drawas i ordning från posY = 0 till posY = canvas.height
-   // Varje entitys ska börja vid ((posY eller posY + height))??
 // 3. HP-mätare, GUI
 // 4. ESC-meny
 // 5. Cursor
@@ -43,16 +39,24 @@ function draw() {
   drawOrder.push(chars[0]);
   drawOrder.push(Wizard);
   for (i = 0; i < treesArray.length; i++) {
-    drawOrder.push(treesArray[i]);
+    if (treesArray[i].posX < camX + canvas.width + tileSize && treesArray[i].posX + treesArray[i].width > camX - tileSize && treesArray[i].posY < camY + canvas.height + tileSize && treesArray[i].posY + treesArray[i].height > camY - tileSize) {
+      drawOrder.push(treesArray[i]);
+    }
   }
   for (i = 0; i < enemies.length; i++) {
-    drawOrder.push(enemies[i]);
+    if (enemies[i].posX < camX + canvas.width + tileSize && enemies[i].posX + enemies[i].width > camX - tileSize && enemies[i].posY < camY + canvas.height + tileSize && enemies[i].posY + enemies[i].height > camY - tileSize) {
+      drawOrder.push(enemies[i]);
+    }
   }
   for (i = 0; i < arrows.length; i++) {
-    drawOrder.push(arrows[i]);
+    if (arrows[i].posX < camX + canvas.width + tileSize && arrows[i].posX + arrows[i].width > camX - tileSize && arrows[i].posY < camY + canvas.height + tileSize && arrows[i].posY + arrows[i].height > camY - tileSize) {
+      drawOrder.push(arrows[i]);
+    }
   }
   for (i = 0; i < coins.length; i++) {
-    drawOrder.push(coins[i]);
+    if (coins[i].posX < camX + canvas.width + tileSize && coins[i].posX + coins[i].width > camX - tileSize && coins[i].posY < camY + canvas.height + tileSize && coins[i].posY + coins[i].height > camY - tileSize) {
+      drawOrder.push(coins[i]);
+    }
   }
   drawOrder.sort(function(a, b) {
     return (a.posY + a.height) - (b.posY + b.height);
@@ -60,6 +64,7 @@ function draw() {
   for (i = 0; i < drawOrder.length; i++) {
     drawOrder[i].draw();
   }
+  ctx.fillText(drawOrder.length, camX + canvas.width/2, camY + 100);
 }
 
 setInterval(update, 1000/fps);

@@ -17,8 +17,8 @@ function Arrow(posX, posY, direction, vel) {
   this.height = arrowHeight;
   this.img = arrowimg;
   this.canSwim = true;
-  this.penetration = 0;
-  this.dmg = 2;
+  this.penetration = 1;
+  this.dmg = 5;
   this.range = 0;
   this.collision = function() {
     let index = arrows.indexOf(this);
@@ -81,3 +81,31 @@ function tickArrows() {
     }
   }
 }
+
+function Bomb(posX, posY, direction) {
+  this.posX = posX;
+  this.posY = posY;
+  this.width = 8*8;
+  this.height = 8*8;
+  this.speed = 10;
+  this.velX = Math.sin(direction) * this.speed;
+  this.velY = Math.cos(direction) * this.speed;
+  this.img = document.getElementById("bomb");
+
+  this.draw = function() {
+    ctx.drawImage(this.img, this.posX, this.posY, this.width, this.height);
+  }
+
+  this.tick = function() {
+    this.posX += this.velX;
+    this.posY += this.velY;
+    this.velX *= 0.8;
+    this.velY *= 0.8;
+  }
+}
+
+let bombs = [];
+
+let direx = Math.atan2(camX - this.posX - this.width / 2 + mousePosX, camY - this.posY - this.height/2 + mousePosY);
+
+boms.push(new Bomb(chars[0].posX, chars[0].posY, direx));

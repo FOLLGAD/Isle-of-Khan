@@ -98,9 +98,10 @@ function getMousePos(e) {
 
 function mouseDownHandler() {
   mouseDown = true;
+  checkMenuDown();
 }
 
 function mouseUpHandler() {
   mouseDown = false;
-  checkMenuClick();
+  checkMenuUp();
 }

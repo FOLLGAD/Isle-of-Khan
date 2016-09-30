@@ -52,9 +52,7 @@ function deleteEnemies() {
   enemies = [];
 }
 
-let periodicMonsterSpawningBoundBySetIntervalFunctionSetTo2000Milliseconds = setInterval(spawnEnemy, 2000);
-
-let monstersSpawn = true;
+let periodicMonsterSpawningBoundBySetIntervalFunctionSetTo2000Milliseconds;
 
 function spawnEnemy() {
   let rand = Math.floor((getRandom() * 2) + 1) * tileSize;
@@ -62,21 +60,23 @@ function spawnEnemy() {
   enemies.push(new Enemy(Math.round(getRandom() * tileMapWidth) * tileSize, Math.round(getRandom() * tileMapWidth) * tileSize, rand, rand));
 }
 
+let monstersSpawn = false;
+
 function toggleEnemySpawn() {
   if (monstersSpawn == true) {
     clearInterval(periodicMonsterSpawningBoundBySetIntervalFunctionSetTo2000Milliseconds);
     monstersSpawn = false;
   } else {
-    periodicMonsterSpawningBoundBySetIntervalFunctionSetTo2000Milliseconds = setInterval(spawnEnemy, 2000);
+    periodicMonsterSpawningBoundBySetIntervalFunctionSetTo2000Milliseconds = setInterval(spawnEnemy, 200);
     monstersSpawn = true;
   }
 }
 
+toggleEnemySpawn();
+
 let menuArray = [];
 
-function menuButton(text, n, onClick, mode){
-  this.text = text;
-  this.mode = mode;
+function menuButton(text, n, onClick, mode) {
   this.bColour = "#fff";
   this.tColour = "#000";
   this.width = 80 * 8;
@@ -84,38 +84,140 @@ function menuButton(text, n, onClick, mode){
   this.posX = canvas.width / 2 - this.width / 2;
   this.posY = 200 + 150 * n;
   this.img = menuButtonimg;
-  this.pressed = false;
+  this.clickToggle = false;
+
+  this.text = text;
+  this.mode = mode;
+
+  if (this.mode == "push") {
+    this.onClick = onClick;
+  } else {
+    this.onClick = function() {
+      this.clickToggle = !this.clickToggle;
+      onClick();
+    }
+  }
+
   this.draw = function() {
     ctx.fillStyle = this.bColour;
-    ctx.drawImage(this.img, 0, this.pressed ? 8 : 0, this.width / 8, this.height / 8, this.posX + camX, this.posY + camY, this.width, this.height);
+    ctx.drawImage(this.img, 0, this.down ? 8 : 0, this.width / 8, this.height / 8, this.posX + camX, this.posY + camY, this.width, this.height);
     ctx.fillStyle = this.bColour;
     ctx.textAlign = "center";
-    ctx.fillText(this.text, this.posX + this.width / 2 + camX, this.posY + (this.pressed ? 45 : 37) + camY);
-  };
-  this.onClick = onClick;
+    let text = this.text;
+    if (this.mode == "toggle") {
+      let sik;
+      if (this.clickToggle) {
+        sik = "Off";
+      } else {
+        sik = "On";
+      }
+      text = text + sik;
+    }
+    ctx.fillText(text, this.posX + this.width / 2 + camX, this.posY + (this.down ? 45 : 37) + camY);
+  }
+
+  this.active = false;
+  this.down = false;
+
+  this.changeDown = function(bool) {
+    this.down = bool;
+  }
+
+  this.onDown = function() {
+    this.active = true;
+    if (this.mode == "push") {
+      if (!!this.timeOut) {
+        clearTimeout(this.timeOut);
+      }
+      this.down = true;
+    } else if (this.mode == "toggle") {
+      this.down = true;
+    }
+  }
+
+  this.onUp = function() {
+    this.active = false;
+    if (this.mode == "push") {
+      if (!!this.timeOut) {
+        clearTimeout(this.timeOut);
+      }
+      this.timeOut = setTimeout(function() { this.changeDown(false); this.timeOut = null; }.bind(this), 100);
+    } else if (this.mode == "toggle") {
+      this.down = this.clickToggle;
+    }
+  }
+
+  this.onAbandoned = function() {
+    this.active = false;
+    if (this.mode == "push") {
+      if (!!this.timeOut) {
+        clearTimeout(this.timeOut);
+      }
+      this.down = false;
+    } else if (this.mode == "toggle") {
+      this.down = this.clickToggle;
+    }
+  }
+
 }
 
 menuArray.push(new menuButton("Kill Enemies", 0, deleteEnemies, "push"));
-menuArray.push(new menuButton("Toggle Enemy Spawn", 1, toggleEnemySpawn, "toggle"));
+menuArray.push(new menuButton("Enemy Spawning: ", 1, toggleEnemySpawn, "toggle"));
 
 function menuUpdate() {
   ctx.fillStyle = "rgba(0, 0, 0, 0.6)";
   ctx.fillRect(camX, camY, canvas.width, canvas.height);
   ctx.drawImage(options, 0, 0, 70, 8, camX + canvas.width / 2 - 70 * 8 / 2, camY + 100, 70 * 8, 8 * 8);
   ctx.fillStyle = "#fff";
+  ctx.fillText("active: " + menuArray[1].active, canvas.width / 2, 700);
+  ctx.fillText("down: " + menuArray[1].down, canvas.width / 2, 725);
+  ctx.fillText("clickToggle: " + menuArray[1].clickToggle, canvas.width / 2, 750);
+  ctx.fillText("enemies: " + enemies.length, canvas.width / 2, 800);
+  ctx.fillText("coins: " + coins.length, canvas.width / 2, 820);
   for (i = 0; i < menuArray.length; i++) {
+    if (menuArray[i].active) {
+      checkIfStillDown(menuArray[i]);
+    }
     menuArray[i].draw();
   }
 }
 
-function checkMenuClick() {
+function checkMenuUp() {
+  if (menuActive) {
+    let lMousePosX = mousePosX;
+    let lMousePosY = mousePosY;
+    for (i = 0; i < menuArray.length; i++) {
+      if (menuArray[i].active) {
+        if (lMousePosX > menuArray[i].posX && lMousePosX < menuArray[i].posX + menuArray[i].width && lMousePosY > menuArray[i].posY && lMousePosY < menuArray[i].posY + menuArray[i].height) {
+          menuArray[i].onClick();
+          menuArray[i].onUp();
+        } else {
+          menuArray[i].onAbandoned();
+        }
+      }
+    }
+  }
+}
+
+function checkIfStillDown(obj) {
+  if (mouseDown) {
+    // let lMousePosX = mousePosX;
+    // let lMousePosY = mousePosY;
+    // if (lMousePosX > obj.posX && lMousePosX < obj.posX + obj.width && lMousePosY > obj.posY && lMousePosY < obj.posY + obj.height) {
+    // } else {
+    // }
+  } else {
+    obj.onAbandoned();
+  }
+}
+
+function checkMenuDown() {
   if (menuActive) {
     let lMousePosX = mousePosX;
     let lMousePosY = mousePosY;
     for (i = 0; i < menuArray.length; i++) {
       if (lMousePosX > menuArray[i].posX && lMousePosX < menuArray[i].posX + menuArray[i].width && lMousePosY > menuArray[i].posY && lMousePosY < menuArray[i].posY + menuArray[i].height) {
-        menuArray[i].onClick();
-        menuArray[i].pressed = !menuArray[i].pressed;
+        menuArray[i].onDown();
       }
     }
   }

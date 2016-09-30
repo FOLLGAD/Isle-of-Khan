@@ -25,9 +25,9 @@ function Character() {
   // Amount of inaccuracy for the bow; default = 0.05
   this.bowInaccuracy = 0;
   // activation delay för bågen i millisekunder; default = 200
-  this.activationDelay = 200;
+  this.activationDelay = 0;
   // tid som char går sakta efter att ha avfyrat bågen
-  this.activationSlowdownTime = 550;
+  this.activationSlowdownTime = this.activationDelay + 100;
   this.tick = function() {
     this.walk();
     if (this.hp <= 0) {
@@ -35,7 +35,9 @@ function Character() {
       this.hp = 10;
     }
     checkObjectCollision(this);
-    this.activate();
+    if (!menuActive) {
+      this.activate();
+    }
   };
 
   this.respawn = function() {
@@ -182,63 +184,3 @@ function Character() {
 }
 
 chars.push(new Character());
-
-// TODO: Fixa karaktärens jittery movement när man ändrar hastighet
-
-
-
-
-/*
-  if (this.attacking) {
-    if (this.direction == "right") {
-      if (Math.floor(frame) == 1 || Math.floor(frame) == 3) {
-        console.log("fameboi");
-      }
-      ctx.drawImage(attacking_right, 0, Math.floor(attackingFrame) * 8, 16, 8, this.posX, this.posY, this.width * 2, this.height);
-    }
-    else if (this.direction == "left") {
-      if (Math.floor(frame) == 1 || Math.floor(frame) == 3) {
-        ctx.drawImage(legs, Math.floor(frame/2) * 8, 0, 8, 8, this.posX, this.posY, this.width, this.height );
-      }
-      ctx.drawImage(attacking_left, 0, Math.floor(attackingFrame) * 8, 16, 8, this.posX - this.width, this.posY, this.width * 2, this.height);
-    }
-    else if (this.direction == "down") {
-      if (Math.floor(frame) == 1 || Math.floor(frame) == 3) {
-        ctx.drawImage(legs, Math.floor(frame/2) * 8, 0, 8, 8, this.posX, this.posY, this.width, this.height );
-      }
-      ctx.drawImage(attacking_down, Math.floor(attackingFrame) * 8, 0, 8, 16, this.posX, this.posY, this.width, this.height * 2);
-    }
-    else if (this.direction == "up") {
-      if (Math.floor(frame) == 1 || Math.floor(frame) == 3) {
-        ctx.drawImage(legs, Math.floor(frame/2) * 8, 0, 8, 8, this.posX, this.posY, this.width, this.height );
-      }
-      ctx.drawImage(attacking_up, Math.floor(attackingFrame) * 8, 0, 8, 16, this.posX, this.posY - this.height, this.width, this.height * 2);
-    }
-  } else if (this.idle) {
-    if (this.direction == "right") {
-      ctx.drawImage(idle_right, Math.floor(frame) * 8, 0, 8, 8, this.posX, this.posY, this.width, this.height );
-    }
-    else if (this.direction == "left") {
-      ctx.drawImage(idle_left, Math.floor(frame) * 8, 0, 8, 8, this.posX, this.posY, this.width, this.height );
-    }
-    else if (this.direction == "down") {
-      ctx.drawImage(idle_down, Math.floor(frame) * 8, 0, 8, 8, this.posX, this.posY, this.width, this.height );
-    }
-    else if (this.direction == "up") {
-      ctx.drawImage(idle_up, Math.floor(frame) * 8, 0, 8, 8, this.posX, this.posY, this.width, this.height );
-    }
-  } else {
-    if (this.direction == "right") {
-      ctx.drawImage(walk_right, Math.floor(frame) * 8, 0, 8, 8, this.posX, this.posY, this.width, this.height );
-    }
-    else if (this.direction == "left") {
-      ctx.drawImage(walk_left, Math.floor(frame) * 8, 0, 8, 8, this.posX, this.posY, this.width, this.height );
-    }
-    else if (this.direction == "down") {
-      ctx.drawImage(walk_down, Math.floor(frame) * 8, 0, 8, 8, this.posX, this.posY, this.width, this.height );
-    }
-    else if (this.direction == "up") {
-      ctx.drawImage(walk_up, Math.floor(frame) * 8, 0, 8, 8, this.posX, this.posY, this.width, this.height );
-    }
-  }
-*/
