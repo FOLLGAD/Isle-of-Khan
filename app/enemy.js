@@ -1,4 +1,4 @@
-﻿let canActive = true;
+let canActive = true;
 //DONE:40 add enemies;
 let enemyWidth = 64;
 let enemyHeight = 64;
@@ -65,18 +65,16 @@ function Enemy(posX, posY, width, height) {
 
 function tickEnemies() {
   for (let i = 0; i < enemies.length; i++) {
-    if (Math.abs(enemies[i].posX - Character.posX) < Character.width && Math.abs(enemies[i].posY - Character.posY) < Character.height) {
+    if (Math.abs(enemies[i].posX - chars[0].posX) < chars[0].width && Math.abs(enemies[i].posY - chars[0].posY) < chars[0].height) {
       enemies[i].active = false;
-    } else if (Math.abs(enemies[i].posX - Character.posX) < enemies[i].noticeDistance && Math.abs(enemies[i].posY - Character.posY) < enemies[i].noticeDistance) {
+    } else if (Math.abs(enemies[i].posX - chars[0].posX) < enemies[i].noticeDistance && Math.abs(enemies[i].posY - chars[0].posY) < enemies[i].noticeDistance) {
       enemies[i].active = true;
-    } else if (enemies[i].active && (Math.abs(enemies[i].posX - Character.posX) > enemies[i].loseDistance && Math.abs(enemies[i].posY - Character.posY) < enemies[i].loseDistance)) {
+    } else if (enemies[i].active && (Math.abs(enemies[i].posX - chars[0].posX) > enemies[i].loseDistance && Math.abs(enemies[i].posY - chars[0].posY) < enemies[i].loseDistance)) {
       enemies[i].active = false;
     }
 
-    // Speed = maxSpeed eller nuvarande?
-
     if (enemies[i].active && canActive) {
-      let direction = Math.atan2(-Character.posX - Character.width / 2 + enemies[i].posX + enemies[i].width / 2, -Character.posY - Character.height / 2 + enemies[i].posY + enemies[i].height / 2);
+      let direction = Math.atan2(-chars[0].posX - chars[0].width / 2 + enemies[i].posX + enemies[i].width / 2, -chars[0].posY - chars[0].height / 2 + enemies[i].posY + enemies[i].height / 2);
       enemies[i].accX = Math.sin(direction) * enemies[i].speed;
       enemies[i].accY = Math.cos(direction) * enemies[i].speed;
     } else {
@@ -103,7 +101,7 @@ function tickEnemies() {
     enemies[i].dmgAnim -= 1;
     checkObjectCollision(enemies[i]);
     checkForPlayerDmg(i);
-    if (enemies[i].posX < 0 || enemies[i].posX > mapSizeX || enemies[i].posY < 0 || enemies[i].posY > mapSizeY || enemies[i].hp <= 0) {
+    if (enemies[i].hp <= 0) {
       enemies.splice(i, 1);
     }
   }
@@ -124,13 +122,6 @@ function drawEnemies() {
       ctx.fillStyle = "#000";
     }
   }
-}
-
-setInterval(spawnEnemy, 1);
-
-function spawnEnemy() {
-  let rand = (getRandom()+ 1) * 2 * tileSize;
-  enemies.push(new Enemy(Math.round(getRandom()*tileMapWidth)*tileSize, Math.round(getRandom()*tileMapWidth)*tileSize, rand, rand));
 }
 
 function toggleEnemies() {
