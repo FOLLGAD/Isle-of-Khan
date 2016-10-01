@@ -4,6 +4,9 @@ let chars = [];
 
 let arrowSpeed = 20;
 
+let charSpawnX = mapSizeX / 2;
+let charSpawnY = mapSizeY / 2;
+
 function Character() {
   this.posX = charSpawnX;
   this.posY = charSpawnY;
@@ -53,6 +56,7 @@ function Character() {
       } else {
         this.posY = j * tileSize + tileSize;
       }
+      this.velY = 0;
     } else if (Math.abs(colDistanceX) > Math.abs(colDistanceY)) {
       // Flyttas till höger/vänster , X-led
       if (colDistanceX > 0) {
@@ -60,6 +64,7 @@ function Character() {
       } else {
         this.posX = i * tileSize + tileSize;
       }
+      this.velX = 0;
     }
   };
   this.draw = function() {

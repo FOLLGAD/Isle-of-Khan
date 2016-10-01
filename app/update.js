@@ -9,6 +9,7 @@ function update() {
   chars[0].tick();
   tickCoin();
   tickEnemies();
+  tickBombs();
   tickArrows();
   // Tick all objects before viewPoint.
     viewPoint();
@@ -48,14 +49,19 @@ function draw() {
       drawOrder.push(enemies[i]);
     }
   }
+  for (i = 0; i < coins.length; i++) {
+    if (coins[i].posX < camX + canvas.width + tileSize && coins[i].posX + coins[i].width > camX - tileSize && coins[i].posY < camY + canvas.height + tileSize && coins[i].posY + coins[i].height > camY - tileSize) {
+      drawOrder.push(coins[i]);
+    }
+  }
   for (i = 0; i < arrows.length; i++) {
     if (arrows[i].posX < camX + canvas.width + tileSize && arrows[i].posX + arrows[i].width > camX - tileSize && arrows[i].posY < camY + canvas.height + tileSize && arrows[i].posY + arrows[i].height > camY - tileSize) {
       drawOrder.push(arrows[i]);
     }
   }
-  for (i = 0; i < coins.length; i++) {
-    if (coins[i].posX < camX + canvas.width + tileSize && coins[i].posX + coins[i].width > camX - tileSize && coins[i].posY < camY + canvas.height + tileSize && coins[i].posY + coins[i].height > camY - tileSize) {
-      drawOrder.push(coins[i]);
+  for (i = 0; i < bombs.length; i++) {
+    if (bombs[i].posX < camX + canvas.width + tileSize && bombs[i].posX + bombs[i].width > camX - tileSize && bombs[i].posY < camY + canvas.height + tileSize && bombs[i].posY + bombs[i].height > camY - tileSize) {
+      drawOrder.push(bombs[i]);
     }
   }
   drawOrder.sort(function(a, b) {
@@ -73,7 +79,7 @@ setInterval(update, 1000/fps);
 
 //resize canvas to window size
 function resize() {
-  ctx.canvas.width  = window.innerWidth;
+  ctx.canvas.width = window.innerWidth;
   ctx.canvas.height = window.innerHeight;
   ctx.imageSmoothingEnabled = false;
   offsetMaxX = mapSizeX - canvas.width;
@@ -81,7 +87,7 @@ function resize() {
 }
 
 //DONE:30 lägg till så att endast tiles synliga på canvas + buffer på ett block blir rendered varje frame
-function drawMap(){
+function drawMap() {
   for (let i = 0; i < mapArray.length; i++) {
     let posX = 0;
     let posY = i * tileSize;

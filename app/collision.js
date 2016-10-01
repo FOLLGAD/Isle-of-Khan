@@ -62,3 +62,16 @@ function checkForPlayerDmg(i) {
     }
   }
 }
+
+function checkCircularEntityCollision(obj1, obj2) {
+  let disX = obj1.posX + obj1.width / 2 - obj2.posX - obj2.width / 2;
+  let disY = obj1.posY + obj1.height / 2 - obj2.posY - obj2.height / 2;
+  let hyp = Math.sqrt(disX * disX + disY * disY);
+  if (hyp < obj1.radius) {
+    let direction = Math.atan2(disX, disY);
+    let intensity = (5 + (obj1.radius - hyp)) / 3;
+    let dmg = obj1.dmg * intensity;
+    let knockback = intensity;
+    obj2.getDamaged(direction, dmg, knockback);
+  }
+}

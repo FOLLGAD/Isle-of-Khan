@@ -56,7 +56,6 @@ let periodicMonsterSpawningBoundBySetIntervalFunctionSetTo2000Milliseconds;
 
 function spawnEnemy() {
   let rand = Math.floor((getRandom() * 2) + 1) * tileSize;
-  console.log(rand);
   enemies.push(new Enemy(Math.round(getRandom() * tileMapWidth) * tileSize, Math.round(getRandom() * tileMapWidth) * tileSize, rand, rand));
 }
 

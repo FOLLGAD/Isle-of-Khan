@@ -24,6 +24,10 @@ function keyDownHandler(e) {
     else if (e.keyCode == 32){
         spacePressed = true;
     }
+    else if (e.keyCode == 70){
+        fPressed = true;
+        spawnBomb();
+    }
     else if (e.keyCode == 86) {
         if (!vPressed) {
           vPressed = true;
@@ -77,6 +81,9 @@ function keyUpHandler(e) {
     }
     else if(e.keyCode == 66) {
         bPressed = false;
+    }
+    else if(e.keyCode == 70) {
+        fPressed = false;
     }
 }
 

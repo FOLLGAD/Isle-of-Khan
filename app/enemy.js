@@ -61,6 +61,17 @@ function Enemy(posX, posY, width, height) {
       ctx.fillStyle = "#000";
     }
   }
+  this.getDamaged = function(direction, dmg, knockback) {
+    this.hp -= dmg;
+    this.velX += Math.sin(direction) * knockback;
+    this.velY += Math.cos(direction) * knockback;
+    if (this.hp <= 0) {
+      console.log("splicing");
+      let indx = enemies.indexOf(this);
+      enemies.splice(indx, 1);
+    }
+    this.dmgAnim = 30;
+  }
 }
 
 function tickEnemies() {

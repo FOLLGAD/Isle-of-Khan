@@ -47,6 +47,7 @@ function tickArrows() {
         enemies[i].velX -= arrows[j].velX * chars[0].knockBack;
         enemies[i].velY -= arrows[j].velY * chars[0].knockBack;
         enemies[i].dmgAnim = 30;
+        enemies[i].getDamaged();
         enemies[i].hp -= arrows[j].dmg;
         arrows[j].penetration -= 1;
 
@@ -75,37 +76,114 @@ function tickArrows() {
     if (arrows[i].range != 0 && ( arrows[i].posX < arrows[i].posX0 - arrows[i].range
       || arrows[i].posX > arrows[i].posX0 + arrows[i].range
       || arrows[i].posY < arrows[i].posY0 - arrows[i].range
-      || arrows[i].posY > arrows[i].posY0 + arrows[i].range ))
-      {
-        arrows.splice(i, 1);
+      || arrows[i].posY > arrows[i].posY0 + arrows[i].range
+      )){
+      arrows.splice(i, 1);
     }
   }
 }
 
-function Bomb(posX, posY, direction) {
+let particleImg = document.getElementById("particle");
+
+function Bomb(posX, posY, direction, inivelX, inivelY) {
   this.posX = posX;
   this.posY = posY;
   this.width = 8*8;
   this.height = 8*8;
-  this.speed = 10;
-  this.velX = Math.sin(direction) * this.speed;
-  this.velY = Math.cos(direction) * this.speed;
+  this.speed = 30;
+  this.velX = Math.sin(direction) * this.speed + inivelX;
+  this.velY = Math.cos(direction) * this.speed + inivelY;
   this.img = document.getElementById("bomb");
+  this.timer = 75;
+  this.canSwim = false;
+  this.exploded = false;
+  this.radius = 250;
+
+  this.dmg = 0.2;
+
+  this.particles = [];
+  this.particleImg = particleImg;
 
   this.draw = function() {
-    ctx.drawImage(this.img, this.posX, this.posY, this.width, this.height);
-  }
+    if (this.timer > 0) {
+      ctx.drawImage(this.img, this.posX, this.posY, this.width, this.height);
+    } else {
+
+    }
+  };
 
   this.tick = function() {
-    this.posX += this.velX;
-    this.posY += this.velY;
-    this.velX *= 0.8;
-    this.velY *= 0.8;
+    this.timer--;
+    if (this.timer > 0) {
+      this.posX += this.velX;
+      this.posY += this.velY;
+      this.velX *= 0.8;
+      this.velY *= 0.8;
+      checkObjectCollision(this);
+    } else if (this.timer < -30) {
+      let indx = bombs.indexOf(this);
+      bombs.splice(indx, 1);
+    } else if (!this.exploded) {
+      this.exploded = true;
+      this.explode();
+    }
+  };
+
+  this.explode = function() {
+    for (i = 0; i < enemies.length; i++) {
+      checkCircularEntityCollision(this, enemies[i]);
+    }
+    let nPart = Math.floor(getRandom() * 3) + 5;
+    for (i = 0; i < nPart; i++) {
+      this.particles.push({
+
+      });
+    }
+  };
+
+  this.collision = function(i, j, colDistanceX, colDistanceY) {
+    if (Math.abs(colDistanceX) < Math.abs(colDistanceY)) {
+      // Flyttas till ner/upp , Y-led
+      if (colDistanceY > 0) {
+        this.posY = j * tileSize - this.width;
+      } else {
+        this.posY = j * tileSize + tileSize;
+      }
+      this.velY = -this.velY;
+    } else if (Math.abs(colDistanceX) > Math.abs(colDistanceY)) {
+      // Flyttas till höger/vänster , X-led
+      if (colDistanceX > 0) {
+        this.posX = i * tileSize - this.height;
+      } else {
+        this.posX = i * tileSize + tileSize;
+      }
+      this.velX = -this.velX;
+    }
+  };
+}
+
+function Particle(posX, posY, direction, vel) {
+  this.posX = posX;
+  this.posY = posY;
+  this.velX = Math.sin(direction) * vel;
+  this.velY = Math.cos(direction) * vel;
+  this.width = 8 * 8;
+  this.height = 8 * 8;
+  this.img = particleImg;
+  this.draw = function() {
+    ctx.drawImage(this.img, posX, posY, width, height);
   }
 }
 
 let bombs = [];
 
-let direx = Math.atan2(camX - this.posX - this.width / 2 + mousePosX, camY - this.posY - this.height/2 + mousePosY);
+function spawnBomb() {
+  let direx = Math.atan2(camX - chars[0].posX - chars[0].width / 2 + mousePosX, camY - chars[0].posY - chars[0].height/2 + mousePosY);
+  bombs.push(new Bomb(chars[0].posX, chars[0].posY, direx, chars[0].velX, chars[0].velY));
+}
 
-boms.push(new Bomb(chars[0].posX, chars[0].posY, direx));
+function tickBombs() {
+  for (i = 0; i < bombs.length; i++) {
+    bombs[i].tick();
+  }
+}

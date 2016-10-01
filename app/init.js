@@ -11,8 +11,6 @@ let fps = 60;
 let frameAdd = 0.1;
 
 let tileSize = 8*8;
-let charSpawnX = 10 * tileSize;
-let charSpawnY = 10 * tileSize;
 
 let hp = 10;
 
