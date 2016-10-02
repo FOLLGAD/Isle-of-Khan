@@ -64,6 +64,11 @@ function draw() {
       drawOrder.push(bombs[i]);
     }
   }
+  for (i = 0; i < particles.length; i++) {
+    if (particles[i].posX < camX + canvas.width + tileSize && particles[i].posX + particles[i].width > camX - tileSize && particles[i].posY < camY + canvas.height + tileSize && particles[i].posY + particles[i].height > camY - tileSize) {
+      drawOrder.push(particles[i]);
+    }
+  }
   drawOrder.sort(function(a, b) {
     return (a.posY + a.height) - (b.posY + b.height);
   });

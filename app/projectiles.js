@@ -101,9 +101,6 @@ function Bomb(posX, posY, direction, inivelX, inivelY) {
 
   this.dmg = 0.2;
 
-  this.particles = [];
-  this.particleImg = particleImg;
-
   this.draw = function() {
     if (this.timer > 0) {
       ctx.drawImage(this.img, this.posX, this.posY, this.width, this.height);
@@ -135,9 +132,7 @@ function Bomb(posX, posY, direction, inivelX, inivelY) {
     }
     let nPart = Math.floor(getRandom() * 3) + 5;
     for (i = 0; i < nPart; i++) {
-      this.particles.push({
-
-      });
+      particles.push(new Particle(this.posX, this.posY, getRandom() * Math.PI * 2, getRandom() * 2 + 10, 20));
     }
   };
 
@@ -162,16 +157,28 @@ function Bomb(posX, posY, direction, inivelX, inivelY) {
   };
 }
 
-function Particle(posX, posY, direction, vel) {
+let particles = [];
+
+function Particle(posX, posY, direction, vel, duration) {
   this.posX = posX;
   this.posY = posY;
   this.velX = Math.sin(direction) * vel;
   this.velY = Math.cos(direction) * vel;
   this.width = 8 * 8;
   this.height = 8 * 8;
+  this.duration = duration;
   this.img = particleImg;
   this.draw = function() {
-    ctx.drawImage(this.img, posX, posY, width, height);
+    ctx.drawImage(this.img, this.posX, this.posY, this.width, this.height);
+  }
+  this.tick = function() {
+    this.posX += this.velX;
+    this.posY += this.velY;
+    this.duration -= 1;
+    if (this.duration <= 0) {
+      let indx = particles.indexOf(this);
+      particles.splice(indx, 1);
+    }
   }
 }
 
@@ -185,5 +192,8 @@ function spawnBomb() {
 function tickBombs() {
   for (i = 0; i < bombs.length; i++) {
     bombs[i].tick();
+  }
+  for (i = 0; i < particles.length; i++) {
+    particles[i].tick();
   }
 }
