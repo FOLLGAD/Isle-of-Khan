@@ -27,12 +27,16 @@ exports.Character = function (id, posX, posY) {
   this.attacking = false;
   this.canSwim = false;
   this.knockBack = 1;
+  this.walkingUp = false;
+  this.walkingLeft = false;
+  this.walkingDown = false;
+  this.walkingRight = false;
   // Amount of inaccuracy for the bow; default = 0.05
   this.bowInaccuracy = 0;
   // activation delay för bågen i millisekunder; default = 200
   this.activationDelay = 0;
   // tid som char går sakta efter att ha avfyrat bågen
-  this.activationSlowdownTime = this.activationDelay + 100;
+  this.activationSlowdownTime = this.activationDelay * 1.1;
   this.tick = function() {
     this.walk();
     if (this.hp <= 0) {
@@ -70,41 +74,28 @@ exports.Character = function (id, posX, posY) {
     }
   };
   this.walk = function() {
-    let idleX;
-    let idleY;
-    if (upPressed && !downPressed) {
-      idleY = false;
+    if (this.walkingUp && !this.walkingDown) {
       this.velY = -this.walkSpeed;
       this.direction = "up";
-    } else if (downPressed && !upPressed) {
-      idleY = false;
+    } else if (this.walkingDown && !this.walkingUp) {
       this.velY = this.walkSpeed;
       this.direction = "down";
     } else {
       this.velY = 0;
-      idleY = true;
     }
-    if (rightPressed && !leftPressed) {
-      idleX = false;
+    if (this.walkingRight && !this.walkingLeft) {
       this.velX = this.walkSpeed;
       this.direction = "right";
-    } else if (leftPressed && !rightPressed) {
-      idleX = false;
+    } else if (this.walkingLeft && !this.walkingRight) {
       this.velX = -this.walkSpeed;
       this.direction = "left";
     } else {
       this.velX = 0;
-      idleX = true;
     }
-    if (spacePressed) {
+    if (this.spacePressed) {
       this.attacking = true;
-    } else if (attackingFrame == 0 && !spacePressed){
+    } else if (this.attackingFrame <= 0 && !this.spacePressed){
       this.attacking = false;
-    }
-    if (idleX && idleY) {
-      this.idle = true;
-    } else {
-      this.idle = false;
     }
     if (this.velX != 0 && this.velY != 0) {
       if (this.velX > 0) {
@@ -119,8 +110,7 @@ exports.Character = function (id, posX, posY) {
       }
     }
     // Sätter position på karaktär beroende på charVel.
-    let d = new Date();
-    if(this.attacking || lastActivate + this.activationSlowdownTime > d.getTime()) {
+    if(this.attacking || lastActivate + this.activationSlowdownTime > Date.now()) {
       this.posX += this.velX * 0.5;
       this.posY += this.velY * 0.5;
     } else {
@@ -136,19 +126,6 @@ exports.Character = function (id, posX, posY) {
       this.posY = mapSizeY - this.height;
     } else if (this.posY < 0) {
       this.posY = 0;
-    }
-
-    if (!this.idle && frame + frameAdd < 4) {
-      frame += frameAdd;
-    }else{
-      frame = 0;
-    }
-
-    if (attackingFrame + frameAdd * 2 < 3 && this.attacking) {
-      attackingFrame += frameAdd * 2;
-    } else if (attackingFrame + frameAdd * 2 >= 3) {
-      attackingFrame = 0;
-      this.attacking = false;
     }
   }
 

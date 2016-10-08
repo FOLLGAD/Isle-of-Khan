@@ -2,19 +2,17 @@ let arrows = [];
 
 //DONE:10 add arrows
 
-let arrowWidth = 16;
-let arrowHeight = 32;
-
-function Arrow(posX, posY, direction, vel) {
+function Arrow(posX, posY, direction, id) {
+  this.owner = id;
   this.direction = direction;
   this.posX = posX;
   this.posY = posY;
-  this.velX = vel * Math.sin(direction);
-  this.velY = vel * Math.cos(direction);
+  this.velX = 5 * Math.sin(direction);
+  this.velY = 5 * Math.cos(direction);
   this.posX0 = this.posX;
   this.posY0 = this.posY;
-  this.width = arrowWidth;
-  this.height = arrowHeight;
+  this.width = 16;
+  this.height = 32;
   this.img = "arrow";
   this.canSwim = true;
   this.penetration = 1;
@@ -65,23 +63,22 @@ function tickArrows() {
     checkObjectCollision(arrows[i]);
   }
   for (i = 0; i < arrows.length; i++) {
-    if  (arrows[i].range != 0 && ( arrows[i].posX < arrows[i].posX0 - arrows[i].range
+    if ((arrows[i].posX < arrows[i].posX0 - arrows[i].range
       || arrows[i].posX > arrows[i].posX0 + arrows[i].range
       || arrows[i].posY < arrows[i].posY0 - arrows[i].range
       || arrows[i].posY > arrows[i].posY0 + arrows[i].range
-      )) {
+    ) && arrows[i].range != 0) {
       arrows.splice(i, 1);
     }
   }
 }
 
-let particleImg = document.getElementById("particle");
-
-function Bomb(posX, posY, direction, inivelX, inivelY) {
+function Bomb(posX, posY, direction, inivelX, inivelY, id) {
+  this.owner = id;
   this.posX = posX;
   this.posY = posY;
-  this.width = 8*8;
-  this.height = 8*8;
+  this.width = 64;
+  this.height = 64;
   this.speed = 30;
   this.velX = Math.sin(direction) * this.speed + inivelX;
   this.velY = Math.cos(direction) * this.speed + inivelY;
@@ -90,7 +87,6 @@ function Bomb(posX, posY, direction, inivelX, inivelY) {
   this.canSwim = false;
   this.exploded = false;
   this.radius = 250;
-
   this.dmg = 0.2;
 
   this.tick = function() {

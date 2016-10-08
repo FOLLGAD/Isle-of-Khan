@@ -1,90 +1,76 @@
-// event handlers
+socket = io();
 
+socket.on()
+
+// event handlers
 document.addEventListener("keydown", keyDownHandler, false);
 document.addEventListener("keyup", keyUpHandler, false);
 document.addEventListener("mousedown", mouseDownHandler, false);
 document.addEventListener("mouseup", mouseUpHandler, false);
 document.addEventListener('mousemove', nameMousePos, false);
-document.addEventListener('click', function(e) {
-});
 
 function keyDownHandler(e) {
-    if(e.keyCode == 68) {
-        rightPressed = true;
-    }
-    else if(e.keyCode == 65) {
-        leftPressed = true;
-    }
-    else if(e.keyCode == 87) {
-        upPressed = true;
-    }
-    else if(e.keyCode == 83) {
-        downPressed = true;
-    }
-    else if (e.keyCode == 32){
-        spacePressed = true;
-    }
-    else if (e.keyCode == 70){
-        fPressed = true;
-        spawnBomb();
-    }
-    else if (e.keyCode == 86) {
-        if (!vPressed) {
-          vPressed = true;
-          spawnMonster();
-        }
-    }
-    else if (e.keyCode == 27) {
-        menuToggle();
-    }
-    else if (e.keyCode == 67) {
-      if (!cPressed) {
-        spawnCoinAtCursor();
-        cPressed = true;
-      }
-    }
-    else if (e.keyCode == 66) {
-      if (!bPressed) {
-        toggleEnemies();
-        bPressed = true;
-        console.log(bPressed);
-      }
-    }
+  if (e.keyCode == 68) {
+    io.emit('key-press', { inputkey: 'd', state: true });
+  } else if (e.keyCode == 65) {
+    io.emit('key-press', { inputkey: 'a', state: true });
+  } else if (e.keyCode == 87) {
+    io.emit('key-press', { inputkey: 'w', state: true });
+  } else if (e.keyCode == 83) {
+    io.emit('key-press', { inputkey: 's', state: true });
+  } else if (e.keyCode == 32) {
+    io.emit('key-press', { inputkey: 'space', state: true });
+  } else if (e.keyCode == 70) {
+    let direx = Math.atan2(camX - chars[0].posX - chars[0].width / 2 + mousePosX, camY - chars[0].posY - chars[0].height/2 + mousePosY);
+    io.emit("bomb", direx)
+  }
+  else if (e.keyCode == 86) {
+    io.emit('key-press', { inputkey: 'v', state: true });
+  }
+  else if (e.keyCode == 27) {
+    menuToggle();
+  }
+  else if (e.keyCode == 67) {
+    io.emit('key-press', { inputkey: 'c', state: true });
+  }
+  else if (e.keyCode == 66) {
+    io.emit('key-press', { inputkey: 'b', state: true });
+  }
 }
 
 function keyUpHandler(e) {
-    if(e.keyCode == 68) {
-        rightPressed = false;
-        frame = 0;
-    }
-    else if(e.keyCode == 65) {
-        leftPressed = false;
-        frame = 0;
-    }
-    else if(e.keyCode == 87) {
-        upPressed = false;
-        frame = 0;
-    }
-    else if(e.keyCode == 83) {
-        downPressed = false;
-        frame = 0;
-    }
-    else if(e.keyCode == 32){
-        spacePressed = false;
-        frame = 0;
-    }
-    else if(e.keyCode == 86) {
-        vPressed = false;
-    }
-    else if(e.keyCode == 67) {
-        cPressed = false;
-    }
-    else if(e.keyCode == 66) {
-        bPressed = false;
-    }
-    else if(e.keyCode == 70) {
-        fPressed = false;
-    }
+  if (e.keyCode == 68) {
+    io.emit('key-press', { inputkey: 'd', state: false });
+    frame = 0;
+  }
+  else if (e.keyCode == 65) {
+    io.emit('key-press', { inputkey: 'a', state: false });
+    frame = 0;
+  }
+  else if (e.keyCode == 87) {
+    io.emit('key-press', { inputkey: 'w', state: false });
+    frame = 0;
+  }
+  else if (e.keyCode == 83) {
+    io.emit('key-press', { inputkey: 's', state: false });
+    frame = 0;
+  }
+  else if (e.keyCode == 32){
+    io.emit('key-press', { inputkey: 'space', state: false });
+    frame = 0;
+  }
+  else if (e.keyCode == 86) {
+    io.emit('key-press', { inputkey: 'v', state: true });
+  }
+  else if (e.keyCode == 67) {
+    io.emit('key-press', { inputkey: 'c', state: false });
+  }
+  else if (e.keyCode == 66) {
+    io.emit('key-press', { inputkey: 'b', state: false });
+  }
+  else if (e.keyCode == 70) {
+    io.emit('key-press', { inputkey: 'f', state: false });
+  }
 }
 
 function nameMousePos(e) {
@@ -95,12 +81,12 @@ function nameMousePos(e) {
 
 function getMousePos(e) {
   let rect = canvas.getBoundingClientRect();
-  scaleX = canvas.width / rect.width;    // relationship bitmap vs. element for X
-  scaleY = canvas.height / rect.height;  // relationship bitmap vs. element for Y
+  scaleX = canvas.width / rect.width;
+  scaleY = canvas.height / rect.height;
   return {
-    x: (e.clientX - rect.left) * scaleX,   // scale mouse coordinates after they have
-    y: (e.clientY - rect.top) * scaleY     // been adjusted to be relative to element
-  }
+    x: (e.clientX - rect.left) * scaleX,
+    y: (e.clientY - rect.top) * scaleY
+  };
 }
 
 function mouseDownHandler() {

@@ -14,16 +14,16 @@ function checkObjectCollision(object) {
 // checks which tiles are in direct collision with the entity.
 
 function tilesSurrounding(posX, posY, width, height) {
-  let tileX = (posX - posX % tileSize) / tileSize;
-  let tileY = (posY - posY % tileSize) / tileSize;
+  let tileX = Math.floor(posX / tileSize);
+  let tileY = Math.floor(posY / tileSize);
   if (posX < 0) {
     tileX--;
   }
   if (posY < 0) {
     tileY--;
   }
-  let colWidth = 1 + (posX + width - (posX + width) % tileSize) / tileSize - tileX;
-  let colHeight = 1 + (posY + height - (posY + height) % tileSize) / tileSize - tileY;
+  let colWidth = 1 + Math.floor(width / tileSize);
+  let colHeight = 1 + Math.floor(height / tileSize);
   return { x: tileX, y: tileY, width: colWidth, height: colHeight };
 }
 
@@ -52,11 +52,10 @@ function checkTileCollision(i, j, object) {
 function checkForPlayerDmg(obj1, obj2) {
   if (obj1.posX < obj2.posX + obj2.width && obj1.posX + obj1.width > obj2.posX) {
     if (obj1.posY < obj2.posY + obj2.height && obj1.posY + obj1.height > obj2.posY) {
-      let d = new Date();
-      if (d.getTime() - 500 > lastHit || lastHit == 0) {
+      if (Date.now() - 500 > lastHit || lastHit === 0) {
         obj2.hp -= obj1.dmg;
         canGetDmg = false;
-        lastHit = d.getTime();
+        lastHit = Date.now();
       }
     }
   }

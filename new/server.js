@@ -26,27 +26,23 @@ const npc = require('./npc.js');
 const projectiles = require('./projectiles.js');
 const viewPoint = require('./viewPoint.js');
 
-function update() {
-  // chars[0].tick();
-  for (let i = 0; i < chars.length; i++) {
-    chars[i].tick();
-  }
-  tickCoin();
-  tickEnemies();
-  tickBombs();
-  tickArrows();
-  viewPoint();
-  drawMap();
-  draw();
-  drawHp();
-  drawGui();
-}
-
 io.on('connection', function (socket) {
   console.log("User with ID", socket.id, "connected");
-  assignedChar = chars.push(new Character(socket.id, 50, 50));
+  chars.push(new Character(socket.id, 50, 50)) - 1;
+  let assignedChar = chars[chars.length];
+
+  io.on('bomb', function (direction) {
+    bombs.push(new Bomb(assignedChar.posX, assignedChar.posY, direction, assignedChar.velX, assignedChar.velY, assignedChar.id));
+  });
+
+  io.on('arrow', function (direction) {
+    arrows.push(new Arrow( assignedChar.posX, assignedChar.posY, direction, assignedChar.id));
+  });
+
+  io.on('')
+
   io.on('disconnect', function () {
-    chars.indexOf(assignedChar);
-    
+    index = chars.indexOf(assignedChar);
+    chars.splice(index, 1);
   });
 });

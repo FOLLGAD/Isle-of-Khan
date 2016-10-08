@@ -162,6 +162,7 @@ function Character() {
           direction += (getRandom()*2 - 1) * this.bowInaccuracy;
           arrows.push(new Arrow(this.posX + this.width / 2, this.posY + this.height / 2, direction, arrowSpeed));
           lastActivate = d.getTime();
+          io.emit("arrow", direction);
         }
       }
     } else if (spacePressed && lastActivate + 100 < d.getTime()) {
