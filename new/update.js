@@ -6,18 +6,13 @@ function update() {
   ctx.save();
   resize();
 
-  chars[0].tick();
-  tickCoin();
-  tickEnemies();
-  tickBombs();
-  tickArrows();
-  // Tick all objects before viewPoint.
-    viewPoint();
-    drawMap();
-  // Draw all objects after viewPoint.
-  draw();
-  drawHp();
-  drawGui();
+  tickCharacter(chars);
+  tickCoin(coins);
+  tickEnemies(enemies);
+  tickBombs(bombs);
+  tickArrows(arrows);
+  // CALCULATE VIEWPOINT FOR EACH AND EVERY PLAYER
+  calculateViewPoint(chars);
 
   if (menuActive) { menuUpdate(); }
   drawCursor();
@@ -37,8 +32,12 @@ function draw() {
   // Drawar alla entities efter värdet på dess posY, från högt till lågt
   // Lägger först alla objekt som ska målas i en och samma array, och sorterar dem efter storlek på posY, och callar sist alla deras individuella draw()-funktioner.
   let drawOrder = [];
-  drawOrder.push(chars[0]);
-  drawOrder.push(Wizard);
+  for (i = 0; i < chars.length; i++) {
+    if (chars[i].posX < camX + canvas.width + tileSize && chars[i].posX + chars[i].width > camX - tileSize && chars[i].posY < camY + canvas.height + tileSize && chars[i].posY + chars[i].height > camY - tileSize) {
+      drawOrder.push(chars[i]);
+    }
+  }
+  // drawOrder.push(Wizard);
   for (i = 0; i < treesArray.length; i++) {
     if (treesArray[i].posX < camX + canvas.width + tileSize && treesArray[i].posX + treesArray[i].width > camX - tileSize && treesArray[i].posY < camY + canvas.height + tileSize && treesArray[i].posY + treesArray[i].height > camY - tileSize) {
       drawOrder.push(treesArray[i]);

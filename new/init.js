@@ -5,7 +5,6 @@ ctx.canvas.width  = window.innerWidth;
 ctx.canvas.height = window.innerHeight;
 
 //Settings
-let attackingSpeed = 2;
 
 let fps = 60;
 let frameAdd = 0.1;
@@ -26,8 +25,8 @@ let mousePosY;
 let frame = 0;
 let attackingFrame = 0;
 let money = 0;
-
 let attacking = false;
+
 let rightPressed = false;
 let upPressed = false;
 let leftPressed = false;
@@ -73,7 +72,7 @@ let menuButtonimg = document.getElementById("menuButton");
 
 let treesArray = [];
 
-exports.PlaceTrees = function () {
+function placeTrees() {
   let posX = 0;
   let posY = 0;
   for (let i = 0; i < mapArray.length; i++) {

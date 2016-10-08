@@ -1,6 +1,5 @@
 function checkObjectCollision(object) {
-  let tiles = {}
-  tiles = tilesSurrounding(object.posX, object.posY, object);
+  let tiles = tilesSurrounding(object.posX, object.posY, object.width, object.height);
   for (var i = 0; i < tiles.width; i++) {
     for (let j = 0; j < tiles.height; j++) {
       if (isTileWall(tiles.x + i, tiles.y + j, object.canSwim)) {
@@ -14,19 +13,17 @@ function checkObjectCollision(object) {
 
 // checks which tiles are in direct collision with the entity.
 
-function tilesSurrounding(posX, posY, object) {
-
+function tilesSurrounding(posX, posY, width, height) {
   let tileX = (posX - posX % tileSize) / tileSize;
+  let tileY = (posY - posY % tileSize) / tileSize;
   if (posX < 0) {
     tileX--;
   }
-  let tileY = (posY - posY % tileSize) / tileSize;
   if (posY < 0) {
     tileY--;
   }
-
-  let colWidth = 1 + (posX + object.width - (posX + object.width) % tileSize) / tileSize - tileX;
-  let colHeight = 1 + (posY + object.height - (posY + object.height) % tileSize) / tileSize - tileY;
+  let colWidth = 1 + (posX + width - (posX + width) % tileSize) / tileSize - tileX;
+  let colHeight = 1 + (posY + height - (posY + height) % tileSize) / tileSize - tileY;
   return { x: tileX, y: tileY, width: colWidth, height: colHeight };
 }
 
@@ -52,12 +49,12 @@ function checkTileCollision(i, j, object) {
   }
 }
 
-function checkForPlayerDmg(i) {
-  if (enemies[i].posX < chars[0].posX + chars[0].width && enemies[i].posX + enemies[i].width > chars[0].posX) {
-    if (enemies[i].posY < chars[0].posY + chars[0].height && enemies[i].posY + enemies[i].height > chars[0].posY) {
+function checkForPlayerDmg(obj1, obj2) {
+  if (obj1.posX < obj2.posX + obj2.width && obj1.posX + obj1.width > obj2.posX) {
+    if (obj1.posY < obj2.posY + obj2.height && obj1.posY + obj1.height > obj2.posY) {
       let d = new Date();
       if (d.getTime() - 500 > lastHit || lastHit == 0) {
-        chars[0].hp -= enemies[i].dmg;
+        obj2.hp -= obj1.dmg;
         canGetDmg = false;
         lastHit = d.getTime();
       }
