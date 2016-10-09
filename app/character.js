@@ -67,8 +67,8 @@ function Character() {
       this.velX = 0;
     }
   };
-  this.draw = function() {
-    ctx.drawImage(this.img, this.posX, this.posY - this.height, this.width, this.height * 2);
+  this.draw = function(img) {
+    ctx.drawImage(img, this.posX, this.posY - this.height, this.width, this.height * 2);
   };
   this.walk = function() {
     let idleX;

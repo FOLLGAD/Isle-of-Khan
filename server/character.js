@@ -1,16 +1,12 @@
-// this object, för storage av alla tillstånd av char
+let col = require('./collision.js');
+let map = require('./map.js');
 
-let chars = [];
-
-let arrowSpeed = 20;
-
-let charSpawnX = 100;
-let charSpawnY = 100;
+let tileSize = 64;
 
 exports.Character = function (id, posX, posY) {
   this.id = id;
-  this.posX = charSpawnX;
-  this.posY = charSpawnY;
+  this.posX = posX;
+  this.posY = posY;
   this.height = 64;
   this.width = 64;
   this.velX = 0;
@@ -22,8 +18,6 @@ exports.Character = function (id, posX, posY) {
   this.hp = 10;
   this.idle = true;
   this.img = "char";
-  this.spawnX = charSpawnX;
-  this.spawnY = charSpawnY;
   this.attacking = false;
   this.canSwim = false;
   this.knockBack = 1;
@@ -33,27 +27,46 @@ exports.Character = function (id, posX, posY) {
   this.walkingRight = false;
   // Amount of inaccuracy for the bow; default = 0.05
   this.bowInaccuracy = 0;
-  // activation delay för bågen i millisekunder; default = 200
   this.activationDelay = 0;
+  this.lastShot = 0;
   // tid som char går sakta efter att ha avfyrat bågen
   this.activationSlowdownTime = this.activationDelay * 1.1;
-  this.tick = function() {
-    this.walk();
+  this.draw = function(img) {
+    ctx.drawImage(img, this.posX, this.posY - this.height, this.width, this.height * 2);
+  };
+  this.tick = function(deltaTime) {
+    this.walk(deltaTime);
     if (this.hp <= 0) {
       this.respawn();
       this.hp = 10;
     }
-    checkObjectCollision(this);
-    if (!menuActive) {
-      this.activate();
+
+    if (this.walkingUp && !this.walkingDown) {
+      this.velX = -this.walkSpeed * deltaTime / 20;
+    } else if (this.walkingDown && !this.walkingUp) {
+      this.velX = this.walkSpeed * deltaTime / 20;
     }
-  };
+    if (this.walkingLeft && !this.walkingRight) {
+      this.velY = -this.walkSpeed * deltaTime / 20;
+    } else if (this.walkingRight && !this.walkingLeft) {
+      this.velY = this.walkSpeed * deltaTime / 20;
+    }
 
+    col.checkObjectCollision(this);
+  };
   this.respawn = function() {
-    this.posX = this.spawnX;
-    this.posY = this.spawnY;
+    this.posX = Math.random() * map.riverMap.width * 63;
+    this.posY = Math.random() * map.riverMap.height * 63;
   };
-
+  this.getDamaged = function (direction, dmg, knockback) {
+    this.hp -= dmg;
+    this.velX += Math.sin(direction) * knockback;
+    this.velY += Math.cos(direction) * knockback;
+    if (this.hp <= 0) {
+      this.hp = 10;
+      this.respawn();
+    }
+  }
   this.collision = function(i, j, colDistanceX, colDistanceY) {
     if (Math.abs(colDistanceX) < Math.abs(colDistanceY)) {
       // Flyttas till ner/upp , Y-led
@@ -73,7 +86,7 @@ exports.Character = function (id, posX, posY) {
       this.velX = 0;
     }
   };
-  this.walk = function() {
+  this.walk = function(deltaTime) {
     if (this.walkingUp && !this.walkingDown) {
       this.velY = -this.walkSpeed;
       this.direction = "up";
@@ -110,25 +123,17 @@ exports.Character = function (id, posX, posY) {
       }
     }
     // Sätter position på karaktär beroende på charVel.
-    if(this.attacking || lastActivate + this.activationSlowdownTime > Date.now()) {
+    this.velX *= deltaTime / 20;
+    this.velY *= deltaTime / 20;
+
+    if (this.attacking) {
       this.posX += this.velX * 0.5;
       this.posY += this.velY * 0.5;
     } else {
       this.posX += this.velX;
       this.posY += this.velY;
     }
-    if (this.posX + this.width > mapSizeX) {
-      this.posX = mapSizeX - this.width;
-    } else if (this.posX < 0) {
-      this.posX = 0;
-    }
-    if (this.posY + this.height > mapSizeY) {
-      this.posY = mapSizeY - this.height;
-    } else if (this.posY < 0) {
-      this.posY = 0;
-    }
   }
-
   this.activate = function() {
     let d = new Date();
     if (mouseDown) {
@@ -136,7 +141,7 @@ exports.Character = function (id, posX, posY) {
         if (lastActivate + this.activationDelay < d.getTime()) {
           let direction = Math.atan2(camX - this.posX - this.width / 2 + mousePosX, camY - this.posY - this.height/2 + mousePosY);
           direction += (getRandom()*2 - 1) * this.bowInaccuracy;
-          arrows.push(new Arrow(this.posX + this.width / 2, this.posY + this.height / 2, direction, arrowSpeed));
+          arrows.push(new Arrow(this.posX + this.width / 2, this.posY + this.height / 2, direction));
           lastActivate = d.getTime();
         }
       }
@@ -144,7 +149,6 @@ exports.Character = function (id, posX, posY) {
       this.attackingArea();
     }
   }
-
   this.attackingArea = function() {
     if (this.direction == "up") {
       attackingX = this.posX;

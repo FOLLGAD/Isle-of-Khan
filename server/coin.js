@@ -1,13 +1,12 @@
-let coins = [];
-function Coin(posX, posY) {
+exports.Coin = function (posX, posY) {
   this.posX = posX;
   this.posY = posY;
   this.height = 32;
   this.width = 32;
   this.img = "coin";
   this.pickUp = false;
-  this.checkPlayer = function() {
-    for (let i = 0; i < chars.length; i++) {
+  this.checkPlayers = function(coins, chars) {
+    for (let i in chars) {
       if (this.posX < chars[i].posX + chars[i].width && this.posX + this.width > chars[i].posX && this.posY < chars[i].posY + chars[i].height && this.posY + this.height > chars[i].posY) {
         chars[i].coins++;
         let index = coins.indexOf(this);
@@ -15,19 +14,13 @@ function Coin(posX, posY) {
       }
     }
   }
-}
-
-function tickCoin() {
-  for (i = 0; i < coins.length; i++) {
-    coins[i].checkPlayer();
-  }
-  for (i = 0; i < coins.length; i++) {
-    coins[i].draw();
+  this.draw = function(img) {
+    ctx.drawImage(img, this.posX, this.posY, this.width, this.height);
   }
 }
 
-setInterval(spawnCoin, 1000);
-
-function spawnCoin() {
-  coins.push(new Coin(Math.round(getRandom() * tileMapWidth) * tileSize + 16, Math.round(getRandom() * tileMapWidth) * tileSize + 16));
+exports.tickCoins = function (coins, chars) {
+  for (i = 0; i < coins.length; i++) {
+    coins[i].checkPlayers(coins, chars);
+  }
 }

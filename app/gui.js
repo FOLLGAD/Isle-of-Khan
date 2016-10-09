@@ -157,7 +157,6 @@ function menuButton(text, n, onClick, mode) {
       this.down = this.clickToggle;
     }
   }
-
 }
 
 menuArray.push(new menuButton("Kill Enemies", 0, deleteEnemies, "push"));

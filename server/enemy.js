@@ -1,9 +1,8 @@
+let col = require('./collision.js');
+
 let canActive = true;
-
-let enemies[];
-
 let slowingF = 0.9;
-function Enemy (posX, posY, width, height) {
+exports.Enemy = function (posX, posY, width, height) {
   this.posX = posX;
   this.posY = posY;
   this.velX = 0;
@@ -63,18 +62,21 @@ function Enemy (posX, posY, width, height) {
   }
 }
 
-function tickEnemies() {
+exports.tickEnemies = function (enemies, chars, deltaTime) {
   for (let i = 0; i < enemies.length; i++) {
-    if (Math.abs(enemies[i].posX - chars[0].posX) < chars[0].width && Math.abs(enemies[i].posY - chars[0].posY) < chars[0].height) {
+    if (Math.abs(enemies[i].posX - chars.posX) < chars.width && Math.abs(enemies[i].posY - chars.posY) < chars.height) {
       enemies[i].active = false;
-    } else if (Math.abs(enemies[i].posX - chars[0].posX) < enemies[i].noticeDistance && Math.abs(enemies[i].posY - chars[0].posY) < enemies[i].noticeDistance) {
+    } else if (Math.abs(enemies[i].posX - chars.posX) < enemies[i].noticeDistance && Math.abs(enemies[i].posY - chars.posY) < enemies[i].noticeDistance) {
       enemies[i].active = true;
-    } else if (enemies[i].active && (Math.abs(enemies[i].posX - chars[0].posX) > enemies[i].loseDistance && Math.abs(enemies[i].posY - chars[0].posY) < enemies[i].loseDistance)) {
+    } else if (enemies[i].active && (Math.abs(enemies[i].posX - chars.posX) > enemies[i].loseDistance && Math.abs(enemies[i].posY - chars.posY) < enemies[i].loseDistance)) {
+      enemies[i].active = false;
+    }
+    if (!!chars.real) {
       enemies[i].active = false;
     }
 
     if (enemies[i].active && enemies[i].canActive) {
-      let direction = Math.atan2(-chars[0].posX - chars[0].width / 2 + enemies[i].posX + enemies[i].width / 2, -chars[0].posY - chars[0].height / 2 + enemies[i].posY + enemies[i].height / 2);
+      let direction = Math.atan2(-chars.posX - chars.width / 2 + enemies[i].posX + enemies[i].width / 2, -chars.posY - chars.height / 2 + enemies[i].posY + enemies[i].height / 2);
       enemies[i].accX = Math.sin(direction) * enemies[i].speed;
       enemies[i].accY = Math.cos(direction) * enemies[i].speed;
     } else {
@@ -92,15 +94,15 @@ function tickEnemies() {
       enemies[i].velY = 0;
     }
 
-    enemies[i].velX += enemies[i].accX;
-    enemies[i].velY += enemies[i].accY;
+    enemies[i].velX += enemies[i].accX * deltaTime / 20;
+    enemies[i].velY += enemies[i].accY * deltaTime / 20;
 
-    enemies[i].posX -= enemies[i].velX;
-    enemies[i].posY -= enemies[i].velY;
+    enemies[i].posX -= enemies[i].velX * deltaTime / 20;
+    enemies[i].posY -= enemies[i].velY * deltaTime / 20;
 
-    checkObjectCollision(enemies[i]);
+    col.checkObjectCollision(enemies[i]);
     for (let j = 0; j < chars.length; j++) {
-      checkForPlayerDmg(enemies[i], chars[j]);
+      col.checkForPlayerDmg(enemies[i], chars[j]);
     }
     if (enemies[i].hp <= 0) {
       enemies.splice(i, 1);
@@ -109,19 +111,6 @@ function tickEnemies() {
   //TODO:2 Move idly about when out of range
   //TODO:3 Avoid obstacles to find a path to the player
 
-}
-
-function drawEnemies() {
-  for (let i = 0; i < enemies.length; i++) {
-    ctx.drawImage(enemies[i].img, enemies[i].posX, enemies[i].posY, enemies[i].width, enemies[i].height);
-    if (enemies[i].dmgAnim > 0) {
-      ctx.globalAlpha = 0.4;
-      ctx.fillStyle = "#FF0000";
-      ctx.fillRect(enemies[i].posX, enemies[i].posY, enemies[i].width, enemies[i].height);
-      ctx.globalAlpha = 1;
-      ctx.fillStyle = "#000";
-    }
-  }
 }
 
 function toggleEnemies() {

@@ -25,7 +25,7 @@ function Arrow(posX, posY, direction, vel) {
     arrows.splice(index, 1);
     return true;
   }
-  this.draw = function() {
+  this.draw = function(img) {
     ctx.save();
     ctx.translate(this.posX, this.posY);
     ctx.rotate(Math.PI - this.direction);

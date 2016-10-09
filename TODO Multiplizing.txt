@@ -1,7 +1,0 @@
-Clientside fil för att ladda applikationen; client.js
-
-Serverside fil för att ladda servern; game.server.js
-
-app.js intializes express & socket.io and handles networking
-
-Gemensam gamecore med det mesta av nuvarande koden. Destination /app

@@ -25,12 +25,6 @@ function update() {
   ctx.restore();
 }
 
-// 1. Map
-// 2. Alla entities (enemies, character, projectiles), inklusive träd, ska drawas i ordning från posY = 0 till posY = canvas.height
-// 3. HP-mätare, GUI
-// 4. ESC-meny
-// 5. Cursor
-
 //TODO: gör träd transparent om man är bakom dem
 
 function draw() {

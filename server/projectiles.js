@@ -1,14 +1,14 @@
-let arrows = [];
+let col = require('./collision.js');
 
-//DONE:10 add arrows
+let tileSize = 64;
 
-function Arrow(posX, posY, direction, id) {
+exports.Arrow = function (posX, posY, direction, id) {
   this.owner = id;
   this.direction = direction;
   this.posX = posX;
   this.posY = posY;
-  this.velX = 5 * Math.sin(direction);
-  this.velY = 5 * Math.cos(direction);
+  this.velX = 10 * Math.sin(direction);
+  this.velY = 10 * Math.cos(direction);
   this.posX0 = this.posX;
   this.posY0 = this.posY;
   this.width = 16;
@@ -18,49 +18,39 @@ function Arrow(posX, posY, direction, id) {
   this.penetration = 1;
   this.dmg = 5;
   this.range = 0;
-  this.collision = function() {
+  this.collision = function(arrows) {
     let index = arrows.indexOf(this);
     arrows.splice(index, 1);
     return true;
   }
+  this.draw = function (img) {
+    ctx.save();
+    ctx.translate(this.posX, this.posY);
+    ctx.rotate(Math.PI - this.direction);
+    ctx.drawImage(img, -this.width / 2, -this.height / 2, this.width, this.height);
+    ctx.restore();
+  }
+  this.tick = function (deltaTime) {
+    this.posX += this.velX * deltaTime / 20;
+    this.posY += this.velY * deltaTime / 20;
+  }
+  this.onPenetration = function (subtract, arrows) {
+    this.penetration -= subtract;
+    if (this.penetration < 0) {
+      indx = arrows.indexOf(this);
+      arrows.splice(indx, 1);
+    }
+  }
 }
 
-function tickArrows() {
+exports.tickArrows = function (arrows, deltaTime, enemies, chars) {
   // check collision with enemies
+  for (i = 0; i < arrows.length; i++) {
+    arrows[i].tick(deltaTime);
+    col.checkObjectCollision(arrows[i]);
+  }
   for (i = 0; i < enemies.length; i++) {
-      for (j = 0; j < arrows.length; j++) {
-        if (enemies[i].posX < arrows[j].posX + arrows[j].width
-         && enemies[i].posX + enemies[i].width > arrows[j].posX
-         && enemies[i].posY < arrows[j].posY + arrows[j].height
-         && enemies[i].posY + enemies[i].height > arrows[j].posY) {
 
-        enemies[i].velX -= arrows[j].velX * chars[0].knockBack;
-        enemies[i].velY -= arrows[j].velY * chars[0].knockBack;
-        enemies[i].dmgAnim = 30;
-        enemies[i].getDamaged();
-        enemies[i].hp -= arrows[j].dmg;
-        arrows[j].penetration -= 1;
-
-        if (arrows[j].penetration < 0) {
-          arrows.splice(j, 1);
-          j -= 1;
-        }
-        if (enemies[i].hp < 0) {
-          enemies.splice(i, 1);
-          i -= 1;
-        }
-      }
-    }
-  }
-  for (i = 0; i < arrows.length; i++) {
-    arrows[i].posX += arrows[i].velX;
-    arrows[i].posY += arrows[i].velY;
-    if (arrows[i].penetration < 0) {
-      arrows.splice(i, 1);
-    }
-  }
-  for (i = 0; i < arrows.length; i++) {
-    checkObjectCollision(arrows[i]);
   }
   for (i = 0; i < arrows.length; i++) {
     if ((arrows[i].posX < arrows[i].posX0 - arrows[i].range
@@ -72,8 +62,14 @@ function tickArrows() {
     }
   }
 }
+function arrowCollision (arrow, entity) {
+  if (entity.posX < arrow.posX + arrow.width && entity.posX + entity.width > arrow.posX && entity.posY < arrow.posY + arrow.height && entity.posY + entity.height > arrow.posY && entity.id !== arrow.owner) {
+    entity.getDamaged(arrow.dmg, arrow.direction, chars[arrow.owner].knockBack);
+    arrow.onPenetration(1);
+  }
+}
 
-function Bomb(posX, posY, direction, inivelX, inivelY, id) {
+exports.Bomb = function (posX, posY, direction, inivelX, inivelY, id) {
   this.owner = id;
   this.posX = posX;
   this.posY = posY;
@@ -88,27 +84,29 @@ function Bomb(posX, posY, direction, inivelX, inivelY, id) {
   this.exploded = false;
   this.radius = 250;
   this.dmg = 0.2;
-
-  this.tick = function() {
-    this.timer--;
+  this.tick = function(bombs, deltaTime, enemies, chars) {
+    this.timer -= deltaTime / 40;
     if (this.timer > 0) {
-      this.posX += this.velX;
-      this.posY += this.velY;
+      this.posX += this.velX * deltaTime / 40;
+      this.posY += this.velY * deltaTime / 40;
       this.velX *= 0.8;
       this.velY *= 0.8;
-      checkObjectCollision(this);
+      col.checkObjectCollision(this);
     } else if (this.timer < -30) {
       let indx = bombs.indexOf(this);
       bombs.splice(indx, 1);
     } else if (!this.exploded) {
       this.exploded = true;
-      this.explode();
+      this.explode(enemies, chars);
     }
   };
 
-  this.explode = function() {
-    for (i = 0; i < enemies.length; i++) {
-      checkCircularEntityCollision(this, enemies[i]);
+  this.explode = function(enemies, chars) {
+    for (let i = 0; i < enemies.length; i++) {
+      col.checkCircularEntityCollision(this, enemies[i]);
+    }
+    for (let i in chars) {
+      col.checkCircularEntityCollision(this, chars[i]);
     }
   };
 
@@ -130,44 +128,16 @@ function Bomb(posX, posY, direction, inivelX, inivelY, id) {
       }
       this.velX = -this.velX;
     }
-  };
-}
-
-function Particle(posX, posY, direction, vel, duration) {
-  this.posX = posX;
-  this.posY = posY;
-  this.velX = Math.sin(direction) * vel;
-  this.velY = Math.cos(direction) * vel;
-  this.width = 8 * 8;
-  this.height = 8 * 8;
-  this.duration = duration;
-  this.img = "particle";
-  this.draw = function() {
-    ctx.drawImage(this.img, this.posX, this.posY, this.width, this.height);
-  }
-  this.tick = function() {
-    this.posX += this.velX;
-    this.posY += this.velY;
-    this.duration -= 1;
-    if (this.duration <= 0) {
-      let indx = particles.indexOf(this);
-      particles.splice(indx, 1);
-    }
   }
 }
-
-let bombs = [];
 
 function spawnBomb() {
   let direx = Math.atan2(camX - chars[0].posX - chars[0].width / 2 + mousePosX, camY - chars[0].posY - chars[0].height/2 + mousePosY);
   bombs.push(new Bomb(chars[0].posX, chars[0].posY, direx, chars[0].velX, chars[0].velY));
 }
 
-function tickBombs() {
+exports.tickBombs = function (bombs, deltaTime, enemies, chars) {
   for (i = 0; i < bombs.length; i++) {
-    bombs[i].tick();
-  }
-  for (i = 0; i < particles.length; i++) {
-    particles[i].tick();
+    bombs[i].tick(bombs, deltaTime, enemies, chars);
   }
 }
