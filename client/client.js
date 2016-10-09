@@ -160,10 +160,8 @@ document.addEventListener("keydown", keyDownHandler, false);
     let mousePos = getMousePos(e);
     mousePosX = mousePos.x;
     mousePosY = mousePos.y;
-    if (mouseDown && Date.now() - lastMouseUpdate > 50) {
-      lastMouseUpdate = Date.now();
+    if (mouseDown) {
       let direction = Math.atan2(camX - Players[clientID].posX - Players[clientID].width / 2 + mousePosX, camY - Players[clientID].posY - Players[clientID].height / 2 + mousePosY);
-      console.log(direction);
       socket.emit('key-press', { inputkey: 'direction-update', direction: direction });
     }
   };
@@ -276,10 +274,10 @@ function resize() {
 }
 
 function drawHp() {
-  ctx.fillStyle = "green";
-  ctx.fillRect(Players[clientID].posX - 20, Players[clientID].posY + Players[clientID].width / 2 - 100, Players[clientID].hp * 10, 10);
   ctx.fillStyle = "#000";
   ctx.fillRect(Players[clientID].posX - 20 - 1, Players[clientID].posY + Players[clientID].width / 2 - 100 - 1, 10 * 10 + 2, 12);
+  ctx.fillStyle = "green";
+  ctx.fillRect(Players[clientID].posX - 20, Players[clientID].posY + Players[clientID].width / 2 - 100, Players[clientID].hp * 10, 10);
 }
 
 function drawCursor() {

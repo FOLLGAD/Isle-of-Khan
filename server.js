@@ -44,10 +44,10 @@ io.on('connection', function (socket) {
   socket.emit("initialize", { map: map.riverMap.matrix, id: socket.id });
 
   socket.on('bomb', function (direction) {
-    bombs.push(new projectiles.Bomb(chars[socket.id].posX, chars[socket.id].posY, direction, chars[socket.id].velX, chars[socket.id].velY, chars[socket.id].id));
+    bombs.push(new projectiles.Bomb(chars[socket.id].posX + chars[socket.id].width / 2, chars[socket.id].posY + chars[socket.id].height / 2, direction, chars[socket.id].velX, chars[socket.id].velY, chars[socket.id].id));
   });
   socket.on('arrow', function (direction) {
-    arrows.push(new projectiles.Arrow(chars[socket.id].posX, chars[socket.id].posY, direction, chars[socket.id].id));
+    arrows.push(new projectiles.Arrow(chars[socket.id].posX + chars[socket.id].width / 2, chars[socket.id].posY + chars[socket.id].height / 2, direction, chars[socket.id].id));
   });
 
   socket.on('key-press', function (input) {
@@ -78,7 +78,7 @@ io.on('connection', function (socket) {
           clearInterval(intervalStorage[socket.id]);
         }
         break;
-      case "direction":
+      case "direction-update":
         chars[socket.id].aimDirection = input.direction;
         break;
       default:

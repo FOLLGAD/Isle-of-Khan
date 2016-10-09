@@ -31,7 +31,7 @@ function tilesSurrounding(posX, posY, width, height) {
 }
 
 function isTileWall(i, j, canSwim) {
-  if (!Boolean(i) || !Boolean(j)) {
+  if (i < 0 || j < 0) {
     return true;
   } else if ((i >= map.riverMap.width || i < 0 || j >= map.riverMap.height || j < 0)) {
     return true;
