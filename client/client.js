@@ -1,12 +1,13 @@
 let canvas = document.getElementById("canvas");
 let ctx = canvas.getContext("2d");
 
-ctx.canvas.width  = window.innerWidth;
-ctx.canvas.height = window.innerHeight;
+let minimap = {};
+minimap.canvas = document.getElementById("minimap");
+minimap.ctx = minimap.canvas.getContext("2d");
 
 let socket = io();
 
-let gameMap = [];
+let gameMap = {};
 let tileSize = 64;
 let menuActive = false;
 let mousePosX;
@@ -14,11 +15,24 @@ let mousePosY;
 
 let clientID;
 socket.on('initialize', function (data) {
-  gameMap = data.map;
+  gameMap.matrix = data.matrix;
+  gameMap.width = data.width;
+  gameMap.height = data.height;
   clientID = data.id;
-  setInterval(update, 1000/60);
   console.log("Your client ID is", clientID);
+  drawMinimap();
 });
+
+ctx.canvas.width  = window.innerWidth;
+ctx.canvas.height = window.innerHeight;
+
+minimap.ctx.canvas.width = gameMap.width;
+minimap.ctx.canvas.height = gameMap.height;
+console.log(minimap.ctx.canvas.width);
+
+minimap.scale = 2;
+
+let asdf = false;
 
 let Players = {};
   let Trees = [];
@@ -38,6 +52,7 @@ socket.on('packet', function (packet) {
   Bombs = [];
   for (let yeahboi in packet.players) {
     Players[packet.players[yeahboi].id] = new Character(packet.players[yeahboi]);
+    console.log(Players[packet.players[yeahboi].id].velX);
   }
   for (let i = 0; i < packet.trees.length; i++) {
     Trees.push(new Tree(packet.trees[i]));
@@ -54,9 +69,10 @@ socket.on('packet', function (packet) {
   for (let i = 0; i < packet.bombs.length; i++) {
     Bombs.push(new Bomb(packet.bombs[i]));
   }
-  // drawOrder.sort(function(a, b) {
-  //   return (a.posY + a.height) - (b.posY + b.height);
-  // });
+  if (!asdf) {
+    update();
+    asdf = true;
+  }
 });
 
 let Img = {};
@@ -179,6 +195,7 @@ document.addEventListener("keydown", keyDownHandler, false);
     if (!menuActive) {
       let direction = Math.atan2(camX - Players[clientID].posX - Players[clientID].width / 2 + mousePosX, camY - Players[clientID].posY - Players[clientID].height / 2 + mousePosY);
       socket.emit('key-press', { inputkey: 'mousebutton', state: true, direction: direction });
+      console.log("emitted");
     } else {
       checkMenuDown();
     }
@@ -190,12 +207,12 @@ document.addEventListener("keydown", keyDownHandler, false);
   }
 
 function draw() {
-  for (let i = 0; i < gameMap.length; i++) {
+  for (let i = 0; i < gameMap.height; i++) {
     let posX = 0;
     let posY = i * tileSize;
-    for (let j = 0; j < gameMap[i].length; j++) {
+    for (let j = 0; j < gameMap.width; j++) {
       if ((j - 1) * tileSize < camX + ctx.canvas.width && (j + 1) * tileSize > camX && (i - 1) * tileSize < camY + ctx.canvas.height && (i + 1) * tileSize > camY) {
-        ctx.drawImage(Img.tilemap, (gameMap[i][j] % 8) * 8, Math.floor(gameMap[i][j] / 8) * 8, 8, 8, posX, posY, tileSize + 1, tileSize + 1);
+        ctx.drawImage(Img.tilemap, (gameMap.matrix[i][j] % 8) * 8, Math.floor(gameMap.matrix[i][j] / 8) * 8, 8, 8, posX, posY, tileSize + 1, tileSize + 1);
       }
       posX += tileSize;
     }
@@ -240,6 +257,7 @@ function draw() {
   for (i = 0; i < drawOrder.length; i++) {
     drawOrder[i].draw(Img[drawOrder[i].img]);
   }
+  // console.log(drawOrder.length);
 }
 
 let camX;
@@ -248,8 +266,8 @@ let camY;
 function viewPort() {
   let vpMinx = 0;
   let vpMiny = 0;
-  let vpMaxx = gameMap[0].length * 64 - ctx.canvas.width;
-  let vpMaxy = gameMap.length * 64 - ctx.canvas.height;
+  let vpMaxx = gameMap.width * 64 - ctx.canvas.width;
+  let vpMaxy = gameMap.height * 64 - ctx.canvas.height;
   camX = Players[clientID].posX + Players[clientID].width / 2 - ctx.canvas.width / 2;
   camY = Players[clientID].posY + Players[clientID].width / 2 - ctx.canvas.height / 2;
   if (camX > vpMaxx) {
@@ -273,11 +291,54 @@ function resize() {
   offsetMaxY = gameMap.height * tileSize - ctx.canvas.height;
 }
 
+function drawMinimap() {
+  minimap.canvas.style.opacity = 0.8;
+  let colorRep = {
+    0: "#11A033",
+    1: "#11A033",
+    2: "#11A033",
+    3: "#8FA3A2",
+    4: "#8FA3A2",
+    5: "#8FA3A2",
+    6: "#006818",
+    7: "#0075FD",
+    8: "#11A033",
+    9: "#11A033",
+    10: "#11A033",
+    11: "#8FA3A2",
+    12: "#8FA3A2",
+    13: "#8FA3A2",
+    14: "#603000",
+    15: null,
+    16: "#11A033",
+    17: "#11A033",
+    18: "#11A033",
+    19: "#8FA3A2",
+    20: "#8FA3A2",
+    21: "#8FA3A2"
+  }
+  minimap.ctx.canvas.width = gameMap.width * minimap.scale + 4;
+  minimap.ctx.canvas.height = gameMap.height * minimap.scale + 4;
+  minimap.ctx.lineWidth = 4;
+  minimap.ctx.strokeRect(0, 0, minimap.ctx.canvas.width, minimap.ctx.canvas.height);
+  for (let i = 0; i < minimap.ctx.canvas.width - 4; i++) {
+    for (let j = 0; j < minimap.ctx.canvas.height - 4; j++) {
+      minimap.ctx.fillStyle = colorRep[gameMap.matrix[j][i]];
+      minimap.ctx.fillRect(i * minimap.scale + 2, j * minimap.scale + 2, minimap.scale, minimap.scale);
+    }
+  }
+}
+
+
 function drawHp() {
   ctx.fillStyle = "#000";
-  ctx.fillRect(Players[clientID].posX - 20 - 1, Players[clientID].posY + Players[clientID].width / 2 - 100 - 1, 10 * 10 + 2, 12);
+  for (let prop in Players) {
+    ctx.fillRect(Players[prop].posX - 20 - 1, Players[prop].posY + Players[prop].width / 2 - 100 - 1, 10 * 10 + 2, 12);
+  }
   ctx.fillStyle = "green";
-  ctx.fillRect(Players[clientID].posX - 20, Players[clientID].posY + Players[clientID].width / 2 - 100, Players[clientID].hp * 10, 10);
+  for (let prop in Players) {
+    ctx.fillRect(Players[prop].posX - 20, Players[prop].posY + Players[prop].width / 2 - 100, Players[prop].hp * 10, 10);
+  }
 }
 
 function drawCursor() {
@@ -285,18 +346,13 @@ function drawCursor() {
 }
 
 function menuToggle() {
-  if (menuActive) {
-    menuActive = false;
-  } else {
-    menuActive = true;
-  }
-  menu = true;
+  menuActive = !menuActive;
 }
 
 function drawGui () {
 }
 
-function menuButton(text, onClick, mode) {
+function menuButton (text, onClick, mode) {
   this.bColour = "#fff";
   this.tColour = "#000";
   this.width = 80 * 8;
@@ -385,7 +441,7 @@ let menuArray = [];
   menuArray.push(new menuButton("Kill Enemies", function() { console.log("kill enemies"); }, "push"));
   menuArray.push(new menuButton("Enemy Spawning: ", function() { console.log("toggle enemy spawn"); }, "toggle"));
 
-function menuUpdate() {
+function menuUpdate () {
   ctx.fillStyle = "rgba(0, 0, 0, 0.6)";
   ctx.fillRect(camX, camY, canvas.width, canvas.height);
   ctx.drawImage(Img.options, 0, 0, 70, 8, camX + canvas.width / 2 - 70 * 8 / 2, camY + 100, 70 * 8, 8 * 8);
@@ -414,7 +470,6 @@ function Bomb (packet) {
     ctx.drawImage(Img.bomb, this.posX, this.posY, this.width, this.height);
   }
 }
-
 function Arrow (packet) {
   this.posX = packet.posX;
   this.posY = packet.posY;
@@ -431,7 +486,6 @@ function Arrow (packet) {
     ctx.restore();
   }
 }
-
 function Character (packet) {
   this.id = packet.id;
   this.posX = packet.posX;
@@ -445,7 +499,6 @@ function Character (packet) {
     ctx.drawImage(Img.char, this.posX, this.posY - this.height, this.width, this.height * 2);
   }
 }
-
 function Tree (packet) {
   this.posX = packet.posX;
   this.posY = packet.posY;
@@ -455,7 +508,6 @@ function Tree (packet) {
     ctx.drawImage(Img.tree, this.posX, this.posY - 64, this.width, this.height * 2);
   }
 }
-
 function Coin (packet) {
   this.posX = packet.posX;
   this.posY = packet.posY;
@@ -465,7 +517,6 @@ function Coin (packet) {
     ctx.drawImage(Img.coin, this.posX, this.posY, this.width, this.height);
   }
 }
-
 function Particle (posX, posY, velX, velY, size) {
   this.posX = posX;
   this.posY = posY;
@@ -479,7 +530,7 @@ function Particle (posX, posY, velX, velY, size) {
   }
 }
 
-function checkMenuUp() {
+function checkMenuUp () {
   if (menuActive) {
     let lMousePosX = mousePosX;
     let lMousePosY = mousePosY;
@@ -496,7 +547,7 @@ function checkMenuUp() {
   }
 }
 
-function checkIfStillDown(obj) {
+function checkIfStillDown (obj) {
   if (mouseDown) {
     // let lMousePosX = mousePosX;
     // let lMousePosY = mousePosY;
@@ -508,7 +559,7 @@ function checkIfStillDown(obj) {
   }
 }
 
-function checkMenuDown() {
+function checkMenuDown () {
   if (menuActive) {
     let lMousePosX = mousePosX;
     let lMousePosY = mousePosY;
@@ -520,15 +571,39 @@ function checkMenuDown() {
   }
 }
 
+let lastTime = Date.now();
 function update() {
+  requestAnimationFrame(update);
+  let deltaTime = Date.now() - lastTime;
+  lastTime = Date.now();
+  // clientSmoothing(deltaTime);
   ctx.save();
   resize();
   viewPort();
   ctx.clearRect(camX, camY, canvas.width, canvas.height);
   draw();
-  drawHp();
+  // drawHp();
   drawGui();
   if (menuActive) menuUpdate();
   drawCursor();
   ctx.restore();
+}
+
+function clientSmoothing (deltaTime) {
+  for (let i in Players) {
+    Players[i].posX += Players[i].velX * deltaTime / 20;
+    Players[i].posY += Players[i].velY * deltaTime / 20;
+  }
+  for (i = 0; i < Enemies.length; i++) {
+    Enemies[i].posX += Enemies[i].velX * deltaTime / 20;
+    Enemies[i].posY += Enemies[i].velY * deltaTime / 20;
+  }
+  for (i = 0; i < Arrows.length; i++) {
+    Arrows[i].posX += Arrows[i].velX * deltaTime / 20;
+    Arrows[i].posY += Arrows[i].velY * deltaTime / 20;
+  }
+  for (i = 0; i < Bombs.length; i++) {
+    Bombs[i].posX += Bombs[i].velX * deltaTime / 20;
+    Bombs[i].posY += Bombs[i].velY * deltaTime / 20;
+  }
 }

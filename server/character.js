@@ -12,12 +12,12 @@ exports.Character = function (id, posX, posY) {
   this.velX = 0;
   this.velY = 0;
   this.coins = 0;
+  this.kills = 0;
   //walkspeed default = 7
   this.walkSpeed = 8;
   this.direction = "up";
   this.hp = 10;
   this.idle = true;
-  this.img = "char";
   this.attacking = false;
   this.canSwim = false;
   this.knockBack = 1;
@@ -31,16 +31,12 @@ exports.Character = function (id, posX, posY) {
   this.lastShot = 0;
   // tid som char går sakta efter att ha avfyrat bågen
   this.activationSlowdownTime = this.activationDelay * 1.1;
-  this.draw = function(img) {
-    ctx.drawImage(img, this.posX, this.posY - this.height, this.width, this.height * 2);
-  };
   this.tick = function(deltaTime) {
     this.walk(deltaTime);
     if (this.hp <= 0) {
       this.respawn();
       this.hp = 10;
     }
-
     if (this.walkingUp && !this.walkingDown) {
       this.velX = -this.walkSpeed * deltaTime / 20;
     } else if (this.walkingDown && !this.walkingUp) {
@@ -51,20 +47,33 @@ exports.Character = function (id, posX, posY) {
     } else if (this.walkingRight && !this.walkingLeft) {
       this.velY = this.walkSpeed * deltaTime / 20;
     }
-
     col.checkObjectCollision(this);
   };
   this.respawn = function() {
-    this.posX = Math.random() * map.riverMap.width * 63;
-    this.posY = Math.random() * map.riverMap.height * 63;
+    do {
+      var spawnX = Math.random() * map.riverMap.width * 64;
+      var spawnY = Math.random() * map.riverMap.height * 64;
+    }
+    while(col.areTilesFree(spawnX, spawnY, 64, 64));
+    this.posX = spawnX;
+    this.posY = spawnY;
   };
-  this.getDamaged = function (direction, dmg, knockback) {
+  this.getDamaged = function (direction, dmg, entity) {
     this.hp -= dmg;
-    this.velX += Math.sin(direction) * knockback;
-    this.velY += Math.cos(direction) * knockback;
+    let kb;
+    if (!!entity.knockback) {
+      kb = entity.knockback;
+    } else {
+      kb = 1;
+    }
+    this.velX += Math.sin(direction) * kb;
+    this.velY += Math.cos(direction) * kb;
     if (this.hp <= 0) {
       this.hp = 10;
       this.respawn();
+      if (entity.owner) {
+        entity.kills++;
+      }
     }
   }
   this.collision = function(i, j, colDistanceX, colDistanceY) {

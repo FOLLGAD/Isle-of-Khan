@@ -28,7 +28,8 @@ init.placeTrees(treesArray, map.riverMap.matrix);
 
 let tileSize = 64;
 
-let renderDistance = 900;
+let renderDistanceX = 1000;
+let renderDistanceY = 550;
 let chars = {};
 let coins = [];
 let arrows = [];
@@ -41,10 +42,10 @@ io.on('connection', function (socket) {
   console.log("User with ID", socket.id, "connected");
   chars[socket.id] = new character.Character(socket.id, 500, 500);
 
-  socket.emit("initialize", { map: map.riverMap.matrix, id: socket.id });
+  socket.emit("initialize", { matrix: map.riverMap.matrix, width: map.riverMap.width, height: map.riverMap.height, id: socket.id });
 
   socket.on('bomb', function (direction) {
-    bombs.push(new projectiles.Bomb(chars[socket.id].posX + chars[socket.id].width / 2, chars[socket.id].posY + chars[socket.id].height / 2, direction, chars[socket.id].velX, chars[socket.id].velY, chars[socket.id].id));
+    bombs.push(new projectiles.Bomb(chars[socket.id].posX, chars[socket.id].posY, direction, chars[socket.id].velX, chars[socket.id].velY, socket.id));
   });
   socket.on('arrow', function (direction) {
     arrows.push(new projectiles.Arrow(chars[socket.id].posX + chars[socket.id].width / 2, chars[socket.id].posY + chars[socket.id].height / 2, direction, chars[socket.id].id));
@@ -76,6 +77,7 @@ io.on('connection', function (socket) {
           startShooting(chars[socket.id], socket.id);
         } else {
           clearInterval(intervalStorage[socket.id]);
+          clearTimeout(intervalStorage[socket.id]);
         }
         break;
       case "direction-update":
@@ -88,7 +90,6 @@ io.on('connection', function (socket) {
 
   socket.on('disconnect', function () {
     delete chars[socket.id];
-    console.log(chars);
     console.log(socket.id, "left the server.");
   });
 });
@@ -99,17 +100,18 @@ function startShooting(char, id) {
     intervalStorage[id] = setInterval(shoot, 400, chars[id]);
   } else {
     intervalStorage[id] = setTimeout(function() {
+      shoot(chars[id]);
       intervalStorage[id] = setInterval(shoot, 400, chars[id]);
-    }, Date.now() - char.lastShot);
+    }, 400 - (Date.now() - char.lastShot));
   }
 }
 
 function shoot(char) {
-  arrows.push(new projectiles.Arrow(char.posX, char.posY, char.aimDirection, char.id));
+  arrows.push(new projectiles.Arrow(char.posX + char.width / 2, char.posY + char.height / 2, char.aimDirection, char.id));
   char.lastShot = Date.now();
 }
 
-let lastTime;
+let lastTime = Date.now();
 function update() {
   let deltaTime = Date.now() - lastTime;
   lastTime = Date.now();
@@ -126,63 +128,68 @@ function update() {
 }
 
 spawnCoin = function () {
-  coins.push(new coin.Coin(Math.round(Math.random() * map.riverMap.width) * map.riverMap.tilesize + 16, Math.round(Math.random() * map.riverMap.height) * map.riverMap.tilesize + 16));
+    do {
+      var spawnX = Math.floor(Math.random() * map.riverMap.width) * 64 + 16;
+      var spawnY = Math.floor(Math.random() * map.riverMap.height) * 64 + 16;
+    }
+    while(collision.areTilesFree(spawnX, spawnY, 32, 32));
+  coins.push(new coin.Coin(spawnX, spawnY));
 }
 
 setInterval(spawnCoin, 1000);
 
 // Packet sending
 function createEntityPacket(object) {
-  let drawOrder = {};
-  drawOrder.char = [];
-  drawOrder.tree = [];
-  drawOrder.enemy = [];
-  drawOrder.coin = [];
-  drawOrder.arrow = [];
-  drawOrder.bomb = [];
+  let packetOrder = {};
+  packetOrder.char = [];
+  packetOrder.tree = [];
+  packetOrder.enemy = [];
+  packetOrder.coin = [];
+  packetOrder.arrow = [];
+  packetOrder.bomb = [];
   let viewPort = viewPoint.calculateViewPoint(object);
   for (let i in chars) {
-    if (chars[i].posX < viewPort.x + renderDistance && chars[i].posX + chars[i].width > viewPort.x - renderDistance && chars[i].posY < viewPort.y + renderDistance && chars[i].posY + chars[i].height > viewPort.y - renderDistance) {
-      drawOrder.char.push(chars[i]);
+    if (chars[i].posX < viewPort.x + renderDistanceX && chars[i].posX + chars[i].width > viewPort.x - renderDistanceX && chars[i].posY < viewPort.y + renderDistanceY && chars[i].posY + chars[i].height > viewPort.y - renderDistanceY) {
+      packetOrder.char.push(chars[i]);
     }
   }
-  // drawOrder.push(Wizard);
+  // packetOrder.push(Wizard);
   for (i = 0; i < treesArray.length; i++) {
-    if (treesArray[i].posX < viewPort.x + renderDistance && treesArray[i].posX + treesArray[i].width > viewPort.x - renderDistance && treesArray[i].posY < viewPort.y + renderDistance && treesArray[i].posY + treesArray[i].height > viewPort.y - renderDistance) {
-      drawOrder.tree.push(treesArray[i]);
+    if (treesArray[i].posX < viewPort.x + renderDistanceX && treesArray[i].posX + treesArray[i].width > viewPort.x - renderDistanceX && treesArray[i].posY < viewPort.y + renderDistanceY && treesArray[i].posY + treesArray[i].height > viewPort.y - renderDistanceY) {
+      packetOrder.tree.push(treesArray[i]);
     }
   }
   for (i = 0; i < enemies.length; i++) {
-    if (enemies[i].posX < viewPort.x + renderDistance && enemies[i].posX + enemies[i].width > viewPort.x - renderDistance && enemies[i].posY < viewPort.y + renderDistance && enemies[i].posY + enemies[i].height > viewPort.y - renderDistance) {
-      drawOrder.enemy.push(enemies[i]);
+    if (enemies[i].posX < viewPort.x + renderDistanceX && enemies[i].posX + enemies[i].width > viewPort.x - renderDistanceX && enemies[i].posY < viewPort.y + renderDistanceY && enemies[i].posY + enemies[i].height > viewPort.y - renderDistanceY) {
+      packetOrder.enemy.push(enemies[i]);
     }
   }
   for (i = 0; i < coins.length; i++) {
-    if (coins[i].posX < viewPort.x + renderDistance && coins[i].posX + coins[i].width > viewPort.x - renderDistance && coins[i].posY < viewPort.y + renderDistance && coins[i].posY + coins[i].height > viewPort.y - renderDistance) {
-      drawOrder.coin.push(coins[i]);
+    if (coins[i].posX < viewPort.x + renderDistanceX && coins[i].posX + coins[i].width > viewPort.x - renderDistanceX && coins[i].posY < viewPort.y + renderDistanceY && coins[i].posY + coins[i].height > viewPort.y - renderDistanceY) {
+      packetOrder.coin.push(coins[i]);
     }
   }
   for (i = 0; i < arrows.length; i++) {
-    if (arrows[i].posX < viewPort.x + renderDistance && arrows[i].posX + arrows[i].width > viewPort.x - renderDistance && arrows[i].posY < viewPort.y + renderDistance && arrows[i].posY + arrows[i].height > viewPort.y - renderDistance) {
-      drawOrder.arrow.push(arrows[i]);
+    if (arrows[i].posX < viewPort.x + renderDistanceX && arrows[i].posX + arrows[i].width > viewPort.x - renderDistanceX && arrows[i].posY < viewPort.y + renderDistanceY && arrows[i].posY + arrows[i].height > viewPort.y - renderDistanceY) {
+      packetOrder.arrow.push(arrows[i]);
     }
   }
   for (i = 0; i < bombs.length; i++) {
-    if (bombs[i].posX < viewPort.x + renderDistance && bombs[i].posX + bombs[i].width > viewPort.x - renderDistance && bombs[i].posY < viewPort.y + renderDistance && bombs[i].posY + bombs[i].height > viewPort.y - renderDistance) {
-      drawOrder.bomb.push(bombs[i]);
+    if (bombs[i].posX < viewPort.x + renderDistanceX && bombs[i].posX + bombs[i].width > viewPort.x - renderDistanceX && bombs[i].posY < viewPort.y + renderDistanceY && bombs[i].posY + bombs[i].height > viewPort.y - renderDistanceY) {
+      packetOrder.bomb.push(bombs[i]);
     }
   }
   io.to(object.id).emit("packet", {
-    players: drawOrder.char,
-    trees: drawOrder.tree,
-    enemies: drawOrder.enemy,
-    coins: drawOrder.coin,
-    arrows: drawOrder.arrow,
-    bombs: drawOrder.bomb
+    players: packetOrder.char,
+    trees: packetOrder.tree,
+    enemies: packetOrder.enemy,
+    coins: packetOrder.coin,
+    arrows: packetOrder.arrow,
+    bombs: packetOrder.bomb
   });
 }
 
-setInterval(update, 1000 / 60);
+setInterval(update, 1000 / 25);
 
 let monsterInterval;
 let monstersSpawn = false;

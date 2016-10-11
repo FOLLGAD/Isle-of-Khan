@@ -14,9 +14,6 @@ exports.Coin = function (posX, posY) {
       }
     }
   }
-  this.draw = function(img) {
-    ctx.drawImage(img, this.posX, this.posY, this.width, this.height);
-  }
 }
 
 exports.tickCoins = function (coins, chars) {

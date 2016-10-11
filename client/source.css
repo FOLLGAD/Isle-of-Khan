@@ -1,16 +1,19 @@
-canvas {
+#canvas {
   background: #eeeeee;
   padding: 0;
-  margin: auto;
+  margin: 0;
   display: block;
   position: absolute;
   top: 0;
   bottom: 0;
   left: 0;
   right: 0;
-/*width: 800px;
-  height: 600px; */
   cursor: none;
+}
+#minimap {
+  right: 20px;
+  top: 20px;
+  position: fixed;
 }
 body {
   background: #333333;

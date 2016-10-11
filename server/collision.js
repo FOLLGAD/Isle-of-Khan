@@ -1,20 +1,39 @@
 let map = require('./map.js');
 
 exports.checkObjectCollision = function (object) {
-  let tiles = tilesSurrounding (object.posX, object.posY, object.width, object.height);
+  let tiles = tilesSurrounding(object.posX, object.posY, object.width, object.height);
   for (var i = 0; i < tiles.width; i++) {
     for (let j = 0; j < tiles.height; j++) {
-      if (isTileWall (tiles.x + i, tiles.y + j, object.canSwim)) {
-        if (!!checkTileCollision (tiles.x + i, tiles.y + j, object)) {
-          return;
-        }
+      if (isTileWall(tiles.x + i, tiles.y + j, object.canSwim)) {
+        checkTileCollision(tiles.x + i, tiles.y + j, object);
+      }
+    }
+  }
+  if (object.posX + object.width > map.riverMap.width * map.tilesize) { object.posX = map.riverMap.width * map.tilesize - object.width }
+  if (object.posY + object.height > map.riverMap.height * map.tilesize) { object.posY = map.riverMap.height * map.tilesize - object.height }
+}
+
+exports.checkArrowTileCollision = function (object, array) {
+  let tiles = tilesSurrounding(object.posX, object.posY, object.width, object.height);
+  for (let i = 0; i < tiles.width; i++) {
+    for (let j = 0; j < tiles.height; j++) {
+      if (isTileWall(tiles.x + i, tiles.y + j, object.canSwim)) {
+        object.collision(array);
       }
     }
   }
 }
 
-// checks which tiles are in direct collision with the entity.
+exports.areTilesFree = function (x, y, width, height) {
+  let tiles = tilesSurrounding(x, y, width, height);
+  for (var i = 0; i < tiles.width; i++) {
+    for (let j = 0; j < tiles.height; j++) {
+      return isTileWall(tiles.x + i, tiles.y + j, false);
+    }
+  }
+}
 
+// remake for specifically arrows.
 
 function tilesSurrounding(posX, posY, width, height) {
   let tileX = Math.floor(posX / map.tilesize);
@@ -31,9 +50,7 @@ function tilesSurrounding(posX, posY, width, height) {
 }
 
 function isTileWall(i, j, canSwim) {
-  if (i < 0 || j < 0) {
-    return true;
-  } else if ((i >= map.riverMap.width || i < 0 || j >= map.riverMap.height || j < 0)) {
+  if (i < 0 || j < 0 || i >= map.riverMap.width || j >= map.riverMap.height) {
     return true;
   } else if (map.riverMap.matrix[j][i] === 6) {
     return true;
@@ -57,10 +74,10 @@ function checkTileCollision(i, j, object) {
 exports.checkForPlayerDmg = function (obj1, obj2) {
   if (obj1.posX < obj2.posX + obj2.width && obj1.posX + obj1.width > obj2.posX) {
     if (obj1.posY < obj2.posY + obj2.height && obj1.posY + obj1.height > obj2.posY) {
-      if (Date.now() - 500 > lastHit || lastHit === 0) {
+      if (Date.now() - 500 > obj2.lastHit || obj2.lastHit === 0) {
         obj2.hp -= obj1.dmg;
-        canGetDmg = false;
-        lastHit = Date.now();
+        obj2.canGetDmg = false;
+        obj2.lastHit = Date.now();
       }
     }
   }
@@ -72,7 +89,8 @@ exports.checkCircularEntityCollision = function (obj1, obj2) {
   let hyp = Math.sqrt(disX * disX + disY * disY);
   if (hyp < obj1.radius) {
     let direction = Math.atan2(disX, disY);
-    let intensity = (5 + (obj1.radius - hyp)) / 3;
+    let intensity = (5 + Math.abs(obj1.radius - hyp)) / 3;
+    console.log(intensity);
     let dmg = obj1.dmg * intensity;
     let knockback = intensity;
     obj2.getDamaged(direction, dmg, knockback);
