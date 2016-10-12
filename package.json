@@ -16,5 +16,9 @@
   "bugs": {
     "url": "https://github.com/FOLLGAD/Isle-of-Khan/issues"
   },
-  "homepage": "https://github.com/FOLLGAD/Isle-of-Khan#readme"
+  "homepage": "https://github.com/FOLLGAD/Isle-of-Khan#readme",
+  "dependencies": {
+    "express": "^4.14.0",
+    "socketio": "^1.0.0"
+  }
 }
