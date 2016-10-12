@@ -189,7 +189,7 @@ function createEntityPacket(object) {
   });
 }
 
-setInterval(update, 1000 / 25);
+setInterval(update, 1000 / 60);
 
 let monsterInterval;
 let monstersSpawn = false;
