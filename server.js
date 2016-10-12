@@ -132,11 +132,11 @@ function update() {
 }
 
 spawnCoin = function () {
-    do {
-      var spawnX = Math.floor(Math.random() * map.riverMap.width) * 64 + 16;
-      var spawnY = Math.floor(Math.random() * map.riverMap.height) * 64 + 16;
-    }
-    while(collision.areTilesFree(spawnX, spawnY, 32, 32));
+  do {
+    var spawnX = Math.floor(Math.random() * map.riverMap.width) * 64 + 16;
+    var spawnY = Math.floor(Math.random() * map.riverMap.height) * 64 + 16;
+  }
+  while(collision.areTilesFree(spawnX, spawnY, 32, 32));
   coins.push(new coin.Coin(spawnX, spawnY));
 }
 
@@ -153,9 +153,9 @@ function createEntityPacket(object) {
   packetOrder.bomb = [];
   let viewPort = viewPoint.calculateViewPoint(object);
   for (let i in chars) {
-    if (chars[i].posX < viewPort.x + renderDistanceX && chars[i].posX + chars[i].width > viewPort.x - renderDistanceX && chars[i].posY < viewPort.y + renderDistanceY && chars[i].posY + chars[i].height > viewPort.y - renderDistanceY) {
+    // if (chars[i].posX < viewPort.x + renderDistanceX && chars[i].posX + chars[i].width > viewPort.x - renderDistanceX && chars[i].posY < viewPort.y + renderDistanceY && chars[i].posY + chars[i].height > viewPort.y - renderDistanceY) {
       packetOrder.char.push(chars[i]);
-    }
+    // }
   }
   // packetOrder.push(Wizard);
   for (i = 0; i < treesArray.length; i++) {

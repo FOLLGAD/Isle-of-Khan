@@ -28,7 +28,6 @@ ctx.canvas.height = window.innerHeight;
 
 minimap.ctx.canvas.width = gameMap.width;
 minimap.ctx.canvas.height = gameMap.height;
-console.log(minimap.ctx.canvas.width);
 
 minimap.scale = 2;
 
@@ -50,9 +49,8 @@ socket.on('packet', function (packet) {
   Coins = [];
   Arrows = [];
   Bombs = [];
-  for (let yeahboi in packet.players) {
-    Players[packet.players[yeahboi].id] = new Character(packet.players[yeahboi]);
-    console.log(Players[packet.players[yeahboi].id].velX);
+  for (let i = 0; i < packet.players.length; i++) {
+    Players[packet.players[i].id] = new Character(packet.players[i]);
   }
   for (let i = 0; i < packet.trees.length; i++) {
     Trees.push(new Tree(packet.trees[i]));
@@ -221,32 +219,32 @@ function draw() {
   for (let i in Players) {
     drawOrder.push(Players[i]);
   }
-  for (i = 0; i < Trees.length; i++) {
+  for (let i = 0; i < Trees.length; i++) {
     if (Trees[i].posX < camX + canvas.width + tileSize && Trees[i].posX + Trees[i].width > camX - tileSize && Trees[i].posY < camY + canvas.height + tileSize && Trees[i].posY + Trees[i].height > camY - tileSize) {
       drawOrder.push(Trees[i]);
     }
   }
-  for (i = 0; i < Enemies.length; i++) {
+  for (let i = 0; i < Enemies.length; i++) {
     if (Enemies[i].posX < camX + canvas.width + tileSize && Enemies[i].posX + Enemies[i].width > camX - tileSize && Enemies[i].posY < camY + canvas.height + tileSize && Enemies[i].posY + Enemies[i].height > camY - tileSize) {
       drawOrder.push(Enemies[i]);
     }
   }
-  for (i = 0; i < Coins.length; i++) {
+  for (let i = 0; i < Coins.length; i++) {
     if (Coins[i].posX < camX + canvas.width + tileSize && Coins[i].posX + Coins[i].width > camX - tileSize && Coins[i].posY < camY + canvas.height + tileSize && Coins[i].posY + Coins[i].height > camY - tileSize) {
       drawOrder.push(Coins[i]);
     }
   }
-  for (i = 0; i < Arrows.length; i++) {
+  for (let i = 0; i < Arrows.length; i++) {
     if (Arrows[i].posX < camX + canvas.width + tileSize && Arrows[i].posX + Arrows[i].width > camX - tileSize && Arrows[i].posY < camY + canvas.height + tileSize && Arrows[i].posY + Arrows[i].height > camY - tileSize) {
       drawOrder.push(Arrows[i]);
     }
   }
-  for (i = 0; i < Bombs.length; i++) {
+  for (let i = 0; i < Bombs.length; i++) {
     if (Bombs[i].posX < camX + canvas.width + tileSize && Bombs[i].posX + Bombs[i].width > camX - tileSize && Bombs[i].posY < camY + canvas.height + tileSize && Bombs[i].posY + Bombs[i].height > camY - tileSize) {
       drawOrder.push(Bombs[i]);
     }
   }
-  for (i = 0; i < Particles.length; i++) {
+  for (let i = 0; i < Particles.length; i++) {
     if (Particles[i].posX < camX + canvas.width + tileSize && Particles[i].posX + Particles[i].width > camX - tileSize && Particles[i].posY < camY + canvas.height + tileSize && Particles[i].posY + Particles[i].height > camY - tileSize) {
       drawOrder.push(Particles[i]);
     }
@@ -292,6 +290,7 @@ function resize() {
 }
 
 function drawMinimap() {
+  minimap.ctx.clearRect(0, 0, minimap.canvas.width, minimap.canvas.height);
   minimap.canvas.style.opacity = 0.8;
   let colorRep = {
     0: "#11A033",
@@ -327,17 +326,9 @@ function drawMinimap() {
       minimap.ctx.fillRect(i * minimap.scale + 2, j * minimap.scale + 2, minimap.scale, minimap.scale);
     }
   }
-}
-
-
-function drawHp() {
-  ctx.fillStyle = "#000";
   for (let prop in Players) {
-    ctx.fillRect(Players[prop].posX - 20 - 1, Players[prop].posY + Players[prop].width / 2 - 100 - 1, 10 * 10 + 2, 12);
-  }
-  ctx.fillStyle = "green";
-  for (let prop in Players) {
-    ctx.fillRect(Players[prop].posX - 20, Players[prop].posY + Players[prop].width / 2 - 100, Players[prop].hp * 10, 10);
+    minimap.ctx.fillStyle = "red";
+    minimap.ctx.fillRect(Players[prop].posX / tileSize * minimap.scale + 2, Players[prop].posY / tileSize * minimap.scale + 2, minimap.scale * 2, minimap.scale * 2);
   }
 }
 
@@ -350,6 +341,7 @@ function menuToggle() {
 }
 
 function drawGui () {
+  ctx.fillText(Players[clientID].hp, 50 + camX, 50 + camY);
 }
 
 function menuButton (text, onClick, mode) {
@@ -497,6 +489,11 @@ function Character (packet) {
   this.height = 64;
   this.draw = function() {
     ctx.drawImage(Img.char, this.posX, this.posY - this.height, this.width, this.height * 2);
+    ctx.fillStyle = "black";
+    ctx.fillRect(this.posX - 20, this.posY + this.width / 2 - 100, 10 * 10, 10);
+    ctx.fillStyle = "green";
+    ctx.fillRect(this.posX - 20, this.posY + this.width / 2 - 100, this.hp * 10, 10);
+    ctx.fillStyle = "black";
   }
 }
 function Tree (packet) {
@@ -582,7 +579,6 @@ function update() {
   viewPort();
   ctx.clearRect(camX, camY, canvas.width, canvas.height);
   draw();
-  // drawHp();
   drawGui();
   if (menuActive) menuUpdate();
   drawCursor();
@@ -607,3 +603,5 @@ function clientSmoothing (deltaTime) {
     Bombs[i].posY += Bombs[i].velY * deltaTime / 20;
   }
 }
+
+setInterval(drawMinimap, 100);

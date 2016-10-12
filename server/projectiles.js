@@ -74,7 +74,6 @@ exports.Bomb = function (posX, posY, direction, inivelX, inivelY, id) {
   this.velY = Math.cos(direction) * this.speed + inivelY;
   this.timer = 75;
   this.canSwim = false;
-  this.exploded = false;
   this.radius = 250;
   this.dmg = 0.2;
   this.tick = function(bombs, deltaTime, enemies, chars) {
@@ -86,7 +85,6 @@ exports.Bomb = function (posX, posY, direction, inivelX, inivelY, id) {
       this.velY /= 1 + 0.3*deltaTime/40;
       col.checkObjectCollision(this);
     } else if (!this.exploded) {
-      this.exploded = true;
       this.explode(enemies, chars);
       let indx = bombs.indexOf(this);
       bombs.splice(indx, 1);
@@ -132,4 +130,9 @@ exports.tickBombs = function (bombs, deltaTime, enemies, chars) {
   for (i = 0; i < bombs.length; i++) {
     bombs[i].tick(bombs, deltaTime, enemies, chars);
   }
+}
+
+exports.Particle = function (posX, posY) {
+  this.posX = posX;
+  this.posY = posY;
 }
