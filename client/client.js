@@ -321,8 +321,8 @@ function drawMinimap() {
   minimap.ctx.canvas.height = gameMap.height * minimap.scale + 4;
   minimap.ctx.lineWidth = 4;
   minimap.ctx.strokeRect(0, 0, minimap.ctx.canvas.width, minimap.ctx.canvas.height);
-  for (let i = 0; i < minimap.ctx.canvas.width - 4; i++) {
-    for (let j = 0; j < minimap.ctx.canvas.height - 4; j++) {
+  for (let i = 0; i < gameMap.width; i++) {
+    for (let j = 0; j < gameMap.height; j++) {
       minimap.ctx.fillStyle = colorRep[gameMap.matrix[j][i]];
       minimap.ctx.fillRect(i * minimap.scale + 2, j * minimap.scale + 2, minimap.scale, minimap.scale);
     }
