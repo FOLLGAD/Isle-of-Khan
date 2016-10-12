@@ -39,7 +39,10 @@ let enemies = [];
 let intervalStorage = {};
 
 io.on('connection', function (socket) {
-  console.log("User with ID", socket.id, "connected");
+  var socketId = socket.id;
+  var clientIp = socket.request.connection.remoteAddress;
+
+  console.log("User with ID", socket.id, "connected with IP: " + clientIp);
   chars[socket.id] = new character.Character(socket.id, 500, 500);
 
   socket.emit("initialize", { matrix: map.riverMap.matrix, width: map.riverMap.width, height: map.riverMap.height, id: socket.id });
