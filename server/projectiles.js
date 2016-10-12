@@ -20,6 +20,7 @@ exports.Arrow = function (posX, posY, direction, id) {
   this.collision = function(arrows) {
     let index = arrows.indexOf(this);
     arrows.splice(index, 1);
+    console.log("spliced at 23");
     return true;
   }
   this.tick = function (arrows, deltaTime) {
@@ -30,6 +31,7 @@ exports.Arrow = function (posX, posY, direction, id) {
     this.penetration -= subtract;
     if (this.penetration < 0 || subtract === -1) {
       indx = arrows.indexOf(this);
+      console.log("spliced at 34");
       arrows.splice(indx, 1);
     }
   }
@@ -37,7 +39,7 @@ exports.Arrow = function (posX, posY, direction, id) {
 
 exports.tickArrows = function (arrows, deltaTime, enemies, chars) {
   for (i = 0; i < arrows.length; i++) {
-    if (chars.hasOwnProperty([arrows[i].owner])) {
+    if (!chars.hasOwnProperty([arrows[i].owner])) {
       arrows[i].onPenetration(-1, arrows);
     }
   }

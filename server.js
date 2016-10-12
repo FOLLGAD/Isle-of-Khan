@@ -108,6 +108,7 @@ function startShooting(char, id) {
 
 function shoot(char) {
   arrows.push(new projectiles.Arrow(char.posX + char.width / 2, char.posY + char.height / 2, char.aimDirection, char.id));
+  console.log("arrow added");
   char.lastShot = Date.now();
 }
 
