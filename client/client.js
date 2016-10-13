@@ -23,6 +23,10 @@ socket.on('initialize', function (data) {
   drawMinimap();
 });
 
+function register(regName) {
+  io.emit('register', regName);
+}
+
 ctx.canvas.width  = window.innerWidth;
 ctx.canvas.height = window.innerHeight;
 
