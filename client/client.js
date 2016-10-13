@@ -490,7 +490,10 @@ function Character (packet) {
   this.height = 64;
   this.draw = function() {
     ctx.drawImage(Img.char, this.posX, this.posY - this.height, this.width, this.height * 2);
-    ctx.fillText(this.username, this.posX - 20, this.posY + this.width / 2 - 100, 10 * 10, 10); //Username
+    ctx.font = "28px sans-serif";
+    ctx.textAlign = "center";
+    ctx.textColor = "white";
+    ctx.fillText(this.username, this.posX + this.width / 2, this.posY + this.width / 2 - 102, 10 * 10, 10); //Username
 
     ctx.fillStyle = "black";
     ctx.fillRect(this.posX - 20, this.posY + this.width / 2 - 100, 10 * 10, 10);

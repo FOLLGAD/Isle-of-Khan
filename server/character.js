@@ -3,8 +3,9 @@ let map = require('./map.js');
 
 let tileSize = 64;
 
-exports.Character = function (id, posX, posY) {
+exports.Character = function (id, posX, posY, username) {
   this.id = id;
+  this.username = username;
   this.posX = posX;
   this.posY = posY;
   this.height = 64;
