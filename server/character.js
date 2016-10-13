@@ -72,7 +72,7 @@ exports.Character = function (id, posX, posY, username) {
     if (this.hp <= 0) {
       this.hp = 10;
       this.respawn();
-      if (entity.owner) {
+      if (Boolean(entity.id)) {
         entity.kills++;
       }
     }
