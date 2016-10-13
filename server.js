@@ -49,10 +49,6 @@ io.on('connection', function (socket) {
 
   socket.on('register', function (user) {
     username = user;
-  });
-
-  if (Boolean(username)) {
-    console.log(Boolean(username));
     chars[socket.id] = new character.Character(socket.id, 500, 500, username);
     socket.on('bomb', function (direction) {
       bombs.push(new projectiles.Bomb(chars[socket.id].posX, chars[socket.id].posY, direction, chars[socket.id].velX, chars[socket.id].velY, socket.id));
@@ -64,44 +60,44 @@ io.on('connection', function (socket) {
     socket.on('key-press', function (input) {
       switch (input.inputkey) {
         case "w":
-          chars[socket.id].walkingUp = input.state;
-          break;
+        chars[socket.id].walkingUp = input.state;
+        break;
         case "a":
-          chars[socket.id].walkingLeft = input.state;
-          break;
+        chars[socket.id].walkingLeft = input.state;
+        break;
         case "s":
-          chars[socket.id].walkingDown = input.state;
-          break;
+        chars[socket.id].walkingDown = input.state;
+        break;
         case "d":
-          chars[socket.id].walkingRight = input.state;
-          break;
+        chars[socket.id].walkingRight = input.state;
+        break;
         case "f":
-          break;
+        break;
         case "space":
-          chars[socket.id].attacking = input.state;
-          break;
+        chars[socket.id].attacking = input.state;
+        break;
         case "mousebutton":
-          if (input.state) {
-            clearInterval(intervalStorage[socket.id]);
-            chars[socket.id].aimDirection = input.direction;
-            startShooting(chars[socket.id], socket.id);
-          } else {
-            clearInterval(intervalStorage[socket.id]);
-            clearTimeout(intervalStorage[socket.id]);
-          }
-          break;
-        case "direction-update":
+        if (input.state) {
+          clearInterval(intervalStorage[socket.id]);
           chars[socket.id].aimDirection = input.direction;
-          break;
+          startShooting(chars[socket.id], socket.id);
+        } else {
+          clearInterval(intervalStorage[socket.id]);
+          clearTimeout(intervalStorage[socket.id]);
+        }
+        break;
+        case "direction-update":
+        chars[socket.id].aimDirection = input.direction;
+        break;
         default:
-          console.log("client input did not match any serverside input");
+        console.log("client input did not match any serverside input");
       }
     });
     socket.on('disconnect', function () {
       delete chars[socket.id];
       console.log(socket.id, "left the server.");
     });
-  }
+  });
 });
 
 function startShooting(char, id) {

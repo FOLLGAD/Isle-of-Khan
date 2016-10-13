@@ -71,6 +71,7 @@ socket.on('packet', function (packet) {
   for (let i = 0; i < packet.bombs.length; i++) {
     Bombs.push(new Bomb(packet.bombs[i]));
   }
+  console.log("packet recieved");
   if (!asdf) {
     update();
     asdf = true;
