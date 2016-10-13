@@ -92,7 +92,6 @@ io.on('connection', function (socket) {
           }
           break;
         case "direction-update":
-          console.log("dsa");
           if (input.direction !== undefined) {
             chars[socket.id].aimDirection = input.direction;
           }
@@ -144,12 +143,14 @@ function update() {
 }
 
 spawnCoin = function () {
-  do {
-    var spawnX = Math.floor(Math.random() * map.riverMap.width) * 64 + 16;
-    var spawnY = Math.floor(Math.random() * map.riverMap.height) * 64 + 16;
+  if (coins.length < 500) {
+    do {
+      var spawnX = Math.floor(Math.random() * map.riverMap.width) * 64 + 16;
+      var spawnY = Math.floor(Math.random() * map.riverMap.height) * 64 + 16;
+    }
+    while (collision.areTilesFree(spawnX, spawnY, 32, 32));
+    coins.push(new coin.Coin(spawnX, spawnY));
   }
-  while (collision.areTilesFree(spawnX, spawnY, 32, 32));
-  coins.push(new coin.Coin(spawnX, spawnY));
 }
 
 setInterval(spawnCoin, 1000);

@@ -344,9 +344,10 @@ function menuToggle() {
 }
 
 function drawGui () {
-  ctx.fillText(Players[clientID].hp, 50 + camX, 50 + camY);
-  ctx.fillText(Players[clientID].coins, 50 + camX, 100 + camY);
-  ctx.fillText(Players[clientID].kills, 50 + camX, 150 + camY);
+  ctx.textAlign = "start";
+  ctx.fillText("HP: " + Players[clientID].hp, 20 + camX, 50 + camY);
+  ctx.fillText("Coins: " + Players[clientID].coins, 20 + camX, 100 + camY);
+  ctx.fillText("Kills: " + Players[clientID].kills, 20 + camX, 150 + camY);
 }
 
 function menuButton (text, onClick, mode) {
