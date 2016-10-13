@@ -348,6 +348,7 @@ function drawGui () {
   ctx.fillText("HP: " + Players[clientID].hp, 20 + camX, 50 + camY);
   ctx.fillText("Coins: " + Players[clientID].coins, 20 + camX, 100 + camY);
   ctx.fillText("Kills: " + Players[clientID].kills, 20 + camX, 150 + camY);
+  ctx.fillText("Deaths: " + Players[clientID].deaths, 20 + camX, 200 + camY);
 }
 
 function menuButton (text, onClick, mode) {
@@ -492,6 +493,7 @@ function Character (packet) {
   this.velX = packet.velX;
   this.velY = packet.velY;
   this.kills = packet.kills;
+  this.deaths = packet.deaths;
   this.coins = packet.coins;
   this.hp = packet.hp;
   this.width = 64;

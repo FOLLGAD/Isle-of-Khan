@@ -14,6 +14,7 @@ exports.Character = function (id, posX, posY, username) {
   this.velY = 0;
   this.coins = 0;
   this.kills = 0;
+  this.deaths = 0;
   //walkspeed default = 7
   this.walkSpeed = 8;
   this.direction = "up";
@@ -52,8 +53,11 @@ exports.Character = function (id, posX, posY, username) {
   };
   this.respawn = function() {
     do {
-      var spawnX = Math.random() * map.riverMap.width * 64;
-      var spawnY = Math.random() * map.riverMap.height * 64;
+      //var spawnX = Math.random() * map.riverMap.width * 64;
+      //var spawnY = Math.random() * map.riverMap.height * 64;
+      var spawnY = 600;
+      var spawnX = 600;
+
     }
     while(col.areTilesFree(spawnX, spawnY, 64, 64));
     this.posX = spawnX;
@@ -71,6 +75,7 @@ exports.Character = function (id, posX, posY, username) {
     this.velY += Math.cos(direction) * kb;
     if (this.hp <= 0) {
       this.hp = 10;
+      this.deaths++;
       this.respawn();
       if (Boolean(entity.id)) {
         entity.kills++;

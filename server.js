@@ -143,7 +143,7 @@ function update() {
 }
 
 spawnCoin = function () {
-  if (coins.length < 500) {
+  if (coins.length < 200) {
     do {
       var spawnX = Math.floor(Math.random() * map.riverMap.width) * 64 + 16;
       var spawnY = Math.floor(Math.random() * map.riverMap.height) * 64 + 16;
@@ -153,7 +153,7 @@ spawnCoin = function () {
   }
 }
 
-setInterval(spawnCoin, 1000);
+setInterval(spawnCoin, 2000);
 
 // Packet sending
 function createEntityPacket(object) {

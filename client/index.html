@@ -30,7 +30,7 @@
   $('button').click(function(){
       username = $('#username').val();
       register(username);
-      $('#container').fadeOut('slow', function(){ $target.remove(); });
+      $('#container').fadeOut('slow', function(){ $('#container').remove(); });
 
 
       console.log(username);
