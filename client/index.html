@@ -4,12 +4,19 @@
     <title>Isle of Khan</title>
     <link rel="icon" type="image/png" href="resources/favicon.png"></link>
     <link rel="stylesheet" type="text/css" href="source.css"></link>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
   </head>
   <body oncontextmenu="return false;">
-  <canvas id="canvas"></canvas>
-  <canvas id="minimap"></canvas>
-  <script src="/socket.io/socket.io.js"></script>
-  <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
-  <script src="/client.js"></script>
+      <div id="menu-overlay" class="container text-center">
+        <h1>Isle of Khan</h1>
+        <p>Open Lobbies</p>
+      </div>
+      <canvas id="canvas" class="game-canvas"></canvas>
+      <canvas id="minimap" class="game-canvas"></canvas>
+    </div>
   </body>
+    <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+    <script src="/client.js"></script>
 </html>
