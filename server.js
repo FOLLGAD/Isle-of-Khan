@@ -48,6 +48,8 @@ io.on('connection', function (socket) {
   socket.emit("initialize", { matrix: map.riverMap.matrix, width: map.riverMap.width, height: map.riverMap.height, id: socket.id });
 
   socket.on('register', function (user) {
+    clearInterval(intervalStorage[socket.id]);
+    clearTimeout(intervalStorage[socket.id]);
     if (chars.hasOwnProperty(socket.id)) {
       delete chars[socket.id];
     }
@@ -80,7 +82,7 @@ io.on('connection', function (socket) {
           chars[socket.id].attacking = input.state;
           break;
         case "mousebutton":
-          if (input.state && input.direction != undefined) {
+          if (input.state && input.direction !== undefined) {
             clearInterval(intervalStorage[socket.id]);
             chars[socket.id].aimDirection = input.direction;
             startShooting(chars[socket.id], socket.id);
@@ -90,8 +92,8 @@ io.on('connection', function (socket) {
           }
           break;
         case "direction-update":
-        console.log("dsa");
-          if (input.direction == undefined) {
+          console.log("dsa");
+          if (input.direction !== undefined) {
             chars[socket.id].aimDirection = input.direction;
           }
           break;
@@ -101,6 +103,8 @@ io.on('connection', function (socket) {
     });
     socket.on('disconnect', function () {
       delete chars[socket.id];
+      clearInterval(intervalStorage[socket.id]);
+      clearTimeout(intervalStorage[socket.id]);
       console.log(socket.id, "left the server.");
     });
   });
@@ -120,7 +124,6 @@ function startShooting(char, id) {
 
 function shoot(char) {
   arrows.push(new projectiles.Arrow(char.posX + char.width / 2, char.posY + char.height / 2, char.aimDirection, char.id));
-  console.log("arrow added");
   char.lastShot = Date.now();
 }
 

@@ -50,7 +50,6 @@ function tilesSurrounding(posX, posY, width, height) {
 }
 
 function isTileWall(i, j, canSwim) {
-  console.log(i, j);
   if (i < 0 || j < 0 || i >= map.riverMap.width || j >= map.riverMap.height) {
     return true;
   } else if (map.riverMap.matrix[j][i] === 6) {

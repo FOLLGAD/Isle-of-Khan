@@ -71,7 +71,6 @@ socket.on('packet', function (packet) {
   for (let i = 0; i < packet.bombs.length; i++) {
     Bombs.push(new Bomb(packet.bombs[i]));
   }
-  console.log("packet recieved");
   if (!asdf) {
     update();
     asdf = true;
@@ -198,7 +197,6 @@ document.addEventListener("keydown", keyDownHandler, false);
     if (!menuActive) {
       let direction = Math.atan2(camX - Players[clientID].posX - Players[clientID].width / 2 + mousePosX, camY - Players[clientID].posY - Players[clientID].height / 2 + mousePosY);
       socket.emit('key-press', { inputkey: 'mousebutton', state: true, direction: direction });
-      console.log("emitted");
     } else {
       checkMenuDown();
     }
