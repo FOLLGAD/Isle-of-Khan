@@ -168,6 +168,7 @@ function createEntityPacket(object) {
   for (let i in chars) {
     // if (chars[i].posX < viewPort.x + renderDistanceX && chars[i].posX + chars[i].width > viewPort.x - renderDistanceX && chars[i].posY < viewPort.y + renderDistanceY && chars[i].posY + chars[i].height > viewPort.y - renderDistanceY) {
       packetOrder.char.push(chars[i]);
+      console.log(chars[i].velX, chars[i].velY);
     // }
   }
   // packetOrder.push(Wizard);
