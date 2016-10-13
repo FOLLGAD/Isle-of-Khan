@@ -104,11 +104,11 @@ let Img = {};
   Img.particle.src = '/resources/particle.png';
 
 // event handlers
-document.addEventListener("keydown", keyDownHandler, false);
-  document.addEventListener("keyup", keyUpHandler, false);
-  document.addEventListener("mousedown", mouseDownHandler, false);
-  document.addEventListener("mouseup", mouseUpHandler, false);
-  document.addEventListener("mousemove", nameMousePos, false);
+canvas.addEventListener("keydown", keyDownHandler, false);
+  canvas.addEventListener("keyup", keyUpHandler, false);
+  canvas.addEventListener("mousedown", mouseDownHandler, false);
+  canvas.addEventListener("mouseup", mouseUpHandler, false);
+  canvas.addEventListener("mousemove", nameMousePos, false);
 
   function keyDownHandler(e) {
     if (e.keyCode == 68) {
