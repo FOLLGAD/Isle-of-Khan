@@ -345,6 +345,8 @@ function menuToggle() {
 
 function drawGui () {
   ctx.fillText(Players[clientID].hp, 50 + camX, 50 + camY);
+  ctx.fillText(Players[clientID].coins, 50 + camX, 100 + camY);
+  ctx.fillText(Players[clientID].kills, 50 + camX, 150 + camY);
 }
 
 function menuButton (text, onClick, mode) {
@@ -488,6 +490,8 @@ function Character (packet) {
   this.posY = packet.posY;
   this.velX = packet.velX;
   this.velY = packet.velY;
+  this.kills = packet.kills;
+  this.coins = packet.coins;
   this.hp = packet.hp;
   this.width = 64;
   this.height = 64;
