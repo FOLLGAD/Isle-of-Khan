@@ -480,6 +480,7 @@ function Arrow (packet) {
 }
 function Character (packet) {
   this.id = packet.id;
+  this.username = packet.username;
   this.posX = packet.posX;
   this.posY = packet.posY;
   this.velX = packet.velX;
@@ -489,6 +490,8 @@ function Character (packet) {
   this.height = 64;
   this.draw = function() {
     ctx.drawImage(Img.char, this.posX, this.posY - this.height, this.width, this.height * 2);
+    ctx.fillText(this.username, this.posX - 20, this.posY + this.width / 2 - 100, 10 * 10, 10); //Username
+
     ctx.fillStyle = "black";
     ctx.fillRect(this.posX - 20, this.posY + this.width / 2 - 100, 10 * 10, 10);
     ctx.fillStyle = "green";
