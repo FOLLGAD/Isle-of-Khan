@@ -17,9 +17,10 @@
             <button class="btn btn-default">Play</button>
           </div>
       </div>
+    </div>
+
       <canvas id="canvas" class="game-canvas"></canvas>
       <canvas id="minimap" class="game-canvas"></canvas>
-    </div>
   </body>
     <script src="/socket.io/socket.io.js"></script>
     <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
@@ -29,6 +30,7 @@
   $('button').click(function(){
       username = $('#username').val();
       register(username);
+      $("#container").empty();
       console.log(username);
   });
     </script>
