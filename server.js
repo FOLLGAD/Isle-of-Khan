@@ -48,6 +48,9 @@ io.on('connection', function (socket) {
   socket.emit("initialize", { matrix: map.riverMap.matrix, width: map.riverMap.width, height: map.riverMap.height, id: socket.id });
 
   socket.on('register', function (user) {
+    if (chars.hasOwnProperty(socket.id)) {
+      delete chars[socket.id];
+    }
     username = user;
     chars[socket.id] = new character.Character(socket.id, 500, 500, username);
     socket.on('bomb', function (direction) {
@@ -60,37 +63,39 @@ io.on('connection', function (socket) {
     socket.on('key-press', function (input) {
       switch (input.inputkey) {
         case "w":
-        chars[socket.id].walkingUp = input.state;
-        break;
+          chars[socket.id].walkingUp = input.state;
+          break;
         case "a":
-        chars[socket.id].walkingLeft = input.state;
-        break;
+          chars[socket.id].walkingLeft = input.state;
+          break;
         case "s":
-        chars[socket.id].walkingDown = input.state;
-        break;
+          chars[socket.id].walkingDown = input.state;
+          break;
         case "d":
-        chars[socket.id].walkingRight = input.state;
-        break;
+          chars[socket.id].walkingRight = input.state;
+          break;
         case "f":
-        break;
+          break;
         case "space":
-        chars[socket.id].attacking = input.state;
-        break;
+          chars[socket.id].attacking = input.state;
+          break;
         case "mousebutton":
-        if (input.state) {
-          clearInterval(intervalStorage[socket.id]);
-          chars[socket.id].aimDirection = input.direction;
-          startShooting(chars[socket.id], socket.id);
-        } else {
-          clearInterval(intervalStorage[socket.id]);
-          clearTimeout(intervalStorage[socket.id]);
-        }
-        break;
+          if (input.state && input.direction !== undefined) {
+            clearInterval(intervalStorage[socket.id]);
+            chars[socket.id].aimDirection = input.direction;
+            startShooting(chars[socket.id], socket.id);
+          } else {
+            clearInterval(intervalStorage[socket.id]);
+            clearTimeout(intervalStorage[socket.id]);
+          }
+          break;
         case "direction-update":
-        chars[socket.id].aimDirection = input.direction;
-        break;
+          if (input.direction === undefined) {
+            chars[socket.id].aimDirection = input.direction;
+          }
+          break;
         default:
-        console.log("client input did not match any serverside input");
+          console.log("client input did not match any serverside input");
       }
     });
     socket.on('disconnect', function () {
@@ -139,7 +144,7 @@ spawnCoin = function () {
     var spawnX = Math.floor(Math.random() * map.riverMap.width) * 64 + 16;
     var spawnY = Math.floor(Math.random() * map.riverMap.height) * 64 + 16;
   }
-  while(collision.areTilesFree(spawnX, spawnY, 32, 32));
+  while (collision.areTilesFree(spawnX, spawnY, 32, 32));
   coins.push(new coin.Coin(spawnX, spawnY));
 }
 

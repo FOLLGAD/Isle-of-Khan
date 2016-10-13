@@ -45,6 +45,7 @@ exports.tickArrows = function (arrows, deltaTime, enemies, chars) {
   }
   for (i = 0; i < arrows.length; i++) {
     arrows[i].tick(arrows, deltaTime);
+    console.log(arrows[i]);
     col.checkArrowTileCollision(arrows[i], arrows);
   }
   // for (let i = 0; i < enemies.length; i++) {
