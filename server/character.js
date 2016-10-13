@@ -66,7 +66,7 @@ exports.Character = function (id, posX, posY, username) {
   this.getDamaged = function (direction, dmg, entity) {
     this.hp -= dmg;
     let kb;
-    if (!!entity.knockback) {
+    if (Boolean(entity.knockback)) {
       kb = entity.knockback;
     } else {
       kb = 1;

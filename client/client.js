@@ -178,10 +178,6 @@ document.addEventListener("keydown", keyDownHandler, false);
     let mousePos = getMousePos(e);
     mousePosX = mousePos.x;
     mousePosY = mousePos.y;
-    if (mouseDown) {
-      let direction = Math.atan2(camX - Players[clientID].posX - Players[clientID].width / 2 + mousePosX, camY - Players[clientID].posY - Players[clientID].height / 2 + mousePosY);
-      socket.emit('key-press', { inputkey: 'direction-update', direction: direction });
-    }
   };
   function getMousePos(e) {
     let rect = canvas.getBoundingClientRect();
@@ -601,20 +597,27 @@ function update() {
   ctx.restore();
 }
 
+setInterval(function () {
+  if (Players.hasOwnProperty(clientID)) {
+    let direction = Math.atan2(camX - Players[clientID].posX - Players[clientID].width / 2 + mousePosX, camY - Players[clientID].posY - Players[clientID].height / 2 + mousePosY);
+    socket.emit('key-press', { inputkey: 'direction-update', direction: direction });
+  }
+}, 200);
+
 function clientSmoothing (deltaTime) {
   for (let i in Players) {
     Players[i].posX += Players[i].velX * deltaTime / 20;
     Players[i].posY += Players[i].velY * deltaTime / 20;
   }
-  for (i = 0; i < Enemies.length; i++) {
+  for (let i = 0; i < Enemies.length; i++) {
     Enemies[i].posX += Enemies[i].velX * deltaTime / 20;
     Enemies[i].posY += Enemies[i].velY * deltaTime / 20;
   }
-  for (i = 0; i < Arrows.length; i++) {
+  for (let i = 0; i < Arrows.length; i++) {
     Arrows[i].posX += Arrows[i].velX * deltaTime / 20;
     Arrows[i].posY += Arrows[i].velY * deltaTime / 20;
   }
-  for (i = 0; i < Bombs.length; i++) {
+  for (let i = 0; i < Bombs.length; i++) {
     Bombs[i].posX += Bombs[i].velX * deltaTime / 20;
     Bombs[i].posY += Bombs[i].velY * deltaTime / 20;
   }
