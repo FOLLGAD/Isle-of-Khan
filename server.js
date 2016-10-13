@@ -51,9 +51,10 @@ io.on('connection', function (socket) {
 
   socket.on('register', function (user) {
     username = user;
-  }
+  });
 
   if (Boolean(username)) {
+    console.log(Boolean(username));
     socket.on('bomb', function (direction) {
       bombs.push(new projectiles.Bomb(chars[socket.id].posX, chars[socket.id].posY, direction, chars[socket.id].velX, chars[socket.id].velY, socket.id));
     });
