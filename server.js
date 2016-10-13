@@ -80,7 +80,7 @@ io.on('connection', function (socket) {
           chars[socket.id].attacking = input.state;
           break;
         case "mousebutton":
-          if (input.state && input.direction !== undefined) {
+          if (input.state && input.direction != undefined) {
             clearInterval(intervalStorage[socket.id]);
             chars[socket.id].aimDirection = input.direction;
             startShooting(chars[socket.id], socket.id);
@@ -90,7 +90,8 @@ io.on('connection', function (socket) {
           }
           break;
         case "direction-update":
-          if (input.direction === undefined) {
+        console.log("dsa");
+          if (input.direction == undefined) {
             chars[socket.id].aimDirection = input.direction;
           }
           break;
