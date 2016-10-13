@@ -24,7 +24,7 @@ socket.on('initialize', function (data) {
 });
 
 function register(regName) {
-  io.emit('register', regName);
+  socket.emit('register', regName);
 }
 
 ctx.canvas.width  = window.innerWidth;
