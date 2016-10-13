@@ -27,6 +27,7 @@
   right: 20px;
   top: 20px;
   position: fixed;
+  cursor: none;
 }
 .game-canvas{
   z-index: 50;
