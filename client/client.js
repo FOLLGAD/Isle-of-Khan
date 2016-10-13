@@ -10,6 +10,7 @@ let socket = io();
 let gameMap = {};
 let tileSize = 64;
 let menuActive = false;
+let scoreboardActive = false;
 let mousePosX;
 let mousePosY;
 
@@ -137,6 +138,9 @@ document.addEventListener("keydown", keyDownHandler, false);
     else if (e.keyCode == 66) {
       socket.emit('key-press', { inputkey: 'b', state: true });
     }
+    else if (e.keyCode == 69) { //E
+      scoreboardActive = true;
+    }
   }
   function keyUpHandler(e) {
     if (e.keyCode == 68) {
@@ -170,6 +174,9 @@ document.addEventListener("keydown", keyDownHandler, false);
     }
     else if (e.keyCode == 70) {
       socket.emit('key-press', { inputkey: 'f', state: false });
+    }
+    else if (e.keyCode == 69) { //E
+      scoreboardActive = false;
     }
   }
   let mouseDown = false;
@@ -453,6 +460,11 @@ function menuUpdate () {
     menuArray[i].draw();
   }
 }
+function scoreboard () {
+  ctx.fillStyle = "rgba(0, 0, 0, 0.6)";
+  ctx.fillRect(camX + canvas.width/2, camY + 100, canvas.width/2-100, canvas.height/2);
+  ctx.drawImage(Img.options, 0, 0, 70, 8, camX + canvas.width / 2 - 70 * 8 / 2, camY + 100, 70 * 8, 8 * 8);
+}
 
 function Bomb (packet) {
   this.posX = packet.posX;
@@ -593,6 +605,7 @@ function update() {
   draw();
   drawGui();
   if (menuActive) menuUpdate();
+  if (scoreboardActive) scoreboard();
   drawCursor();
   ctx.restore();
 }
