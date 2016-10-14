@@ -8,9 +8,9 @@
   </head>
   <body oncontextmenu="return false;">
     <div id="container">
-      <div id="menu-overlay" class="container text-center" style="display:; padding:10px;">
+      <div id="menu-overlay" class="container text-center" style="padding: 10px;">
         <h1>Isle of Khan</h1>
-        <hr>
+        <hr />
           <div class="form-group">
             <h4>Username</h4>
             <input style="padding:5px;" id="username" name="username" type="text"></input>
@@ -18,6 +18,7 @@
           </div>
       </div>
     </div>
+<<<<<<< HEAD
     <div id="chat-window">
       <div id="chatmessages">
         <ul id="messagelist">
@@ -29,6 +30,14 @@
     </div>
     <canvas id="canvas" class="game-canvas"></canvas>
     <canvas id="minimap" class="game-canvas"></canvas>
+=======
+    <div id="scoreboard" style="display:none">
+      <h1>Scoreboard</h1>
+    </div>
+
+      <canvas id="canvas" class="game-canvas"></canvas>
+      <canvas id="minimap" class="game-canvas"></canvas>
+>>>>>>> 5a30e77ca4db5407c017eacce31af7323cb4c0f7
   </body>
   <script src="/socket.io/socket.io.js"></script>
   <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
@@ -53,5 +62,17 @@
   socket.on('chat-msg', function (msg, sender, date) {
     $("#messagelist").append($("<li>").text(sender + ": " + msg));
   });
+<<<<<<< HEAD
   </script>
+=======
+  $(document).keypress(function(e) {
+      var key = e.which;
+      if (key == 116) {
+          // if the user pressed 't':
+          console.log("t was pressed")
+          $("#scoreboard").toggle();
+      }
+  });
+    </script>
+>>>>>>> 5a30e77ca4db5407c017eacce31af7323cb4c0f7
 </html>

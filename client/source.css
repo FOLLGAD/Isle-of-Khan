@@ -11,6 +11,17 @@
   margin-left: auto;
   margin-right: auto;
 }
+#scoreboard{
+  background-color: white;
+  top: 300px;
+  left: 0;
+  right: 0;
+  position: absolute;
+  z-index: 100;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+}
 #canvas {
   background: #eeeeee;
   padding: 0;
