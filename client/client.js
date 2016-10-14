@@ -83,9 +83,9 @@ socket.on('particle', function (object) {
   let particleAmount = Math.random() * 4 + 4;
   for (let i = 0; i < particleAmount; i++) {
     let part = { x: object.x, y: object.y };
-    let direc = Math.random() * Math.PI;
+    let direc = Math.random() * Math.PI * 2;
     part.direction = direc;
-    Particles.push(new projectiles.Particle(part));
+    Particles.push(new Particle(part));
   }
 });
 
@@ -527,11 +527,10 @@ function Character (packet) {
   this.height = 64;
   this.draw = function() {
     ctx.drawImage(Img.char, this.posX, this.posY - this.height, this.width, this.height * 2);
-    ctx.font = "28px sans-serif";
+    ctx.font = "20px sans-serif";
     ctx.textAlign = "center";
     ctx.textColor = "white";
     ctx.fillText(this.username, this.posX + this.width / 2, this.posY + this.width / 2 - 102, 10 * 10, 10); //Username
-
     ctx.fillStyle = "black";
     ctx.fillRect(this.posX - 20, this.posY + this.width / 2 - 100, 10 * 10, 10);
     ctx.fillStyle = "green";
@@ -557,16 +556,36 @@ function Coin (packet) {
     ctx.drawImage(Img.coin, this.posX, this.posY, this.width, this.height);
   }
 }
-function Particle (posX, posY, velX, velY, size) {
-  this.posX = posX;
-  this.posY = posY;
-  this.velX = velX;
-  this.velY = velY;
-  this.size = size;
+function Particle (packet) {
+  this.posX = packet.x;
+  this.posY = packet.y;
+  this.size = 1;
   this.width = 64;
   this.height = 64;
-  this.draw = function() {
+  this.velt = (Math.random() + 1)*0.5;
+  this.velX = Math.sin(packet.direction) * this.velt;
+  this.velY = Math.cos(packet.direction) * this.velt;
+  this.timer = 500;
+  this.tick = function (deltaTime) {
+    this.timer -= deltaTime;
+    this.velX *= Math.pow(0.99, deltaTime/2);
+    this.velY *= Math.pow(0.99, deltaTime/2);
+    this.posX += this.velX * deltaTime;
+    this.posY += this.velY * deltaTime;
+    if (this.timer <= 0) {
+      let indx = Particles.indexOf(this);
+      Particles.splice(indx, 1);
+      return true;
+    }
+  }
+  this.draw = function () {
     ctx.drawImage(Img.particle, this.posX, this.posY, this.width * this.size, this.height * this.size);
+  }
+}
+
+function updateParticles (deltaTime) {
+  for (let i = 0; i < Particles.length; i++) {
+    if (Particles[i].tick(deltaTime)) i--;
   }
 }
 
@@ -603,7 +622,7 @@ function checkMenuDown () {
   if (menuActive) {
     let lMousePosX = mousePosX;
     let lMousePosY = mousePosY;
-    for (i = 0; i < menuArray.length; i++) {
+    for (let i = 0; i < menuArray.length; i++) {
       if (lMousePosX > menuArray[i].posX && lMousePosX < menuArray[i].posX + menuArray[i].width && lMousePosY > menuArray[i].posY && lMousePosY < menuArray[i].posY + menuArray[i].height) {
         menuArray[i].onDown();
       }
@@ -620,6 +639,7 @@ function update() {
   // clientSmoothing(sincePacket);
   ctx.save();
   resize();
+  updateParticles(deltaTime);
   viewPort();
   ctx.clearRect(camX, camY, canvas.width, canvas.height);
   draw();

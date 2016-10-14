@@ -67,36 +67,37 @@ exports.Bomb = function (posX, posY, direction, inivelX, inivelY, id) {
   this.posY = posY;
   this.width = 64;
   this.height = 64;
-  this.speed = 50;
-  this.velX = Math.sin(direction) * this.speed + inivelX;
-  this.velY = Math.cos(direction) * this.speed + inivelY;
-  this.timer = 75;
+  this.speed = 5;
+  this.velX = Math.sin(direction) * this.speed + inivelX * 5;
+  this.velY = Math.cos(direction) * this.speed + inivelY * 5;
+  this.timer = 1000;
   this.canSwim = false;
   this.radius = 250;
   this.dmg = 0.2;
-  this.tick = function(bombs, deltaTime, enemies, chars) {
-    this.timer -= deltaTime / 40;
+  this.tick = function(bombs, deltaTime, enemies, chars, pow) {
+    this.timer -= deltaTime;
     if (this.timer > 0) {
-      this.posX += this.velX * deltaTime / 40;
-      this.posY += this.velY * deltaTime / 40;
-      this.velX /= 1.3*deltaTime/40;
-      this.velY /= 1.3*deltaTime/40;
+      this.velX *= pow;
+      this.velY *= pow;
+      this.posX += this.velX * deltaTime;
+      this.posY += this.velY * deltaTime;
       col.checkObjectCollision(this);
     } else if (!this.exploded) {
       this.explode(enemies, chars);
+    } else {
       let indx = bombs.indexOf(this);
       bombs.splice(indx, 1);
     }
   };
 
   this.explode = function(enemies, chars) {
+    this.exploded = true;
     for (let i = 0; i < enemies.length; i++) {
       col.checkCircularEntityCollision(this, enemies[i]);
     }
     for (let i in chars) {
       col.checkCircularEntityCollision(this, chars[i]);
     }
-
   };
 
   this.collision = function(i, j, colDistanceX, colDistanceY) {
@@ -126,7 +127,8 @@ function spawnBomb() {
 }
 
 exports.tickBombs = function (bombs, deltaTime, enemies, chars) {
+  let pow = Math.pow(0.97, deltaTime);
   for (i = 0; i < bombs.length; i++) {
-    bombs[i].tick(bombs, deltaTime, enemies, chars);
+    bombs[i].tick(bombs, deltaTime, enemies, chars, pow);
   }
 }

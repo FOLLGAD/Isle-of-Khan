@@ -193,7 +193,14 @@ function createEntityPacket(object) {
   }
   for (i = 0; i < bombs.length; i++) {
     if (bombs[i].posX < viewPort.x + renderDistanceX && bombs[i].posX + bombs[i].width > viewPort.x - renderDistanceX && bombs[i].posY < viewPort.y + renderDistanceY && bombs[i].posY + bombs[i].height > viewPort.y - renderDistanceY) {
-      packetOrder.bomb.push(bombs[i]);
+      if (bombs[i].exploded) {
+        io.to(object.id).emit('particle', {
+          x: bombs[i].posX,
+          y: bombs[i].posY
+        });
+      } else {
+        packetOrder.bomb.push(bombs[i]);
+      }
     }
   }
   io.to(object.id).emit("packet", {
