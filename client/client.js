@@ -478,9 +478,15 @@ function menuUpdate () {
   }
 }
 function scoreboard () {
-  ctx.fillStyle = "rgba(0, 0, 0, 0.6)";
-  ctx.fillRect(camX + canvas.width/2, camY + 100, canvas.width/2-100, canvas.height/2);
-  ctx.drawImage(Img.options, 0, 0, 70, 8, camX + canvas.width / 2 - 70 * 8 / 2, camY + 100, 70 * 8, 8 * 8);
+  $("#scoreboard-players").html("<tr><th>Username</th><th>Health</th><th>Kills</th><th>Deaths</th></tr>");
+  for (let player in Players) {
+    $("#scoreboard-players").append("<tr><td>"+Players[player].username+"</td><td>"+Players[player].hp+"</td><td>"+Players[player].kills+"</td><td>"+Players[player].deaths+"</td></tr>");
+    console.log(Players[player].username);
+
+  }
+  //ctx.fillStyle = "rgba(0, 0, 0, 0.6)";
+  //ctx.fillRect(camX + canvas.width/2, camY + 100, canvas.width/2-100, canvas.height/2);
+  //ctx.drawImage(Img.options, 0, 0, 70, 8, camX + canvas.width / 2 - 70 * 8 / 2, camY + 100, 70 * 8, 8 * 8);
 }
 
 function Bomb (packet) {
@@ -645,7 +651,12 @@ function update() {
   draw();
   drawGui();
   if (menuActive) menuUpdate();
-  if (scoreboardActive) scoreboard();
+  if (scoreboardActive) {
+    $("#scoreboard").show();
+  }else{
+  $("#scoreboard").hide();
+  }
+  scoreboard();
   drawCursor();
   ctx.restore();
 }
