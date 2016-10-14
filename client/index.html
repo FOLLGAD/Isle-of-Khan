@@ -13,19 +13,21 @@
         <hr />
           <div class="form-group">
             <h4>Username</h4>
-            <input style="padding:5px;" id="username" name="username" type="text"></input>
-            <button class="btn btn-default">Play</button>
+            <form id="registration">
+              <input style="padding:5px;" id="username" name="username" type="text"></input>
+              <button class="btn btn-default">Play</button>
+            </form>
           </div>
       </div>
     </div>
-<<<<<<< HEAD
     <div id="chat-window">
       <div id="chatmessages">
         <ul id="messagelist">
         </ul>
       </div>
-      <form id="chat-form">
+      <form id="chat-form" action="">
         <input id="chatbar" type="text" placeholder="Enter a chatmessage">
+        <input type="submit">
       </form>
     </div>
     <canvas id="canvas" class="game-canvas"></canvas>
@@ -35,40 +37,38 @@
       <table id="scoreboard-players" class="table">
       </table>
     </div>
-
-      <canvas id="canvas" class="game-canvas"></canvas>
-      <canvas id="minimap" class="game-canvas"></canvas>
   </body>
   <script src="/socket.io/socket.io.js"></script>
   <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
   <script src="/client.js"></script>
   <script>
-  $('button').click(function(){
+  $("#registration").submit( function(e) {
+    e.preventDefault();
     username = $('#username').val();
     register(username);
     $('#container').fadeOut('slow', function(){ $('#container').remove(); });
     console.log(username);
   });
+  $(document).keypress(function(e) {
+    var key = e.which;
+    if (key == 116) {
+      // if the user pressed 't':
+      console.log("t was pressed")
+      $("#scoreboard").toggle();
+    }
+  });
   </script>
   <script>
-  $("chat-form").submit(function() {
-    if (!!$("#chatbar").val().replace(/\s/g, '').length) {
-      socket.emit('chat-msg', $("#chatbar").val());
-    }
-    $("#chatbar").val("");
-    return false;
-  });
-  socket.on('chat-msg', function (msg, sender, date) {
-    $("#messagelist").append($("<li>").text(sender + ": " + msg));
-  });
-  $(document).keypress(function(e) {
-      var key = e.which;
-      if (key == 116) {
-          // if the user pressed 't':
-
+    $("chat-form").submit(function() {
+      if (!!$("#chatbar").val().replace(/\s/g, '').length) {
+        socket.emit('chat-msg', $("#chatbar").val());
       }
-  });
-
-    </script>
+      $("#chatbar").val("");
+      return true;
+    });
+    socket.on('chat-msg', function (msg, sender, date) {
+      $("#messagelist").append($("<li>").text(sender + ": " + msg));
+    });
+  </script>
 </html>
