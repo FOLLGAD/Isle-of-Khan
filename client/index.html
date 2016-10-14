@@ -8,15 +8,18 @@
   </head>
   <body oncontextmenu="return false;">
     <div id="container">
-      <div id="menu-overlay" class="container text-center" style="display:; padding:10px;">
+      <div id="menu-overlay" class="container text-center" style="padding: 10px;">
         <h1>Isle of Khan</h1>
-        <hr>
+        <hr />
           <div class="form-group">
             <h4>Username</h4>
             <input style="padding:5px;" id="username" name="username" type="text"></input>
             <button class="btn btn-default">Play</button>
           </div>
       </div>
+    </div>
+    <div id="scoreboard" style="display:none">
+      <h1>Scoreboard</h1>
     </div>
 
       <canvas id="canvas" class="game-canvas"></canvas>
@@ -34,6 +37,14 @@
 
 
       console.log(username);
+  });
+  $(document).keypress(function(e) {
+      var key = e.which;
+      if (key == 116) {
+          // if the user pressed 't':
+          console.log("t was pressed")
+          $("#scoreboard").toggle();
+      }
   });
     </script>
 </html>
