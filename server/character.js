@@ -16,17 +16,13 @@ exports.Character = function (id, posX, posY, username) {
   this.kills = 0;
   this.deaths = 0;
   //walkspeed default = 7
-  this.walkSpeed = 8;
+  this.walkSpeed = 0.5;
   this.direction = "up";
   this.hp = 10;
   this.idle = true;
   this.attacking = false;
   this.canSwim = false;
   this.knockBack = 1;
-  this.walkingUp = false;
-  this.walkingLeft = false;
-  this.walkingDown = false;
-  this.walkingRight = false;
   // Amount of inaccuracy for the bow; default = 0.05
   this.bowInaccuracy = 0;
   this.activationDelay = 0;
@@ -38,16 +34,6 @@ exports.Character = function (id, posX, posY, username) {
     if (this.hp <= 0) {
       this.respawn();
       this.hp = 10;
-    }
-    if (this.walkingUp && !this.walkingDown) {
-      this.velX = -this.walkSpeed * deltaTime / 20;
-    } else if (this.walkingDown && !this.walkingUp) {
-      this.velX = this.walkSpeed * deltaTime / 20;
-    }
-    if (this.walkingLeft && !this.walkingRight) {
-      this.velY = -this.walkSpeed * deltaTime / 20;
-    } else if (this.walkingRight && !this.walkingLeft) {
-      this.velY = this.walkSpeed * deltaTime / 20;
     }
     col.checkObjectCollision(this);
   };
@@ -104,19 +90,15 @@ exports.Character = function (id, posX, posY, username) {
   this.walk = function(deltaTime) {
     if (this.walkingUp && !this.walkingDown) {
       this.velY = -this.walkSpeed;
-      this.direction = "up";
     } else if (this.walkingDown && !this.walkingUp) {
       this.velY = this.walkSpeed;
-      this.direction = "down";
     } else {
       this.velY = 0;
     }
     if (this.walkingRight && !this.walkingLeft) {
       this.velX = this.walkSpeed;
-      this.direction = "right";
     } else if (this.walkingLeft && !this.walkingRight) {
       this.velX = -this.walkSpeed;
-      this.direction = "left";
     } else {
       this.velX = 0;
     }
@@ -126,28 +108,16 @@ exports.Character = function (id, posX, posY, username) {
       this.attacking = false;
     }
     if (this.velX != 0 && this.velY != 0) {
-      if (this.velX > 0) {
-        this.velX = this.walkSpeed * 0.7;
-      } else {
-        this.velX = -this.walkSpeed * 0.7;
-      }
-      if (this.velY > 0) {
-        this.velY = this.walkSpeed * 0.7;
-      } else {
-        this.velY = -this.walkSpeed * 0.7;
-      }
+      this.velX *= 0.7;
+      this.velY *= 0.7;
     }
-    // Sätter position på karaktär beroende på charVel.
-    this.velX *= deltaTime / 20;
-    this.velY *= deltaTime / 20;
 
     if (this.attacking) {
-      this.posX += this.velX * 0.5;
-      this.posY += this.velY * 0.5;
-    } else {
-      this.posX += this.velX;
-      this.posY += this.velY;
+      this.velX *= 0.5;
+      this.velY *= 0.5;
     }
+    this.posX += this.velX * deltaTime;
+    this.posY += this.velY * deltaTime;
   }
   this.activate = function() {
     let d = new Date();

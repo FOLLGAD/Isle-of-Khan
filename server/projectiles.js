@@ -7,8 +7,8 @@ exports.Arrow = function (posX, posY, direction, id) {
   this.direction = direction;
   this.posX = posX;
   this.posY = posY;
-  this.velX = 20 * Math.sin(direction);
-  this.velY = 20 * Math.cos(direction);
+  this.velX = 2 * Math.sin(direction);
+  this.velY = 2 * Math.cos(direction);
   this.posX0 = this.posX;
   this.posY0 = this.posY;
   this.width = 16;
@@ -23,8 +23,8 @@ exports.Arrow = function (posX, posY, direction, id) {
     return true;
   }
   this.tick = function (arrows, deltaTime) {
-    this.posX += this.velX * deltaTime / 20;
-    this.posY += this.velY * deltaTime / 20;
+    this.posX += this.velX * deltaTime;
+    this.posY += this.velY * deltaTime;
   }
   this.onPenetration = function (subtract, arrows) {
     this.penetration -= subtract;
@@ -79,8 +79,8 @@ exports.Bomb = function (posX, posY, direction, inivelX, inivelY, id) {
     if (this.timer > 0) {
       this.posX += this.velX * deltaTime / 40;
       this.posY += this.velY * deltaTime / 40;
-      this.velX /= 1 + 0.3*deltaTime/40;
-      this.velY /= 1 + 0.3*deltaTime/40;
+      this.velX /= 1.3*deltaTime/40;
+      this.velY /= 1.3*deltaTime/40;
       col.checkObjectCollision(this);
     } else if (!this.exploded) {
       this.explode(enemies, chars);
@@ -96,6 +96,7 @@ exports.Bomb = function (posX, posY, direction, inivelX, inivelY, id) {
     for (let i in chars) {
       col.checkCircularEntityCollision(this, chars[i]);
     }
+
   };
 
   this.collision = function(i, j, colDistanceX, colDistanceY) {
@@ -128,9 +129,4 @@ exports.tickBombs = function (bombs, deltaTime, enemies, chars) {
   for (i = 0; i < bombs.length; i++) {
     bombs[i].tick(bombs, deltaTime, enemies, chars);
   }
-}
-
-exports.Particle = function (posX, posY) {
-  this.posX = posX;
-  this.posY = posY;
 }

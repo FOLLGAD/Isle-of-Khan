@@ -44,8 +44,8 @@ let Players = {};
   let Coins = [];
   let Arrows = [];
   let Bombs = [];
-
   let Particles = [];
+  let lastPacket = Date.now();
 
 socket.on('packet', function (packet) {
   Players = {};
@@ -75,6 +75,17 @@ socket.on('packet', function (packet) {
   if (!asdf) {
     update();
     asdf = true;
+  }
+  lastPacket = packet.sent;
+});
+
+socket.on('particle', function (object) {
+  let particleAmount = Math.random() * 4 + 4;
+  for (let i = 0; i < particleAmount; i++) {
+    let part = { x: object.x, y: object.y };
+    let direc = Math.random() * Math.PI;
+    part.direction = direc;
+    Particles.push(new projectiles.Particle(part));
   }
 });
 
@@ -333,8 +344,12 @@ function drawMinimap() {
     }
   }
   for (let prop in Players) {
-    minimap.ctx.fillStyle = "red";
-    minimap.ctx.fillRect(Players[prop].posX / tileSize * minimap.scale + 2, Players[prop].posY / tileSize * minimap.scale + 2, minimap.scale * 2, minimap.scale * 2);
+    if (prop === clientID) {
+      minimap.ctx.fillStyle = "Blue";
+    } else {
+      minimap.ctx.fillStyle = "Red";
+    }
+    minimap.ctx.fillRect(Players[prop].posX / tileSize * minimap.scale + 2 - minimap.scale / 2, Players[prop].posY / tileSize * minimap.scale + 2 - minimap.scale / 2, minimap.scale * 2, minimap.scale * 2);
   }
 }
 
@@ -352,6 +367,8 @@ function drawGui () {
   ctx.fillText("Coins: " + Players[clientID].coins, 20 + camX, 100 + camY);
   ctx.fillText("Kills: " + Players[clientID].kills, 20 + camX, 150 + camY);
   ctx.fillText("Deaths: " + Players[clientID].deaths, 20 + camX, 200 + camY);
+  ctx.fillText("PosX: " + Players[clientID].posX, 20 + camX, 250 + camY);
+  ctx.fillText("PosY: " + Players[clientID].posY, 20 + camX, 300 + camY);
 }
 
 function menuButton (text, onClick, mode) {
@@ -496,8 +513,10 @@ function Arrow (packet) {
 function Character (packet) {
   this.id = packet.id;
   this.username = packet.username;
-  this.posX = packet.posX;
-  this.posY = packet.posY;
+  this.posX     = packet.posX;
+  this.packPosX = packet.posX;
+  this.posY     = packet.posY;
+  this.packPosY = packet.posY;
   this.velX = packet.velX;
   this.velY = packet.velY;
   this.kills = packet.kills;
@@ -597,7 +616,8 @@ function update() {
   requestAnimationFrame(update);
   let deltaTime = Date.now() - lastTime;
   lastTime = Date.now();
-  // clientSmoothing(deltaTime);
+  let sincePacket = Date.now() - lastPacket;
+  // clientSmoothing(sincePacket);
   ctx.save();
   resize();
   viewPort();
@@ -615,24 +635,25 @@ setInterval(function () {
     let direction = Math.atan2(camX - Players[clientID].posX - Players[clientID].width / 2 + mousePosX, camY - Players[clientID].posY - Players[clientID].height / 2 + mousePosY);
     socket.emit('key-press', { inputkey: 'direction-update', direction: direction });
   }
-}, 200);
+}, 100);
 
-function clientSmoothing (deltaTime) {
+function clientSmoothing (sincePacket) {
+  console.log(sincePacket);
   for (let i in Players) {
-    Players[i].posX += Players[i].velX * deltaTime / 20;
-    Players[i].posY += Players[i].velY * deltaTime / 20;
+    Players[i].posX = Players[i].packPosX + Players[i].velX * sincePacket;
+    Players[i].posY = Players[i].packPosY + Players[i].velY * sincePacket;
   }
   for (let i = 0; i < Enemies.length; i++) {
-    Enemies[i].posX += Enemies[i].velX * deltaTime / 20;
-    Enemies[i].posY += Enemies[i].velY * deltaTime / 20;
+    Enemies[i].posX += Enemies[i].velX * sincePacket;
+    Enemies[i].posY += Enemies[i].velY * sincePacket;
   }
   for (let i = 0; i < Arrows.length; i++) {
-    Arrows[i].posX += Arrows[i].velX * deltaTime / 20;
-    Arrows[i].posY += Arrows[i].velY * deltaTime / 20;
+    Arrows[i].posX += Arrows[i].velX * sincePacket;
+    Arrows[i].posY += Arrows[i].velY * sincePacket;
   }
   for (let i = 0; i < Bombs.length; i++) {
-    Bombs[i].posX += Bombs[i].velX * deltaTime / 20;
-    Bombs[i].posY += Bombs[i].velY * deltaTime / 20;
+    Bombs[i].posX += Bombs[i].velX * sincePacket;
+    Bombs[i].posY += Bombs[i].velY * sincePacket;
   }
 }
 
