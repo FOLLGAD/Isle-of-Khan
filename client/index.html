@@ -60,7 +60,8 @@
   });
   </script>
   <script>
-    $("chat-form").submit(function() {
+  $("#chat-form").submit( function(e) {
+    e.preventDefault();
       if (!!$("#chatbar").val().replace(/\s/g, '').length) {
         socket.emit('chat-msg', $("#chatbar").val());
       }
