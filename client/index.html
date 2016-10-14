@@ -18,22 +18,40 @@
           </div>
       </div>
     </div>
-
-      <canvas id="canvas" class="game-canvas"></canvas>
-      <canvas id="minimap" class="game-canvas"></canvas>
+    <div id="chat-window">
+      <div id="chatmessages">
+        <ul id="messagelist">
+        </ul>
+      </div>
+      <form id="chat-form">
+        <input id="chatbar" type="text" placeholder="Enter a chatmessage">
+      </form>
+    </div>
+    <canvas id="canvas" class="game-canvas"></canvas>
+    <canvas id="minimap" class="game-canvas"></canvas>
   </body>
-    <script src="/socket.io/socket.io.js"></script>
-    <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-    <script src="/client.js"></script>
-    <script>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+  <script src="/client.js"></script>
+  <script>
   $('button').click(function(){
-      username = $('#username').val();
-      register(username);
-      $('#container').fadeOut('slow', function(){ $('#container').remove(); });
-
-
-      console.log(username);
+    username = $('#username').val();
+    register(username);
+    $('#container').fadeOut('slow', function(){ $('#container').remove(); });
+    console.log(username);
   });
-    </script>
+  </script>
+  <script>
+  $("chat-form").submit(function() {
+    if (!!$("#chatbar").val().replace(/\s/g, '').length) {
+      socket.emit('chat-msg', $("#chatbar").val());
+    }
+    $("#chatbar").val("");
+    return false;
+  });
+  socket.on('chat-msg', function (msg, sender, date) {
+    $("#messagelist").append($("<li>").text(sender + ": " + msg));
+  });
+  </script>
 </html>

@@ -48,13 +48,18 @@ io.on('connection', function (socket) {
   socket.emit("initialize", { matrix: map.riverMap.matrix, width: map.riverMap.width, height: map.riverMap.height, id: socket.id });
 
   socket.on('register', function (user) {
+    username = user;
     clearInterval(intervalStorage[socket.id]);
     clearTimeout(intervalStorage[socket.id]);
     if (chars.hasOwnProperty(socket.id)) {
       delete chars[socket.id];
     }
-    username = user;
     chars[socket.id] = new character.Character(socket.id, 500, 500, username);
+
+    socket.on("chat-msg", function (msg) {
+      io.emit("chat-msg", msg, username, new Date());
+    });
+
     socket.on('bomb', function (direction) {
       bombs.push(new projectiles.Bomb(chars[socket.id].posX, chars[socket.id].posY, direction, chars[socket.id].velX, chars[socket.id].velY, socket.id));
     });
