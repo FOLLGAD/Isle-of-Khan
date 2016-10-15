@@ -370,11 +370,9 @@ function drawMinimap() {
 function drawCursor() {
   ctx.drawImage(Img.crosshair, mousePosX + camX, mousePosY + camY, 30, 36);
 }
-
 function menuToggle() {
   menuActive = !menuActive;
 }
-
 function drawGui () {
   ctx.textAlign = "start";
   ctx.fillText("HP: " + Players[clientID].hp, 20 + camX, 50 + camY);
@@ -384,7 +382,6 @@ function drawGui () {
   ctx.fillText("PosX: " + Players[clientID].posX, 20 + camX, 250 + camY);
   ctx.fillText("PosY: " + Players[clientID].posY, 20 + camX, 300 + camY);
 }
-
 function menuButton (text, onClick, mode) {
   this.bColour = "#fff";
   this.tColour = "#000";
@@ -469,7 +466,6 @@ function menuButton (text, onClick, mode) {
     }
   }
 }
-
 let menuArray = [];
   menuArray.push(new menuButton("Kill Enemies", function() { console.log("kill enemies"); }, "push"));
   menuArray.push(new menuButton("Enemy Spawning: ", function() { console.log("toggle enemy spawn"); }, "toggle"));
@@ -670,7 +666,7 @@ function update() {
   $("#scoreboard").hide();
   }
   scoreboard();
-  drawCursor();
+  // drawCursor();
   ctx.restore();
 }
 let lastDirection;
