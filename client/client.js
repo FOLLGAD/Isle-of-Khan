@@ -89,7 +89,7 @@ let lastdirection;
       let mouseDifX = camX - Players[clientID].posX - Players[clientID].width / 2 + mousePosX;
       let mouseDifY = camY - Players[clientID].posY - Players[clientID].height / 2 + mousePosY;
       let direx = Math.atan2(mouseDifX, mouseDifY);
-      let vel = Math.min(Math.sqrt(Math.pow(mouseDifX, 2) + Math.pow(mouseDifY, 2)) / 50, 5);
+      let vel = Math.min(Math.sqrt(Math.pow(mouseDifX, 2) + Math.pow(mouseDifY, 2)) / 100, 5);
       socket.emit("bomb", direx, vel);
     }
     else if (e.keyCode == 86) {
