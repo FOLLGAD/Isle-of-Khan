@@ -117,7 +117,7 @@ let Img = {};
 
 // event handlers
 canvas.addEventListener("keydown", keyDownHandler, false);
-  canvas.addEventListener("keyup", keyUpHandler, false);
+  document.addEventListener("keyup", keyUpHandler, false);
   canvas.addEventListener("mousedown", mouseDownHandler, false);
   canvas.addEventListener("mouseup", mouseUpHandler, false);
   canvas.addEventListener("mousemove", nameMousePos, false);
