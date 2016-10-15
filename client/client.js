@@ -13,9 +13,9 @@ let mousePosX;
 let mousePosY;
 
 let audio = {};
-audio.bomb = new Audio('explosion.wav');
+audio.bomb = new Audio('./resources/explosion.wav');
 // audio.bomb.play();
-audio.arrow = new Audio('arrow-sound.wav');
+audio.arrow = new Audio('./resources/arrow-sound.wav');
 // audio.bomb.play();
 
 ctx.canvas.width  = window.innerWidth;
