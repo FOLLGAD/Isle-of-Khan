@@ -127,7 +127,7 @@ function spawnBomb() {
 }
 
 exports.tickBombs = function (bombs, deltaTime, enemies, chars) {
-  let pow = Math.pow(0.97, deltaTime);
+  let pow = Math.pow(0.99, deltaTime);
   for (i = 0; i < bombs.length; i++) {
     bombs[i].tick(bombs, deltaTime, enemies, chars, pow);
   }
