@@ -10,6 +10,13 @@
   opacity: 0.8;
 }
 #chatmessages {
+<<<<<<< HEAD
+=======
+  position: absolute;
+  overflow: auto;
+  background: #333;
+  opacity: 0.2;
+>>>>>>> origin/Multi-player
   bottom: 26px;
   left:0;
   overflow: hidden;
@@ -19,6 +26,10 @@
   color: #fff;
   font-size: 15px;
   list-style-type: none;
+<<<<<<< HEAD
+=======
+  opacity: 1;
+>>>>>>> origin/Multi-player
   margin:0px;
   padding-left:10px;
 }
