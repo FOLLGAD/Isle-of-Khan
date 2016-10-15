@@ -5,28 +5,12 @@ let minimap = {};
 minimap.canvas = document.getElementById("minimap");
 minimap.ctx = minimap.canvas.getContext("2d");
 
-let socket = io();
-
 let gameMap = {};
 let tileSize = 64;
 let menuActive = false;
 let scoreboardActive = false;
 let mousePosX;
 let mousePosY;
-
-let clientID;
-socket.on('initialize', function (data) {
-  gameMap.matrix = data.matrix;
-  gameMap.width = data.width;
-  gameMap.height = data.height;
-  clientID = data.id;
-  console.log("Your client ID is", clientID);
-  drawMinimap();
-});
-
-function register(regName) {
-  socket.emit('register', regName);
-}
 
 ctx.canvas.width  = window.innerWidth;
 ctx.canvas.height = window.innerHeight;
@@ -36,8 +20,6 @@ minimap.ctx.canvas.height = gameMap.height;
 
 minimap.scale = 2;
 
-let asdf = false;
-
 let Players = {};
   let Trees = [];
   let Enemies = [];
@@ -45,49 +27,6 @@ let Players = {};
   let Arrows = [];
   let Bombs = [];
   let Particles = [];
-  let lastPacket = Date.now();
-
-socket.on('packet', function (packet) {
-  Players = {};
-  Trees = [];
-  Enemies = [];
-  Coins = [];
-  Arrows = [];
-  Bombs = [];
-  for (let i = 0; i < packet.players.length; i++) {
-    Players[packet.players[i].id] = new Character(packet.players[i]);
-  }
-  for (let i = 0; i < packet.trees.length; i++) {
-    Trees.push(new Tree(packet.trees[i]));
-  }
-  for (let i = 0; i < packet.enemies.length; i++) {
-    Enemies.push(new Enemy(packet.enemies[i]));
-  }
-  for (let i = 0; i < packet.coins.length; i++) {
-    Coins.push(new Coin(packet.coins[i]));
-  }
-  for (let i = 0; i < packet.arrows.length; i++) {
-    Arrows.push(new Arrow(packet.arrows[i]));
-  }
-  for (let i = 0; i < packet.bombs.length; i++) {
-    Bombs.push(new Bomb(packet.bombs[i]));
-  }
-  if (!asdf) {
-    update();
-    asdf = true;
-  }
-  lastPacket = packet.sent;
-});
-
-socket.on('particle', function (object) {
-  let particleAmount = Math.random() * 4 + 4;
-  for (let i = 0; i < particleAmount; i++) {
-    let part = { x: object.x, y: object.y };
-    let direc = Math.random() * Math.PI * 2;
-    part.direction = direc;
-    Particles.push(new Particle(part));
-  }
-});
 
 let Img = {};
   Img.char = new Image();
@@ -701,3 +640,21 @@ function clientSmoothing (sincePacket) {
 }
 
 setInterval(drawMinimap, 100);
+
+let deathMsgArray = [];
+let deathTimer;
+function deathQueue (msg) {
+  if (msg != 'undefined') {
+    deathMsgArray.push(msg);
+  }
+  if (deathTimer == null && deathMsgArray.length !== 0) {
+    $("#death-messages").html('<h1>' + deathMsgArray[0] + '</h1>');
+    deathTimer = setTimeout(function() {
+      $("#death-messages").fadeOut("slow", function() {
+        $("#death-messages").empty();
+        deathMsgArray.splice(0, 1);
+        deathQueue();
+      });
+    }, 1000);
+  }
+}
