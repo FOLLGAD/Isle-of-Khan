@@ -51,10 +51,11 @@ exports.tickArrows = function (arrows, deltaTime, enemies, chars) {
   arrowCollision(arrows, chars);
 }
 function arrowCollision (arrows, entities) {
+  let knockback = 5;
   for (let prop in entities) {
     for (let i = 0; i < arrows.length; i++) {
       if (entities[prop].id !== arrows[i].owner && entities[prop].posX < arrows[i].posX + arrows[i].width && entities[prop].posX + entities[prop].width > arrows[i].posX && entities[prop].posY < arrows[i].posY + arrows[i].height && entities[prop].posY + entities[prop].height > arrows[i].posY) {
-        entities[prop].getDamaged(arrows[i].direction, arrows[i].dmg, entities[arrows[i].owner]);
+        entities[prop].getDamaged(arrows[i].direction, arrows[i].dmg, entities[arrows[i].owner], knockback);
         arrows[i].onPenetration(1, arrows);
       }
     }
@@ -93,10 +94,10 @@ exports.Bomb = function (posX, posY, direction, inivelX, inivelY, id) {
   this.explode = function(enemies, chars) {
     this.exploded = true;
     for (let i = 0; i < enemies.length; i++) {
-      col.checkCircularEntityCollision(this, enemies[i]);
+      col.checkCircularEntityCollision(this, enemies[i], chars[this.owner]);
     }
     for (let i in chars) {
-      col.checkCircularEntityCollision(this, chars[i]);
+      col.checkCircularEntityCollision(this, chars[i], chars[this.owner]);
     }
   };
 

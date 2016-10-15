@@ -85,16 +85,15 @@ exports.checkForPlayerDmg = function (obj1, obj2) {
   }
 }
 
-exports.checkCircularEntityCollision = function (obj1, obj2) {
+exports.checkCircularEntityCollision = function (obj1, obj2, owner) {
   let disX = obj1.posX + obj1.width / 2 - obj2.posX - obj2.width / 2;
   let disY = obj1.posY + obj1.height / 2 - obj2.posY - obj2.height / 2;
   let hyp = Math.sqrt(disX * disX + disY * disY);
   if (hyp < obj1.radius) {
     let direction = Math.atan2(disX, disY);
     let intensity = (5 + Math.abs(obj1.radius - hyp)) / 3;
-    console.log(intensity);
     let dmg = obj1.dmg * intensity;
     let knockback = intensity;
-    obj2.getDamaged(direction, dmg, knockback);
+    obj2.getDamaged(direction, dmg, owner, knockback);
   }
 }

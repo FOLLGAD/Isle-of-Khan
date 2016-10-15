@@ -18,7 +18,7 @@ exports.Character = function (id, posX, posY, username) {
   //walkspeed default = 7
   this.walkSpeed = 0.5;
   this.direction = "up";
-  this.hp = 10;
+  this.hp = 100;
   this.idle = true;
   this.attacking = false;
   this.canSwim = false;
@@ -49,10 +49,12 @@ exports.Character = function (id, posX, posY, username) {
     this.posX = spawnX;
     this.posY = spawnY;
   };
-  this.getDamaged = function (direction, dmg, entity) {
+  this.getDamaged = function (direction, dmg, entity, knockback) {
     this.hp -= dmg;
     let kb;
-    if (Boolean(entity.knockback)) {
+    if (knockback != 'undefined') {
+      kb = knockback;
+    } else if (entity.hasOwnProperty(knockback)) {
       kb = entity.knockback;
     } else {
       kb = 1;
@@ -63,7 +65,8 @@ exports.Character = function (id, posX, posY, username) {
       this.hp = 10;
       this.deaths++;
       this.respawn();
-      if (Boolean(entity.id)) {
+      console.log(entity);
+      if (entity.hasOwnProperty('id') && entity.id != this.id) {
         entity.kills++;
       }
     }
