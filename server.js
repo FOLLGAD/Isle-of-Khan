@@ -64,8 +64,8 @@ io.on('connection', function (socket) {
       io.emit("chat-msg", msg, username, new Date());
     });
 
-    socket.on('bomb', function (direction) {
-      bombs.push(new projectiles.Bomb(chars[socket.id].posX, chars[socket.id].posY, direction, chars[socket.id].velX, chars[socket.id].velY, socket.id));
+    socket.on('bomb', function (direction, vel) {
+      bombs.push(new projectiles.Bomb(chars[socket.id].posX, chars[socket.id].posY, direction, chars[socket.id].velX, chars[socket.id].velY, socket.id, vel));
     });
     socket.on('arrow', function (direction) {
       arrows.push(new projectiles.Arrow(chars[socket.id].posX + chars[socket.id].width / 2, chars[socket.id].posY + chars[socket.id].height / 2, direction, chars[socket.id].id));

@@ -86,8 +86,11 @@ let lastdirection;
       if (!keyStates.space) socket.emit('key-press', { inputkey: 'space', state: true });
       keyStates.space = true;
     } else if (e.keyCode == 70) {
-      let direx = Math.atan2(camX - Players[clientID].posX - Players[clientID].width / 2 + mousePosX, camY - Players[clientID].posY - Players[clientID].height / 2 + mousePosY);
-      socket.emit("bomb", direx)
+      let mouseDifX = camX - Players[clientID].posX - Players[clientID].width / 2 + mousePosX;
+      let mouseDifY = camY - Players[clientID].posY - Players[clientID].height / 2 + mousePosY;
+      let direx = Math.atan2(mouseDifX, mouseDifY);
+      let vel = Math.min(Math.sqrt(Math.pow(mouseDifX, 2) + Math.pow(mouseDifY, 2)) / 300, 2.5);
+      socket.emit("bomb", direx, vel);
     }
     else if (e.keyCode == 86) {
       socket.emit('key-press', { inputkey: 'v', state: true });

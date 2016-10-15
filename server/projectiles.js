@@ -62,15 +62,15 @@ function arrowCollision (arrows, entities) {
   }
 }
 
-exports.Bomb = function (posX, posY, direction, inivelX, inivelY, id) {
+exports.Bomb = function (posX, posY, direction, inivelX, inivelY, id, vel) {
   this.owner = id;
   this.posX = posX;
   this.posY = posY;
   this.width = 64;
   this.height = 64;
   this.speed = 5;
-  this.velX = Math.sin(direction) * this.speed + inivelX * 5;
-  this.velY = Math.cos(direction) * this.speed + inivelY * 5;
+  this.velX = Math.sin(direction) * vel + inivelX * 5;
+  this.velY = Math.cos(direction) * vel + inivelY * 5;
   this.timer = 650;
   this.canSwim = false;
   this.radius = 250;
