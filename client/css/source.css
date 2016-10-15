@@ -138,6 +138,20 @@ th{
     font-family: GameFont;
     src: url("FFFFORWA.TTF");
 }
-#kill-messages{
+#death-messages{
   position: absolute;
+  /*left: 50%;*/
+  top: 100px;
+  z-index: 100;
+  width:100%;
+  text-align:center;
+}
+#death-messages h1{
+  font-size: 50px;
+}
+#game-overlay {
+    height:0px;
+    overflow:visible;
+    pointer-events:none;
+    background:none !important;
 }

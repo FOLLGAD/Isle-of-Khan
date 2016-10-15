@@ -27,34 +27,44 @@
           </iframe>
         </div>-->
       </div><!-- ./menu-screen -->
-      <div id="chat-window" style="display:none">
-        <div id="chatmessages" class="mCustomScrollbar" data-mcs-theme="light" data-mcs-axis="y">
-        <!--<div id="chatmessages">-->
-          <ul id="messagelist">
-          </ul>
+      <div id="game-overlay">
+        <div id="chat-window" style="display:none">
+          <div id="chatmessages" class="mCustomScrollbar" data-mcs-theme="light" data-mcs-axis="y">
+          <!--<div id="chatmessages">-->
+            <ul id="messagelist">
+            </ul>
+          </div>
+          <form id="chat-form" action="" autocomplete="off">
+            <input id="chat-bar" type="text" placeholder="Enter a chat message" autocomplete="off">
+            <input id="chat-submit" type="hidden">
+          </form>
         </div>
-        <form id="chat-form" action="" autocomplete="off">
-          <input id="chat-bar" type="text" placeholder="Enter a chat message" autocomplete="off">
-          <input id="chat-submit" type="hidden">
-        </form>
-      </div>
-      <canvas id="canvas" class="game-canvas" tabindex="1"></canvas>
-      <canvas id="minimap" class="game-canvas" tabindex="1"></canvas>
-      <div id="scoreboard" style="display:none">
-        <h1>Scoreboard</h1>
-        <table id="scoreboard-players" class="table">
-        </table>
-      </div>
-      <div id="kill-messages">
+        <canvas id="canvas" class="game-canvas" tabindex="1"></canvas>
+        <canvas id="minimap" class="game-canvas" tabindex="1"></canvas>
+        <div id="scoreboard" style="display:none">
+          <h1>Scoreboard</h1>
+          <table id="scoreboard-players" class="table">
+          </table>
+        </div>
+        <div id="death-messages">
+          <h1>Death message</h1>
+        </div>
       </div>
     </div>
   </body>
-  <script src="/socket.io/socket.io.js"></script>
-  <script src="game/sockets.js"></script>
+  <!-- JQuery -->
   <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+  <!-- JQuery Custom Scrollbar -->
   <script src="js/jquery.mCustomScrollbar.concat.min.js"></script>
+  <!-- Bootstrap JS -->
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+  <!-- Socket.io -->
+  <script src="/socket.io/socket.io.js"></script>
+  <!-- Emits and Recieves -->
+  <script src="game/sockets.js"></script>
+  <!-- Base game client -->
   <script src="/client.js"></script>
+
   <script>
   //Does what emil?
   $(document).bind('selectstart dragstart', function(e) {
