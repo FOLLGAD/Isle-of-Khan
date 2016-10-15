@@ -10,7 +10,12 @@
   </head>
   <body oncontextmenu="return false;">
     <div id="container">
-      <div id="menu-overlay" class="container text-center" style="padding: 10px;">
+      <div style="position: fixed; z-index: 60; width: 100%; height: 100%">
+        <iframe frameborder="0" height="100%" width="100%" 
+          src="https://www.youtube.com/embed/9ZfN87gSjvI?controls=0&showinfo=0&rel=0&autoplay=1&loop=1&start=80">
+        </iframe>
+      </div>
+      <div id="menu-overlay" class="container text-center">
         <h1>Isle of Khan</h1>
         <hr />
           <div class="form-group">
@@ -22,7 +27,7 @@
           </div>
       </div>
     </div>
-    <div id="chat-window">
+    <div id="chat-window" style="display:none">
       <div id="chatmessages" class="mCustomScrollbar" data-mcs-theme="light" data-mcs-axis="y">
       <!--<div id="chatmessages">-->
         <ul id="messagelist">
@@ -60,6 +65,7 @@
     register(username);
     $('#container').fadeOut('slow', function(){ $('#container').remove(); });
     console.log(username);
+    $("#chat-window").show();
     $('#canvas').focus();
   });
 
