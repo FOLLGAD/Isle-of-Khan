@@ -23,6 +23,7 @@ exports.Character = function (id, posX, posY, username) {
   this.attacking = false;
   this.canSwim = false;
   this.knockBack = 1;
+  this.maxhp = 100;
   // Amount of inaccuracy for the bow; default = 0.05
   this.bowInaccuracy = 0;
   this.activationDelay = 0;

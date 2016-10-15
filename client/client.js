@@ -539,7 +539,6 @@ function Character (packet) {
   this.deaths = packet.deaths;
   this.coins = packet.coins;
   this.hp = packet.hp;
-  this.maxhp = 100;
   this.width = 64;
   this.height = 64;
   this.draw = function() {

@@ -4,23 +4,25 @@
   width: 25%;
   max-width: 400px;
   min-width: 300px;
-  background: black;
   position: fixed;
   z-index: 200;
-  opacity: 0.8;
+  opacity: 0.6;
+  background: none;
 }
 #chatmessages {
   bottom: 26px;
   left:0;
   overflow: hidden;
   max-height: 100px;
+  pointer-events: none;
 }
 #messagelist {
   color: #fff;
   font-size: 15px;
   list-style-type: none;
-  margin:0px;
-  padding-left:10px;
+  margin: 0px;
+  padding-left: 10px;
+  opacity: 1;
 }
 #chat-form {
   bottom: 0;
@@ -109,4 +111,3 @@ th{
     font-family: GameFont;
     src: url("Minecraft Evenings.otf");
 }
-

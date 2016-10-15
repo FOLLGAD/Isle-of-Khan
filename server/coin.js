@@ -9,8 +9,11 @@ exports.Coin = function (posX, posY) {
     for (let i in chars) {
       if (this.posX < chars[i].posX + chars[i].width && this.posX + this.width > chars[i].posX && this.posY < chars[i].posY + chars[i].height && this.posY + this.height > chars[i].posY) {
         chars[i].coins++;
-        if (chars[i].hp < chars[i].maxhp){
+        if (chars[i].hp < chars[i].maxhp) {
             chars[i].hp++;
+        }
+        if (chars[i].hp > chars[i].maxhp) {
+          chars[i].hp = chars[i].maxhp;
         }
         let index = coins.indexOf(this);
         coins.splice(index, 1);
