@@ -4,10 +4,10 @@ let socket = io();
 socket.on('death-msg', function (object) {
   if (object.killer == object.victim) {
     // deathmsg function here
-    deathQueue(object.killer + " killed " + object.victim);
+    deathQueue(object.victim + " commited suicide");
   } else {
     //deathmsg func
-    deathQueue(object.victim + " commited suicide");
+    deathQueue(object.killer + " killed " + object.victim);
   }
 });
 
