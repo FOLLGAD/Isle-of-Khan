@@ -12,6 +12,13 @@ let scoreboardActive = false;
 let mousePosX;
 let mousePosY;
 
+let audio = {};
+var audio.bomb = new Audio('explosion.wav');
+// audio.bomb.play();
+let audio = {};
+var audio.arrow = new Audio('arrow-sound.wav');
+// audio.bomb.play();
+
 ctx.canvas.width  = window.innerWidth;
 ctx.canvas.height = window.innerHeight;
 
@@ -90,7 +97,7 @@ let lastdirection;
       let mouseDifY = camY - Players[clientID].posY - Players[clientID].height / 2 + mousePosY;
       let direx = Math.atan2(mouseDifX, mouseDifY);
       let vel = Math.min(Math.sqrt(Math.pow(mouseDifX, 2) + Math.pow(mouseDifY, 2)) / 90, 5);
-      socket.emit('key-press', { direction: direx, velocity: vel } );
+      socket.emit('key-press', { direction: direx, velocity: vel });
     }
     else if (e.keyCode == 86) {
       socket.emit('key-press', { inputkey: 'v', state: true });
@@ -170,6 +177,7 @@ let lastdirection;
     let direction = Math.atan2(camX - Players[clientID].posX - Players[clientID].width / 2 + mousePosX, camY - Players[clientID].posY - Players[clientID].height / 2 + mousePosY);
     socket.emit('key-press', { inputkey: 'mousebutton', state: true, direction: direction });
     console.log("dsaas");
+    audio.arrow.play();
     // checkMenuDown();
   }
   function mouseUpHandler() {
