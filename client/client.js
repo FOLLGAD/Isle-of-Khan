@@ -120,7 +120,7 @@ canvas.addEventListener("keydown", keyDownHandler, false);
   document.addEventListener("keyup", keyUpHandler, false);
   canvas.addEventListener("mousedown", mouseDownHandler, false);
   canvas.addEventListener("mouseup", mouseUpHandler, false);
-  canvas.addEventListener("mousemove", nameMousePos, false);
+  document.addEventListener("mousemove", nameMousePos, false);
 
 let keyStates = {
   w: false,
