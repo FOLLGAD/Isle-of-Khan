@@ -2,30 +2,49 @@
   bottom: 0;
   left: 0;
   width: 25%;
-  max-width: 500px;
+  max-width: 400px;
   min-width: 300px;
-  background: #333333;
-  opacity: 0.5;
-  height: auto;
-  position: absolute;
+  background: black;
+  position: fixed;
   z-index: 200;
+  opacity: 0.8;
 }
 #chatmessages {
+<<<<<<< HEAD
   position: absolute;
   overflow: auto;
   background: #333;
   opacity: 0.2;
+=======
+  bottom: 26px;
+  left:0;
+  overflow: hidden;
+  max-height: 100px;
+>>>>>>> origin/Multi-player
 }
 #messagelist {
-  color: #eee;
+  color: #fff;
+  font-size: 15px;
   list-style-type: none;
+<<<<<<< HEAD
   opacity: 1;
+=======
+  margin:0px;
+  padding-left:10px;
+>>>>>>> origin/Multi-player
 }
 #chat-form {
   bottom: 0;
   height: auto;
-  margin: 1px;
-  position: fixed;
+  margin: 0px;
+  color: white;
+}
+#chat-bar{
+  width:100%;
+  padding:10px;
+  margin:0px;
+  border:0px;
+  background-color:black;
 }
 #container {
   position: relative;

@@ -2,9 +2,11 @@
 <html>
   <head>
     <title>Isle of Khan</title>
+    <meta charset="UTF-8">
     <link rel="icon" type="image/png" href="resources/favicon.png"></link>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="source.css"></link>
+    <link rel="stylesheet" type="text/css" href="css/jquery.mCustomScrollbar.min.css"></link>
   </head>
   <body oncontextmenu="return false;">
     <div id="container">
@@ -13,7 +15,7 @@
         <hr />
           <div class="form-group">
             <h4>Username</h4>
-            <form id="registration">
+            <form id="registration" action="">
               <input style="padding:5px;" id="username" name="username" type="text"></input>
               <button class="btn btn-default">Play</button>
             </form>
@@ -21,13 +23,20 @@
       </div>
     </div>
     <div id="chat-window">
-      <div id="chatmessages">
+      <div id="chatmessages" class="mCustomScrollbar" data-mcs-theme="light" data-mcs-axis="y">
+      <!--<div id="chatmessages">-->
         <ul id="messagelist">
         </ul>
       </div>
+<<<<<<< HEAD
       <form id="chat-form" action="">
         <input id="chatbar" type="text" placeholder="Enter a chatmessage" autocomplete="off">
         <input type="submit">
+=======
+      <form id="chat-form" action="" autocomplete="off">
+        <input id="chat-bar" type="text" placeholder="Enter a chatmessage">
+        <input id="chat-submit" type="hidden">
+>>>>>>> origin/Multi-player
       </form>
     </div>
     <canvas id="canvas" class="game-canvas" tabindex="1"></canvas>
@@ -40,9 +49,17 @@
   </body>
   <script src="/socket.io/socket.io.js"></script>
   <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+  <script src="js/jquery.mCustomScrollbar.concat.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
   <script src="/client.js"></script>
   <script>
+  //Does what emil?
+  $(document).bind('selectstart dragstart', function(e) {
+    e.preventDefault();
+    return false;
+  });
+
+  //Handles registration
   $("#registration").submit( function(e) {
     e.preventDefault();
     username = $('#username').val();
@@ -50,26 +67,36 @@
     $('#container').fadeOut('slow', function(){ $('#container').remove(); });
     console.log(username);
   });
+
+  //Focuses chat
   $(document).keypress(function(e) {
     var key = e.which;
-    if (key == 116) {
-      // if the user pressed 't':
-      console.log("t was pressed")
-      $("#scoreboard").toggle();
+    if (key == 13) { // If enter is pressed
+      console.log("Set focus to chat")
+      if (!$('#chat-bar').is(":focus")){
+        $('#chat-bar').focus();
+      }else{
+        console.log("blur")
+        $('#chat-bar').blur();
+      }
     }
   });
-  </script>
-  <script>
+
+  //Sends a chat message
   $("#chat-form").submit( function(e) {
     e.preventDefault();
-      if (!!$("#chatbar").val().replace(/\s/g, '').length) {
-        socket.emit('chat-msg', $("#chatbar").val());
+      if (!!$("#chat-bar").val().replace(/\s/g, '').length) {
+        socket.emit('chat-msg', $("#chat-bar").val());
       }
-      $("#chatbar").val("");
+      $("#chat-bar").val("");
       return true;
-    });
+  });
+
+    //Adds chat messages
     socket.on('chat-msg', function (msg, sender, date) {
       $("#messagelist").append($("<li>").text(sender + ": " + msg));
+      $("#chatmessages").mCustomScrollbar('scrollTo','bottom'); //Scrolls to bottom when message is recieved
+
     });
   </script>
 </html>
