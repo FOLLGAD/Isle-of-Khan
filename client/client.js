@@ -119,7 +119,7 @@ let Img = {};
 canvas.addEventListener("keydown", keyDownHandler, false);
   document.addEventListener("keyup", keyUpHandler, false);
   canvas.addEventListener("mousedown", mouseDownHandler, false);
-  canvas.addEventListener("mouseup", mouseUpHandler, false);
+  document.addEventListener("mouseup", mouseUpHandler, false);
   document.addEventListener("mousemove", nameMousePos, false);
 
 let keyStates = {
@@ -222,7 +222,9 @@ let lastdirection;
       y: (e.clientY - rect.top) * scaleY
     };
   }
-  function mouseDownHandler() {
+  function mouseDownHandler(e) {
+    e.preventDefault();
+    e.stopPropagation();
     let direction = Math.atan2(camX - Players[clientID].posX - Players[clientID].width / 2 + mousePosX, camY - Players[clientID].posY - Players[clientID].height / 2 + mousePosY);
     socket.emit('key-press', { inputkey: 'mousebutton', state: true, direction: direction });
     console.log("dsaas");
