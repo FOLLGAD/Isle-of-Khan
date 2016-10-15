@@ -539,6 +539,7 @@ function Character (packet) {
   this.deaths = packet.deaths;
   this.coins = packet.coins;
   this.hp = packet.hp;
+  this.maxhp = 100;
   this.width = 64;
   this.height = 64;
   this.draw = function() {
@@ -550,7 +551,7 @@ function Character (packet) {
     ctx.fillStyle = "black";
     ctx.fillRect(this.posX - 20, this.posY + this.width / 2 - 100, 10 * 10, 10);
     ctx.fillStyle = "green";
-    ctx.fillRect(this.posX - 20, this.posY + this.width / 2 - 100, this.hp * 10, 10);
+    ctx.fillRect(this.posX - 20, this.posY + this.width / 2 - 100, this.hp, 10);
     ctx.fillStyle = "black";
   }
 }
