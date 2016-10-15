@@ -9,6 +9,10 @@ app.get('/', function(req, res, next) {
     res.sendFile(__dirname + '/client/index.html');
 });
 
+exports.emit = function (name, param1) {
+  io.emit(name, param1);
+}
+
 let port = 8080;
 server.listen(port);
 console.log("server is listening on port", port);

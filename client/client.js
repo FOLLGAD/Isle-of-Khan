@@ -642,19 +642,23 @@ function clientSmoothing (sincePacket) {
 setInterval(drawMinimap, 100);
 
 let deathMsgArray = [];
-let deathTimer;
+let deathTimer = false;
 function deathQueue (msg) {
-  if (msg != 'undefined') {
+  if (!!msg) {
     deathMsgArray.push(msg);
   }
-  if (deathTimer == null && deathMsgArray.length !== 0) {
+  if (deathTimer == false && deathMsgArray.length !== 0) {
+    deathTimer = true;
     $("#death-messages").html('<h1>' + deathMsgArray[0] + '</h1>');
-    deathTimer = setTimeout(function() {
-      $("#death-messages").fadeOut("slow", function() {
-        $("#death-messages").empty();
-        deathMsgArray.splice(0, 1);
-        deathQueue();
-      });
-    }, 1000);
+    $("#death-messages").fadeIn("slow", function() {
+      setTimeout(function() {
+        $("#death-messages").fadeOut("slow", function() {
+          $("#death-messages h1").empty();
+          console.log(deathMsgArray.splice(0, 1));
+          deathTimer = false;
+          deathQueue();
+        });
+      }, 1000);
+    });
   }
 }

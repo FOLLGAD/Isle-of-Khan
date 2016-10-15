@@ -1,5 +1,6 @@
 let col = require('./collision.js');
 let map = require('./map.js');
+let serv = require('../server.js');
 
 let tileSize = 64;
 
@@ -66,10 +67,10 @@ exports.Character = function (id, posX, posY, username) {
       if (entity.hasOwnProperty('id') && entity.id != this.id) {
         entity.kills++;
         //Send kill message
-        io.emit('death-msg', { killer: entity.username, victim: this.username });
+        serv.emit('death-msg', { killer: entity.username, victim: this.username });
       }else if (entity.hasOwnProperty('id')){
         //Send sucide message
-        io.emit('death-msg', { killer: entity.username, victim: this.username });
+        serv.emit('death-msg', { killer: entity.username, victim: this.username });
       }
     }
   }

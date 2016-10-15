@@ -1,12 +1,22 @@
 {
   "ecmaVersion": 6,
-  "libs": [],
+  "libs": [
+    "jquery"
+  ],
   "plugins": {
     "node": {
       "dontLoad": "",
       "load": "",
       "modules": ""
     },
-    "node_resolve": {}
+    "node_resolve": {},
+    "complete_strings": {
+      "maxLength": 15
+    },
+    "modules": {
+      "dontLoad": "",
+      "load": "",
+      "modules": ""
+    }
   }
 }
