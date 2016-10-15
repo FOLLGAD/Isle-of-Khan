@@ -28,11 +28,8 @@
         <ul id="messagelist">
         </ul>
       </div>
-      <form id="chat-form" action="">
-        <input id="chatbar" type="text" placeholder="Enter a chatmessage" autocomplete="off">
-        <input type="submit">
       <form id="chat-form" action="" autocomplete="off">
-        <input id="chat-bar" type="text" placeholder="Enter a chatmessage">
+        <input id="chat-bar" type="text" placeholder="Enter a chatmessage" autocomplete="off">
         <input id="chat-submit" type="hidden">
       </form>
     </div>
@@ -75,6 +72,7 @@
       }else{
         console.log("blur")
         $('#chat-bar').blur();
+        $('#canvas').focus();
       }
     }
   });
