@@ -32,10 +32,6 @@ exports.Character = function (id, posX, posY, username) {
   this.activationSlowdownTime = this.activationDelay * 1.1;
   this.tick = function(deltaTime) {
     this.walk(deltaTime);
-    if (this.hp <= 0) {
-      this.respawn();
-      this.hp = 10;
-    }
     col.checkObjectCollision(this);
   };
   this.respawn = function() {
@@ -44,6 +40,7 @@ exports.Character = function (id, posX, posY, username) {
       //var spawnY = Math.random() * map.riverMap.height * 64;
       var spawnY = 600;
       var spawnX = 600;
+      this.hp = this.maxhp;
 
     }
     while(col.areTilesFree(spawnX, spawnY, 64, 64));
@@ -62,13 +59,19 @@ exports.Character = function (id, posX, posY, username) {
     }
     this.velX += Math.sin(direction) * kb;
     this.velY += Math.cos(direction) * kb;
-    if (this.hp <= 0) {
-      this.hp = 10;
+    if (this.hp <= 0) { //If character dies
       this.deaths++;
       this.respawn();
+
+
       console.log(entity);
+
       if (entity.hasOwnProperty('id') && entity.id != this.id) {
         entity.kills++;
+        //Send kill message
+
+      }else if (entity.hasOwnProperty('id')){
+        //Send sucide message
       }
     }
   }
