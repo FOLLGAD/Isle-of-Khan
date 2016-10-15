@@ -91,7 +91,7 @@ exports.checkCircularEntityCollision = function (obj1, obj2, owner) {
   let hyp = Math.sqrt(disX * disX + disY * disY);
   if (hyp < obj1.radius) {
     let direction = Math.atan2(disX, disY);
-    let intensity = (5 + Math.abs(obj1.radius - hyp)) / 3;
+    let intensity = (20 + Math.abs(obj1.radius - hyp));
     let dmg = obj1.dmg * intensity;
     let knockback = intensity;
     obj2.getDamaged(direction, dmg, owner, knockback);
