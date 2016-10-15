@@ -22,7 +22,7 @@
             <h4>Username</h4>
             <form id="registration" action="">
               <input style="padding: 5px;" id="username" name="username" type="text" autofocus="true"></input>
-              <button class="btn btn-default">Play</button>
+              <br><button class="btn btn-default">Play</button>
             </form>
           </div>
       </div>
@@ -93,7 +93,7 @@
 
     //Adds chat messages
     socket.on('chat-msg', function (msg, sender, date) {
-      $("#messagelist").append($("<li>").text(sender + ": " + msg));
+      $("#messagelist").append($("<li>").text("<"+ sender + "> " + msg));
       $("#chatmessages").mCustomScrollbar('scrollTo','bottom'); //Scrolls to bottom when message is recieved
 
     });
