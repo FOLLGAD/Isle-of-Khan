@@ -83,8 +83,10 @@ io.on('connection', function (socket) {
           console.log(input.inputkey);
           break;
         case "f":
-          input.vel = Math.min(input.vel, 5);
-          bombs.push(new projectiles.Bomb(chars[socket.id].posX, chars[socket.id].posY, input.direction, chars[socket.id].velX, chars[socket.id].velY, socket.id, input.vel));
+          if (input.direction !== undefined) {
+            input.vel = Math.min(input.vel, 5);
+            bombs.push(new projectiles.Bomb(chars[socket.id].posX, chars[socket.id].posY, input.direction, chars[socket.id].velX, chars[socket.id].velY, socket.id, input.vel));
+          }
           break;
         case "space":
           chars[socket.id].attacking = input.state;
