@@ -543,7 +543,7 @@ function Character (packet) {
   this.height = 64;
   this.draw = function() {
     ctx.drawImage(Img.char, this.posX, this.posY - this.height, this.width, this.height * 2);
-    ctx.font = "20px GameFont";
+    ctx.font = "15px GameFont";
     ctx.textAlign = "center";
     ctx.textColor = "white";
     ctx.fillText(this.username, this.posX + this.width / 2, this.posY + this.width / 2 - 102, 10 * 10, 10); //Username
