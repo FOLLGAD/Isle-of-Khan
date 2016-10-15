@@ -90,7 +90,7 @@ let lastdirection;
       let mouseDifY = camY - Players[clientID].posY - Players[clientID].height / 2 + mousePosY;
       let direx = Math.atan2(mouseDifX, mouseDifY);
       let vel = Math.min(Math.sqrt(Math.pow(mouseDifX, 2) + Math.pow(mouseDifY, 2)) / 90, 5);
-      socket.emit('key-press', { direction: direx, velocity: vel );
+      socket.emit('key-press', { direction: direx, velocity: vel } );
     }
     else if (e.keyCode == 86) {
       socket.emit('key-press', { inputkey: 'v', state: true });
