@@ -121,35 +121,35 @@ document.addEventListener("keydown", keyDownHandler, false);
   canvas.addEventListener("mousedown", mouseDownHandler, false);
   canvas.addEventListener("mouseup", mouseUpHandler, false);
   canvas.addEventListener("mousemove", nameMousePos, false);
-
+  console.log("Allows keys");
   function keyDownHandler(e) {
-    if (e.keyCode == 68) {
+    if (e.keyCode == 68 && !$('#chat-bar').is(":focus")) {
       socket.emit('key-press', { inputkey: 'd', state: true });
-    } else if (e.keyCode == 65) {
+    } else if (e.keyCode == 65 && !$('#chat-bar').is(":focus")) {
       socket.emit('key-press', { inputkey: 'a', state: true });
-    } else if (e.keyCode == 87) {
+    } else if (e.keyCode == 87 && !$('#chat-bar').is(":focus")) {
       socket.emit('key-press', { inputkey: 'w', state: true });
-    } else if (e.keyCode == 83) {
+    } else if (e.keyCode == 83 && !$('#chat-bar').is(":focus")) {
       socket.emit('key-press', { inputkey: 's', state: true });
-    } else if (e.keyCode == 32) {
+    } else if (e.keyCode == 32 && !$('#chat-bar').is(":focus")) {
       socket.emit('key-press', { inputkey: 'space', state: true });
-    } else if (e.keyCode == 70) {
+    } else if (e.keyCode == 70 && !$('#chat-bar').is(":focus")) {
       let direx = Math.atan2(camX - Players[clientID].posX - Players[clientID].width / 2 + mousePosX, camY - Players[clientID].posY - Players[clientID].height / 2 + mousePosY);
       socket.emit("bomb", direx)
     }
-    else if (e.keyCode == 86) {
+    else if (e.keyCode == 86 && !$('#chat-bar').is(":focus"))  {
       socket.emit('key-press', { inputkey: 'v', state: true });
     }
-    else if (e.keyCode == 27) {
+    else if (e.keyCode == 27 && !$('#chat-bar').is(":focus")) {
       menuToggle();
     }
-    else if (e.keyCode == 67) {
+    else if (e.keyCode == 67 && !$('#chat-bar').is(":focus")) {
       socket.emit('key-press', { inputkey: 'c', state: true });
     }
-    else if (e.keyCode == 66) {
+    else if (e.keyCode == 66 && !$('#chat-bar').is(":focus")) {
       socket.emit('key-press', { inputkey: 'b', state: true });
     }
-    else if (e.keyCode == 69) { //E
+    else if (e.keyCode == 69 && !$('#chat-bar').is(":focus")) { //E
       scoreboardActive = true;
     }
   }
@@ -481,7 +481,6 @@ function scoreboard () {
   $("#scoreboard-players").html("<tr><th>Username</th><th>Health</th><th>Kills</th><th>Deaths</th></tr>");
   for (let player in Players) {
     $("#scoreboard-players").append("<tr><td>"+Players[player].username+"</td><td>"+Players[player].hp+"</td><td>"+Players[player].kills+"</td><td>"+Players[player].deaths+"</td></tr>");
-    console.log(Players[player].username);
 
   }
   //ctx.fillStyle = "rgba(0, 0, 0, 0.6)";
