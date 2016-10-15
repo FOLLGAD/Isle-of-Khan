@@ -12,15 +12,17 @@
 }
 #chatmessages {
   position: absolute;
-  overflow: none;
+  overflow: auto;
+  background: #333;
+  opacity: 0.2;
 }
 #messagelist {
   color: #eee;
   list-style-type: none;
+  opacity: 1;
 }
 #chat-form {
   bottom: 0;
-  width: 100%;
   height: auto;
   margin: 1px;
   position: fixed;

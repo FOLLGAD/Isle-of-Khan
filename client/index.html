@@ -26,12 +26,12 @@
         </ul>
       </div>
       <form id="chat-form" action="">
-        <input id="chatbar" type="text" placeholder="Enter a chatmessage">
+        <input id="chatbar" type="text" placeholder="Enter a chatmessage" autocomplete="off">
         <input type="submit">
       </form>
     </div>
-    <canvas id="canvas" class="game-canvas"></canvas>
-    <canvas id="minimap" class="game-canvas"></canvas>
+    <canvas id="canvas" class="game-canvas" tabindex="1"></canvas>
+    <canvas id="minimap" class="game-canvas" tabindex="1"></canvas>
     <div id="scoreboard" style="display:none">
       <h1>Scoreboard</h1>
       <table id="scoreboard-players" class="table">

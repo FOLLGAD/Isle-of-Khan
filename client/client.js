@@ -116,23 +116,36 @@ let Img = {};
   Img.particle.src = '/resources/particle.png';
 
 // event handlers
-document.addEventListener("keydown", keyDownHandler, false);
-  document.addEventListener("keyup", keyUpHandler, false);
+canvas.addEventListener("keydown", keyDownHandler, false);
+  canvas.addEventListener("keyup", keyUpHandler, false);
   canvas.addEventListener("mousedown", mouseDownHandler, false);
   canvas.addEventListener("mouseup", mouseUpHandler, false);
   canvas.addEventListener("mousemove", nameMousePos, false);
 
+let keyStates = {
+  w: false,
+  a: false,
+  s: false,
+  d: false,
+  space: false
+};
+let lastdirection;
   function keyDownHandler(e) {
     if (e.keyCode == 68) {
-      socket.emit('key-press', { inputkey: 'd', state: true });
+      if (!keyStates.d) socket.emit('key-press', { inputkey: 'd', state: true });
+      keyStates.d = true;
     } else if (e.keyCode == 65) {
-      socket.emit('key-press', { inputkey: 'a', state: true });
+      if (!keyStates.a) socket.emit('key-press', { inputkey: 'a', state: true });
+      keyStates.a = true;
     } else if (e.keyCode == 87) {
-      socket.emit('key-press', { inputkey: 'w', state: true });
+      if (!keyStates.w) socket.emit('key-press', { inputkey: 'w', state: true });
+      keyStates.w = true;
     } else if (e.keyCode == 83) {
-      socket.emit('key-press', { inputkey: 's', state: true });
+      if (!keyStates.s) socket.emit('key-press', { inputkey: 's', state: true });
+      keyStates.s = true;
     } else if (e.keyCode == 32) {
-      socket.emit('key-press', { inputkey: 'space', state: true });
+      if (!keyStates.space) socket.emit('key-press', { inputkey: 'space', state: true });
+      keyStates.space = true;
     } else if (e.keyCode == 70) {
       let direx = Math.atan2(camX - Players[clientID].posX - Players[clientID].width / 2 + mousePosX, camY - Players[clientID].posY - Players[clientID].height / 2 + mousePosY);
       socket.emit("bomb", direx)
@@ -152,27 +165,28 @@ document.addEventListener("keydown", keyDownHandler, false);
     else if (e.keyCode == 69) { //E
       scoreboardActive = true;
     }
+    // e.preventDefault();
   }
   function keyUpHandler(e) {
     if (e.keyCode == 68) {
       socket.emit('key-press', { inputkey: 'd', state: false });
-      frame = 0;
+      keyStates.d = false;
     }
     else if (e.keyCode == 65) {
       socket.emit('key-press', { inputkey: 'a', state: false });
-      frame = 0;
+      keyStates.a = false;
     }
     else if (e.keyCode == 87) {
       socket.emit('key-press', { inputkey: 'w', state: false });
-      frame = 0;
+      keyStates.w = false;
     }
     else if (e.keyCode == 83) {
       socket.emit('key-press', { inputkey: 's', state: false });
-      frame = 0;
+      keyStates.s = false;
     }
     else if (e.keyCode == 32){
       socket.emit('key-press', { inputkey: 'space', state: false });
-      frame = 0;
+      keyStates.space = false;
     }
     else if (e.keyCode == 86) {
       socket.emit('key-press', { inputkey: 'v', state: true });
@@ -189,6 +203,7 @@ document.addEventListener("keydown", keyDownHandler, false);
     else if (e.keyCode == 69) { //E
       scoreboardActive = false;
     }
+    // e.preventDefault();
   }
   let mouseDown = false;
   let lastMouseUpdate = Date.now();
@@ -196,6 +211,7 @@ document.addEventListener("keydown", keyDownHandler, false);
     let mousePos = getMousePos(e);
     mousePosX = mousePos.x;
     mousePosY = mousePos.y;
+    console.log("0");
   };
   function getMousePos(e) {
     let rect = canvas.getBoundingClientRect();
@@ -207,16 +223,12 @@ document.addEventListener("keydown", keyDownHandler, false);
     };
   }
   function mouseDownHandler() {
-    mouseDown = true;
-    if (!menuActive) {
-      let direction = Math.atan2(camX - Players[clientID].posX - Players[clientID].width / 2 + mousePosX, camY - Players[clientID].posY - Players[clientID].height / 2 + mousePosY);
-      socket.emit('key-press', { inputkey: 'mousebutton', state: true, direction: direction });
-    } else {
-      checkMenuDown();
-    }
+    let direction = Math.atan2(camX - Players[clientID].posX - Players[clientID].width / 2 + mousePosX, camY - Players[clientID].posY - Players[clientID].height / 2 + mousePosY);
+    socket.emit('key-press', { inputkey: 'mousebutton', state: true, direction: direction });
+    console.log("dsaas");
+    // checkMenuDown();
   }
   function mouseUpHandler() {
-    mouseDown = false;
     socket.emit('key-press', { inputkey: 'mousebutton', state: false });
     checkMenuUp();
   }
@@ -481,8 +493,6 @@ function scoreboard () {
   $("#scoreboard-players").html("<tr><th>Username</th><th>Health</th><th>Kills</th><th>Deaths</th></tr>");
   for (let player in Players) {
     $("#scoreboard-players").append("<tr><td>"+Players[player].username+"</td><td>"+Players[player].hp+"</td><td>"+Players[player].kills+"</td><td>"+Players[player].deaths+"</td></tr>");
-    console.log(Players[player].username);
-
   }
   //ctx.fillStyle = "rgba(0, 0, 0, 0.6)";
   //ctx.fillRect(camX + canvas.width/2, camY + 100, canvas.width/2-100, canvas.height/2);
@@ -660,11 +670,14 @@ function update() {
   drawCursor();
   ctx.restore();
 }
-
+let lastDirection;
 setInterval(function () {
   if (Players.hasOwnProperty(clientID)) {
     let direction = Math.atan2(camX - Players[clientID].posX - Players[clientID].width / 2 + mousePosX, camY - Players[clientID].posY - Players[clientID].height / 2 + mousePosY);
-    socket.emit('key-press', { inputkey: 'direction-update', direction: direction });
+    if (direction !== lastDirection) {
+      socket.emit('key-press', { inputkey: 'direction-update', direction: direction });
+      lastDirection = direction;
+    }
   }
 }, 100);
 
@@ -675,16 +688,16 @@ function clientSmoothing (sincePacket) {
     Players[i].posY = Players[i].packPosY + Players[i].velY * sincePacket;
   }
   for (let i = 0; i < Enemies.length; i++) {
-    Enemies[i].posX += Enemies[i].velX * sincePacket;
-    Enemies[i].posY += Enemies[i].velY * sincePacket;
+    Enemies[i].posX = Enemies[i].posX + Enemies[i].velX * sincePacket;
+    Enemies[i].posY = Enemies[i].posY + Enemies[i].velY * sincePacket;
   }
   for (let i = 0; i < Arrows.length; i++) {
-    Arrows[i].posX += Arrows[i].velX * sincePacket;
-    Arrows[i].posY += Arrows[i].velY * sincePacket;
+    Arrows[i].posX = Arrows[i].posX + Arrows[i].velX * sincePacket;
+    Arrows[i].posY = Arrows[i].posY + Arrows[i].velY * sincePacket;
   }
   for (let i = 0; i < Bombs.length; i++) {
-    Bombs[i].posX += Bombs[i].velX * sincePacket;
-    Bombs[i].posY += Bombs[i].velY * sincePacket;
+    Bombs[i].posX = Bombs[i].posX + Bombs[i].velX * sincePacket;
+    Bombs[i].posY = Bombs[i].posY + Bombs[i].velY * sincePacket;
   }
 }
 
