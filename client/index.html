@@ -10,40 +10,43 @@
   </head>
   <body oncontextmenu="return false;">
     <div id="container">
-      <div style="position: fixed; z-index: 60; width: 100%; height: 100%">
-        <iframe frameborder="0" height="100%" width="100%"
-          src="https://www.youtube.com/embed/9ZfN87gSjvI?controls=0&showinfo=0&rel=0&autoplay=1&loop=1&start=80">
-        </iframe>
+      <div id="menu-screen">
+        <div id="menu-overlay" class="container text-center">
+          <h1>Isle of Khan</h1>
+          <hr />
+            <div class="form-group">
+              <h4>Username</h4>
+              <form id="registration" action="">
+                <input style="padding: 5px;" id="username" name="username" type="text" autofocus="true"></input>
+                <br><button class="btn btn-default">Play</button>
+              </form>
+            </div>
+        </div>
+        <!--<div style="position: fixed; z-index: 90; width: 100%; height: 100%">
+          <iframe frameborder="0" height="100%" width="100%" src="https://www.youtube.com/embed/9ZfN87gSjvI?controls=0&amp;showinfo=0&amp;rel=0&amp;autoplay=1&amp;loop=1&amp;start=80">
+          </iframe>
+        </div>-->
+      </div><!-- ./menu-screen -->
+      <div id="chat-window" style="display:none">
+        <div id="chatmessages" class="mCustomScrollbar" data-mcs-theme="light" data-mcs-axis="y">
+        <!--<div id="chatmessages">-->
+          <ul id="messagelist">
+          </ul>
+        </div>
+        <form id="chat-form" action="" autocomplete="off">
+          <input id="chat-bar" type="text" placeholder="Enter a chat message" autocomplete="off">
+          <input id="chat-submit" type="hidden">
+        </form>
       </div>
-      <div id="menu-overlay" class="container text-center">
-        <h1>Isle of Khan</h1>
-        <hr />
-          <div class="form-group">
-            <h4>Username</h4>
-            <form id="registration" action="">
-              <input style="padding: 5px;" id="username" name="username" type="text" autofocus="true"></input>
-              <br><button class="btn btn-default">Play</button>
-            </form>
-          </div>
+      <canvas id="canvas" class="game-canvas" tabindex="1"></canvas>
+      <canvas id="minimap" class="game-canvas" tabindex="1"></canvas>
+      <div id="scoreboard" style="display:none">
+        <h1>Scoreboard</h1>
+        <table id="scoreboard-players" class="table">
+        </table>
       </div>
-    </div>
-    <div id="chat-window" style="display:none">
-      <div id="chatmessages" class="mCustomScrollbar" data-mcs-theme="light" data-mcs-axis="y">
-      <!--<div id="chatmessages">-->
-        <ul id="messagelist">
-        </ul>
+      <div id="kill-messages">
       </div>
-      <form id="chat-form" action="" autocomplete="off">
-        <input id="chat-bar" type="text" placeholder="Enter a chat message" autocomplete="off">
-        <input id="chat-submit" type="hidden">
-      </form>
-    </div>
-    <canvas id="canvas" class="game-canvas" tabindex="1"></canvas>
-    <canvas id="minimap" class="game-canvas" tabindex="1"></canvas>
-    <div id="scoreboard" style="display:none">
-      <h1>Scoreboard</h1>
-      <table id="scoreboard-players" class="table">
-      </table>
     </div>
   </body>
   <script src="/socket.io/socket.io.js"></script>
@@ -63,7 +66,9 @@
     e.preventDefault();
     username = $('#username').val();
     register(username);
-    $('#container').fadeOut('slow', function(){ $('#container').remove(); });
+    $('#menu-screen').fadeOut('slow', function(){ $('#menu-screen').remove();
+console.log("Fade out done");
+     });
     console.log(username);
     $("#chat-window").show();
     $('#canvas').focus();
