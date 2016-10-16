@@ -96,7 +96,7 @@ let lastdirection;
       let mouseDifY = camY - Players[clientID].posY - Players[clientID].height / 2 + mousePosY;
       let direx = Math.atan2(mouseDifX, mouseDifY);
       let vel = Math.min(Math.sqrt(Math.pow(mouseDifX, 2) + Math.pow(mouseDifY, 2)) / 90, 5);
-      socket.emit('key-press', { direction: direx, velocity: vel });
+      socket.emit('key-press', { inputkey: 'f', direction: direx, velocity: vel });
     }
     else if (e.keyCode == 86) {
       socket.emit('key-press', { inputkey: 'v', state: true });
@@ -146,7 +146,7 @@ let lastdirection;
       socket.emit('key-press', { inputkey: 'b', state: false });
     }
     else if (e.keyCode == 70) {
-      socket.emit('key-press', { inputkey: 'f', state: false });
+      // socket.emit('key-press', { inputkey: 'f', state: false });
     }
     else if (e.keyCode == 69) { //E
       scoreboardActive = false;
@@ -159,7 +159,6 @@ let lastdirection;
     let mousePos = getMousePos(e);
     mousePosX = mousePos.x;
     mousePosY = mousePos.y;
-    console.log("0");
   };
   function getMousePos(e) {
     let rect = canvas.getBoundingClientRect();
@@ -175,7 +174,6 @@ let lastdirection;
     e.stopPropagation();
     let direction = Math.atan2(camX - Players[clientID].posX - Players[clientID].width / 2 + mousePosX, camY - Players[clientID].posY - Players[clientID].height / 2 + mousePosY);
     socket.emit('key-press', { inputkey: 'mousebutton', state: true, direction: direction });
-    console.log("dsaas");
     audio.arrow.play();
     // checkMenuDown();
   }

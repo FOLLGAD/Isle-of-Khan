@@ -68,24 +68,21 @@ io.on('connection', function (socket) {
       switch (input.inputkey) {
         case "w":
           chars[socket.id].walkingUp = input.state;
-          console.log(input.inputkey);
           break;
         case "a":
           chars[socket.id].walkingLeft = input.state;
-          console.log(input.inputkey);
           break;
         case "s":
           chars[socket.id].walkingDown = input.state;
-          console.log(input.inputkey);
           break;
         case "d":
           chars[socket.id].walkingRight = input.state;
-          console.log(input.inputkey);
           break;
         case "f":
-          if (input.direction != 'undefined' && input.vel != 'undefined') {
-            input.vel = Math.min(input.vel, 5);
-            bombs.push(new projectiles.Bomb(chars[socket.id].posX, chars[socket.id].posY, input.direction, chars[socket.id].velX, chars[socket.id].velY, socket.id, input.vel));
+          console.log(input.direction, input.velocity);
+          if (!!input.direction && !!input.velocity) {
+            input.vel = Math.min(input.velocity, 5);
+            bombs.push(new projectiles.Bomb(chars[socket.id].posX, chars[socket.id].posY, input.direction, chars[socket.id].velX, chars[socket.id].velY, socket.id, input.velocity));
           }
           break;
         case "space":
@@ -105,7 +102,6 @@ io.on('connection', function (socket) {
           if (input.direction !== undefined) {
             chars[socket.id].aimDirection = input.direction;
           }
-          console.log("direct", input.direction);
           break;
         default:
           console.log("client input did not match any serverside input");

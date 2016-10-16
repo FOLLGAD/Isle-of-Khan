@@ -63,7 +63,6 @@ exports.Character = function (id, posX, posY, username) {
     if (this.hp <= 0) { //If character dies
       this.deaths++;
       this.respawn();
-      console.log(entity);
       if (entity.hasOwnProperty('id') && entity.id != this.id) {
         entity.kills++;
         //Send kill message
