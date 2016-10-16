@@ -52,7 +52,18 @@ io.on('connection', function (socket) {
   socket.emit("initialize", { matrix: map.riverMap.matrix, width: map.riverMap.width, height: map.riverMap.height, id: socket.id });
 
   socket.on('register', function (user) {
-    username = user;
+    if (user == ""){
+      let guestCount = 1;
+      for (let prop in chars) {
+        if (chars[prop].username == "Guest " + guestCount){
+          guestCount++;
+        }
+      }
+      username = "Guest " + guestCount;
+    }else{
+      username = user;
+    }
+    console.log("Username: " + username)
     clearInterval(intervalStorage[socket.id]);
     clearTimeout(intervalStorage[socket.id]);
     if (chars.hasOwnProperty(socket.id)) {
@@ -79,7 +90,7 @@ io.on('connection', function (socket) {
           chars[socket.id].walkingRight = input.state;
           break;
         case "f":
-          console.log(input.direction, input.velocity);
+          // console.log(input.direction, input.velocity);
           if (!!input.direction && !!input.velocity) {
             input.vel = Math.min(input.velocity, 5);
             bombs.push(new projectiles.Bomb(chars[socket.id].posX, chars[socket.id].posY, input.direction, chars[socket.id].velX, chars[socket.id].velY, socket.id, input.velocity));

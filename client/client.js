@@ -13,9 +13,9 @@ let mousePosX;
 let mousePosY;
 
 let audio = {};
-// audio.bomb = new Audio('./resources/explosion.wav');
+ audio.bomb = new Audio('./resources/grenade-sound.mp3');
 // audio.bomb.play();
-audio.arrow = new Audio('./resources/arrow-swosh.mp3');
+audio.arrow = new Audio('./resources/bow-fire.mp3');
 // audio.bomb.play();
 
 ctx.canvas.width  = window.innerWidth;
@@ -488,15 +488,20 @@ function Character (packet) {
   this.height = 64;
   this.draw = function() {
     ctx.drawImage(Img.char, this.posX, this.posY - this.height, this.width, this.height * 2);
-    ctx.font = "15px GameFont";
+    ctx.font = "12px GameFont";
     ctx.textAlign = "center";
-    ctx.textColor = "white";
-    ctx.fillText(this.username, this.posX + this.width / 2, this.posY + this.width / 2 - 102, 10 * 10, 10); //Username
+    ctx.fillStyle = "white";
+    ctx.lineWidth = 3;
+    ctx.strokeStyle = 'black';
+    ctx.strokeText(this.username, this.posX + this.width / 2, this.posY + this.width / 2 - 105, 10 * 10, 10); //Username
+    ctx.fillText(this.username, this.posX + this.width / 2, this.posY + this.width / 2 - 105, 10 * 10, 10); //Username
     ctx.fillStyle = "black";
     ctx.fillRect(this.posX - 20, this.posY + this.width / 2 - 100, 10 * 10, 10);
     ctx.fillStyle = "green";
     ctx.fillRect(this.posX - 20, this.posY + this.width / 2 - 100, this.hp, 10);
-    ctx.fillStyle = "black";
+    ctx.fillStyle = "red";
+    ctx.fillText(this.hp, this.posX, this.posY);
+    ctx.fillStyle = "white";
   }
 }
 function Tree (packet) {

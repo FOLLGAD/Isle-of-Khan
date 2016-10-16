@@ -157,3 +157,4 @@ exports.Character = function (id, posX, posY, username) {
     ctx.fillRect(attackingX, attackingY, 8*8, 8*8);
   }
 }
+

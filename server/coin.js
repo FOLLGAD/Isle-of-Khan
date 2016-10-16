@@ -10,7 +10,7 @@ exports.Coin = function (posX, posY) {
       if (this.posX < chars[i].posX + chars[i].width && this.posX + this.width > chars[i].posX && this.posY < chars[i].posY + chars[i].height && this.posY + this.height > chars[i].posY) {
         chars[i].coins++;
         if (chars[i].hp < chars[i].maxhp) {
-            chars[i].hp++;
+            chars[i].hp += chars[i].maxhp *0.1;
         }
         if (chars[i].hp > chars[i].maxhp) {
           chars[i].hp = chars[i].maxhp;
