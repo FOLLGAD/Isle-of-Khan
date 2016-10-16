@@ -36,7 +36,9 @@ let Players = {};
 
 let Img = {};
   Img.archer = new Image();
-  Img.archer.src = '/resources/classes/archer-right.png';
+  Img.archer.src = '/resources/classes/archer-spritesheet.png';
+  Img.warrior = new Image();
+  Img.warrior.src = '/resources/classes/warrior.png';
   Img.enemy = new Image();
   Img.enemy.src = '/resources/enemy.png';
   Img.tilemap = new Image();
@@ -476,7 +478,7 @@ function Arrow (packet) {
 }
 function Character (packet) {
   this.id = packet.id;
-  this.class = archer;
+  this.class = "archer";
   this.username = packet.username;
   this.posX     = packet.posX;
   this.packPosX = packet.posX;
@@ -503,12 +505,15 @@ function Character (packet) {
     }
   }
   this.draw = function() {
-    let dir = Math.floor((this.aimDirection / Math.PI + 1) * 2);
+    let dir = Math.floor((this.aimDirection / Math.PI + 1) * 2 + 0.5);
+    if (dir === 4) dir = 0;
+    console.log(dir);
+    console.log(this.aimDirection);
     let pics;
-    if (dir == 0 || dir == 1) { pics = 2 } else { pics = 3 }
+    if (dir == 0 || dir == 1) { pics = 3 } else { pics = 2 }
     ctx.drawImage(
       Img[this.class],
-      this.frame / (100 * pics) * 16,
+      Math.floor(this.frame / (100 * pics)) * 16,
       dir * 32,
       16,
       32,
@@ -643,6 +648,9 @@ function update() {
   updateParticles(deltaTime);
   viewPort();
   ctx.clearRect(camX, camY, canvas.width, canvas.height);
+  for (let prop in Players) {
+    Players[prop].walkAnim(deltaTime);
+  }
   draw();
   drawGui();
   if (menuActive) menuUpdate();

@@ -54,7 +54,7 @@ io.on('connection', function (socket) {
   socket.emit("initialize", { matrix: map.riverMap.matrix, width: map.riverMap.width, height: map.riverMap.height, id: socket.id });
 
   socket.on('register', function (object) {
-    if (user == ""){
+    if (object.username == ""){
       let guestCount = 1;
       for (let prop in chars) {
         if (chars[prop].username == "Guest " + guestCount){

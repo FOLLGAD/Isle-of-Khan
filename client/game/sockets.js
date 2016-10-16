@@ -39,7 +39,7 @@ function register(regName, gameClass) {
 let asdf = false;
 let lastPacket = Date.now();
 socket.on('packet', function (packet) {
-  Players = {};
+  // Players = {};
   Trees = [];
   Enemies = [];
   Coins = [];
@@ -48,12 +48,11 @@ socket.on('packet', function (packet) {
   for (let i = 0; i < packet.players.length; i++) {
     //checks if player does not exist in files
     if (!Players.hasOwnProperty(packet.players[i].id)) {
-      Players[packet.players[i].id] = new Character();
+      Players[packet.players[i].id] = new Character(packet.players[i]);
     }
     for (let prop in packet.players[i]) {
       Players[packet.players[i].id][prop] = packet.players[i][prop];
     }
-    Players[packet.players[i].id][prop] = new Character(packet.players[i]);
   }
   for (let i = 0; i < packet.trees.length; i++) {
     Trees.push(new Tree(packet.trees[i]));
