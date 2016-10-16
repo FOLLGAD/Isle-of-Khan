@@ -1,6 +1,10 @@
 let map = require('./map.js');
 
 exports.checkObjectCollision = function (object) {
+  if (object.posX + object.width > map.riverMap.width * map.tilesize) { object.posX = map.riverMap.width * map.tilesize - object.width }
+  if (object.posX < 0) { object.posX = 0 }
+  if (object.posY + object.height > map.riverMap.height * map.tilesize) { object.posY = map.riverMap.height * map.tilesize - object.height }
+  if (object.posY < 0) { object.posY = 0 }
   let tiles = tilesSurrounding(object.posX, object.posY, object.width, object.height);
   for (var i = 0; i < tiles.width; i++) {
     for (let j = 0; j < tiles.height; j++) {
@@ -9,10 +13,6 @@ exports.checkObjectCollision = function (object) {
       }
     }
   }
-  if (object.posX + object.width > map.riverMap.width * map.tilesize) { object.posX = map.riverMap.width * map.tilesize - object.width }
-  if (object.posX < 0) { object.posX = 0 }
-  if (object.posY + object.height > map.riverMap.height * map.tilesize) { object.posY = map.riverMap.height * map.tilesize - object.height }
-  if (object.posY < 0) { object.posY = 0 }
 }
 
 exports.checkArrowTileCollision = function (object, array) {

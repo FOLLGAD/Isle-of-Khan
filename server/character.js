@@ -82,7 +82,7 @@ exports.Character = function (id, posX, posY, username) {
         this.posY = j * tileSize + tileSize;
       }
       this.velY = 0;
-    } else if (Math.abs(colDistanceX) > Math.abs(colDistanceY)) {
+    } else if (Math.abs(colDistanceX) >= Math.abs(colDistanceY)) {
       // Flyttas till höger/vänster , X-led
       if (colDistanceX > 0) {
         this.posX = i * tileSize - this.height;
