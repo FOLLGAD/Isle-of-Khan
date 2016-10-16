@@ -84,7 +84,6 @@
   var gameClass;
   $("#class-archer").click(function() {
     gameClass = "archer";
-    console.log("Archer got clicked");
   });
   $("#class-warrior").click(function() {
     gameClass = "warrior";
@@ -99,9 +98,7 @@
     username = $('#username').val();
     register(username, gameClass);
     $('#menu-screen').fadeOut('slow', function(){ $('#menu-screen').remove();
-console.log("Fade out done");
      });
-    console.log(username);
     $("#chat-window").show();
     $('#canvas').focus();
   });
