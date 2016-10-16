@@ -8,6 +8,7 @@ socket.on('death-msg', function (object) {
   }else{
     //deathmsg func
     deathQueue('<span style="color:green">' + object.killer + '</span> killed <span style="color:red">' + object.victim + '</span>');
+  }
 });
 
 socket.on('particle', function (object) {
