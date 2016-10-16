@@ -36,10 +36,6 @@
               </form>
             </div>
         </div>
-        <!--<div style="position: fixed; z-index: 90; width: 100%; height: 100%">
-          <iframe frameborder="0" height="100%" width="100%" src="https://www.youtube.com/embed/9ZfN87gSjvI?controls=0&amp;showinfo=0&amp;rel=0&amp;autoplay=1&amp;loop=1&amp;start=80">
-          </iframe>
-        </div>-->
       </div><!-- ./menu-screen -->
       <div id="game-overlay">
         <div id="chat-window" style="display:none">
@@ -79,10 +75,22 @@
   <script src="/client.js"></script>
 
   <script>
-  //Does what emil?
+  //Disables selection
   $(document).bind('selectstart dragstart', function(e) {
     e.preventDefault();
     return false;
+  });
+  //Selects class
+  var gameClass;
+  $("#class-archer").click(function() {
+    gameClass = "archer";
+    console.log("Archer got clicked");
+  });
+  $("#class-warrior").click(function() {
+    gameClass = "warrior";
+  });
+  $("#class-mage").click(function() {
+    gameClass = "mage";
   });
 
   //Handles registration

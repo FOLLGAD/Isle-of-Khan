@@ -4,9 +4,10 @@ let serv = require('../server.js');
 
 let tileSize = 64;
 
-exports.Character = function (id, posX, posY, username) {
+exports.Character = function (id, posX, posY, username, characterClass) {
   this.id = id;
   this.username = username;
+  this.class = characterClass;
   this.posX = posX;
   this.posY = posY;
   this.height = 64;
