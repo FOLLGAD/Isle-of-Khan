@@ -83,7 +83,7 @@ io.on('connection', function (socket) {
           console.log(input.inputkey);
           break;
         case "f":
-          if (input.direction !== undefined) {
+          if (input.direction != 'undefined' && input.vel != 'undefined') {
             input.vel = Math.min(input.vel, 5);
             bombs.push(new projectiles.Bomb(chars[socket.id].posX, chars[socket.id].posY, input.direction, chars[socket.id].velX, chars[socket.id].velY, socket.id, input.vel));
           }
