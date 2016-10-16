@@ -29,6 +29,7 @@
   padding-left: 10px;
   padding-bottom:5px;
   opacity: 1;
+  word-wrap: break-word;
 }
 #chat-form {
   bottom: 0;

@@ -263,6 +263,8 @@ function resize() {
   ctx.canvas.width = window.innerWidth;
   ctx.canvas.height = window.innerHeight;
   ctx.imageSmoothingEnabled = false;
+  ctx.mozImageSmoothingEnabled = false;
+  ctx.webkitImageSmoothingEnabled = false;
   offsetMaxX = gameMap.width * tileSize - ctx.canvas.width;
   offsetMaxY = gameMap.height * tileSize - ctx.canvas.height;
 }
@@ -532,13 +534,18 @@ function Particle (packet) {
   this.velX = Math.sin(packet.direction) * this.velt;
   this.velY = Math.cos(packet.direction) * this.velt;
   this.timer = 500;
+  this.exploded = false;
   this.tick = function (deltaTime) {
-    this.timer -= deltaTime;
-    this.velX *= Math.pow(0.99, deltaTime/2);
-    this.velY *= Math.pow(0.99, deltaTime/2);
-    this.posX += this.velX * deltaTime;
-    this.posY += this.velY * deltaTime;
-    if (this.timer <= 0) {
+    console.log("hek");
+    for (let i = 0; i < deltaTime && this.exploded === false; i++) {
+      this.timer -= 1;
+      this.velX *= 0.997;
+      this.velY *= 0.997;
+      this.posX += this.velX;
+      this.posY += this.velY;
+      if (this.timer <= 0) this.exploded = true;
+    }
+    if (this.exploded) {
       let indx = Particles.indexOf(this);
       Particles.splice(indx, 1);
       return true;
