@@ -172,6 +172,7 @@ let lastdirection;
   function mouseDownHandler(e) {
     e.preventDefault();
     e.stopPropagation();
+    $('#canvas').focus();
     let direction = Math.atan2(camX - Players[clientID].posX - Players[clientID].width / 2 + mousePosX, camY - Players[clientID].posY - Players[clientID].height / 2 + mousePosY);
     socket.emit('key-press', { inputkey: 'mousebutton', state: true, direction: direction });
     audio.arrow.play();
