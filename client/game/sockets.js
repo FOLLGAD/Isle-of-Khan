@@ -4,15 +4,15 @@ let socket = io();
 socket.on('death-msg', function (object) {
   if (object.killer == object.victim) {
     // deathmsg function here
-    deathQueue(object.victim + " commited suicide");
+    deathQueue((object.victim !== "" ? object.victim : "Unknown player") + " commited suicide");
   } else {
     //deathmsg func
-    deathQueue(object.killer + " killed " + object.victim);
+    deathQueue((object.killer !== "" ? object.killer : "Unknown player") + " killed " + (object.victim !== "" ? object.killer : "Unknown player"));
   }
 });
 
 socket.on('particle', function (object) {
-  let particleAmount = Math.random() * 4 + 4;
+  let particleAmount = Math.floor(Math.random() * 5) + 6;
   for (let i = 0; i < particleAmount; i++) {
     let part = { x: object.x, y: object.y };
     let direc = Math.random() * Math.PI * 2;
