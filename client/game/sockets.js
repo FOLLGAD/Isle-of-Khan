@@ -5,14 +5,9 @@ socket.on('death-msg', function (object) {
   if (object.killer == object.victim) {
     // deathmsg function here
     deathQueue('<span style="color:red">' + object.victim + "</span> commited suicide");
-  } else {
+  }else{
     //deathmsg func
     deathQueue('<span style="color:green">' + object.killer + '</span> killed <span style="color:red">' + object.victim + '</span>');
-    deathQueue((object.victim !== "" ? object.victim : "Unknown player") + " commited suicide");
-  } else {
-    //deathmsg func
-    deathQueue((object.killer !== "" ? object.killer : "Unknown player") + " killed " + (object.victim !== "" ? object.killer : "Unknown player"));
-  }
 });
 
 socket.on('particle', function (object) {
