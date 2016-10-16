@@ -38,7 +38,7 @@ let Img = {};
   Img.archer = new Image();
   Img.archer.src = '/resources/classes/archer-spritesheet.png';
   Img.warrior = new Image();
-  Img.warrior.src = '/resources/classes/warrior.png';
+  Img.warrior.src = '/resources/classes/warrior-spritesheet.png';
   Img.enemy = new Image();
   Img.enemy.src = '/resources/enemy.png';
   Img.tilemap = new Image();
@@ -478,7 +478,7 @@ function Arrow (packet) {
 }
 function Character (packet) {
   this.id = packet.id;
-  this.class = "archer";
+  this.class = packet.class;
   this.username = packet.username;
   this.posX     = packet.posX;
   this.packPosX = packet.posX;
@@ -510,7 +510,7 @@ function Character (packet) {
     console.log(dir);
     console.log(this.aimDirection);
     let pics;
-    if (dir == 0 || dir == 1) { pics = 3 } else { pics = 2 }
+    if (dir == 0 || dir == 2) { pics = 3 } else { pics = 2 }
     ctx.drawImage(
       Img[this.class],
       Math.floor(this.frame / (100 * pics)) * 16,
