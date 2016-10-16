@@ -476,6 +476,7 @@ function Arrow (packet) {
 }
 function Character (packet) {
   this.id = packet.id;
+  this.class = archer;
   this.username = packet.username;
   this.posX     = packet.posX;
   this.packPosX = packet.posX;
@@ -506,7 +507,7 @@ function Character (packet) {
     let pics;
     if (dir == 0 || dir == 1) { pics = 2 } else { pics = 3 }
     ctx.drawImage(
-      Img.archer,
+      Img[this.class],
       this.frame / (100 * pics) * 16,
       dir * 32,
       16,
