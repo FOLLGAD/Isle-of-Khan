@@ -46,7 +46,14 @@ socket.on('packet', function (packet) {
   Arrows = [];
   Bombs = [];
   for (let i = 0; i < packet.players.length; i++) {
-    Players[packet.players[i].id] = new Character(packet.players[i]);
+    //checks if player does not exist in files
+    if (!Players.hasOwnProperty(packet.players[i].id)) {
+      Players[packet.players[i].id] = new Character();
+    }
+    for (let prop in packet.players[i]) {
+      Players[packet.players[i].id][prop] = packet.players[i][prop];
+    }
+    Players[packet.players[i].id][prop] = new Character(packet.players[i]);
   }
   for (let i = 0; i < packet.trees.length; i++) {
     Trees.push(new Tree(packet.trees[i]));

@@ -42,6 +42,8 @@ let enemies = [];
 
 let intervalStorage = {};
 
+let toBeDeleted = [];
+
 io.on('connection', function (socket) {
   var socketId = socket.id;
   var clientIp = socket.request.connection.remoteAddress;
@@ -119,9 +121,9 @@ io.on('connection', function (socket) {
       }
     });
     socket.on('disconnect', function () {
-      delete chars[socket.id];
       clearInterval(intervalStorage[socket.id]);
       clearTimeout(intervalStorage[socket.id]);
+      toBeDeleted.push(chars[socket.id]);
       console.log(socket.id, "left the server.");
     });
   });

@@ -35,8 +35,8 @@ let Players = {};
   let Particles = [];
 
 let Img = {};
-  Img.char = new Image();
-  Img.char.src = '/resources/char.png';
+  Img.archer = new Image();
+  Img.archer.src = '/resources/classes/archer-right.png';
   Img.enemy = new Image();
   Img.enemy.src = '/resources/enemy.png';
   Img.tilemap = new Image();
@@ -487,10 +487,35 @@ function Character (packet) {
   this.deaths = packet.deaths;
   this.coins = packet.coins;
   this.hp = packet.hp;
+  this.frame = 0;
+  // Walking Direction: 0=right, 1=left, 2=down, 3=up;
   this.width = 64;
   this.height = 64;
+  this.walkAnim = function (deltaTime) {
+    if (this.walking) {
+      this.frame += deltaTime;
+      if (this.frame > 600) {
+        this.frame -= 600;
+      }
+    } else {
+      this.frame = 0;
+    }
+  }
   this.draw = function() {
-    ctx.drawImage(Img.char, this.posX, this.posY - this.height, this.width, this.height * 2);
+    let dir = Math.floor((this.aimDirection / Math.PI + 1) * 2);
+    let pics;
+    if (dir == 0 || dir == 1) { pics = 2 } else { pics = 3 }
+    ctx.drawImage(
+      Img.archer,
+      this.frame / (100 * pics) * 16,
+      dir * 32,
+      16,
+      32,
+      this.posX,
+      this.posY - this.height,
+      this.width,
+      this.height * 2
+    );
     ctx.font = "12px GameFont";
     ctx.textAlign = "center";
     ctx.fillStyle = "white";

@@ -16,9 +16,10 @@ exports.Character = function (id, posX, posY, username) {
   this.coins = 0;
   this.kills = 0;
   this.deaths = 0;
+  this.aimDirection = 0;
+  this.walking = false;
   //walkspeed default = 7
   this.walkSpeed = 0.5;
-  this.direction = "up";
   this.hp = 100;
   this.idle = true;
   this.attacking = false;
@@ -123,6 +124,7 @@ exports.Character = function (id, posX, posY, username) {
     }
     this.posX += this.velX * deltaTime;
     this.posY += this.velY * deltaTime;
+    this.walking = this.walkingRight || this.walkingLeft || this.walkingUp || this.walkingDown;
   }
   this.activate = function() {
     let d = new Date();
@@ -157,4 +159,3 @@ exports.Character = function (id, posX, posY, username) {
     ctx.fillRect(attackingX, attackingY, 8*8, 8*8);
   }
 }
-
