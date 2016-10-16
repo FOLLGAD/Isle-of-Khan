@@ -32,8 +32,8 @@ socket.on('initialize', function (data) {
   drawMinimap();
 });
 
-function register(regName) {
-  socket.emit('register', regName);
+function register(regName, gameClass) {
+  socket.emit('register', {username: regName, class: gameClass});
 }
 
 let asdf = false;

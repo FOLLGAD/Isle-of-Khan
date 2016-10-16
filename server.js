@@ -53,7 +53,7 @@ io.on('connection', function (socket) {
 
   socket.emit("initialize", { matrix: map.riverMap.matrix, width: map.riverMap.width, height: map.riverMap.height, id: socket.id });
 
-  socket.on('register', function (user) {
+  socket.on('register', function (object) {
     if (user == ""){
       let guestCount = 1;
       for (let prop in chars) {
@@ -63,7 +63,7 @@ io.on('connection', function (socket) {
       }
       username = "Guest " + guestCount;
     }else{
-      username = user;
+      username = object.username;
     }
     console.log("Username: " + username)
     clearInterval(intervalStorage[socket.id]);
@@ -71,7 +71,7 @@ io.on('connection', function (socket) {
     if (chars.hasOwnProperty(socket.id)) {
       delete chars[socket.id];
     }
-    chars[socket.id] = new character.Character(socket.id, 500, 500, username);
+    chars[socket.id] = new character.Character(socket.id, 500, 500, username, object.class);
 
     socket.on("chat-msg", function (msg) {
       io.emit("chat-msg", msg, username, new Date());

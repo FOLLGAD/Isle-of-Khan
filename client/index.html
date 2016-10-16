@@ -89,7 +89,7 @@
   $("#registration").submit( function(e) {
     e.preventDefault();
     username = $('#username').val();
-    register(username);
+    register(username, gameClass);
     $('#menu-screen').fadeOut('slow', function(){ $('#menu-screen').remove();
 console.log("Fade out done");
      });
