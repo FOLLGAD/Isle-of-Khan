@@ -45,6 +45,9 @@ socket.on('packet', function (packet) {
   Coins = [];
   Arrows = [];
   Bombs = [];
+  for (let i = 0; i < packet.delete.length; i++) {
+    delete Players[packet.delete[i]];
+  }
   for (let i = 0; i < packet.players.length; i++) {
     //checks if player does not exist in files
     if (!Players.hasOwnProperty(packet.players[i].id)) {

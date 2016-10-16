@@ -123,7 +123,7 @@ io.on('connection', function (socket) {
     socket.on('disconnect', function () {
       clearInterval(intervalStorage[socket.id]);
       clearTimeout(intervalStorage[socket.id]);
-      toBeDeleted.push(chars[socket.id]);
+      toBeDeleted.push(chars[socket.id].id);
       console.log(socket.id, "left the server.");
     });
   });
@@ -159,6 +159,9 @@ function update() {
   projectiles.tickArrows(arrows, deltaTime, enemies, chars);
   for (let i in chars) {
     createEntityPacket(chars[i]);
+  }
+  for (let i = 0; i < toBeDeleted.length; i++) {
+    delete chars[toBeDeleted];
   }
 }
 
@@ -230,7 +233,8 @@ function createEntityPacket(object) {
     coins: packetOrder.coin,
     arrows: packetOrder.arrow,
     bombs: packetOrder.bomb,
-    sent: Date.now()
+    sent: Date.now(),
+    delete: toBeDeleted
   });
 }
 
