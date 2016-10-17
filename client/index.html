@@ -82,18 +82,18 @@
   });
   //Selects class
   var gameClass;
-  $("#class-archer").click(function() {
+  $("#class-archer").click(function () {
     gameClass = "archer";
   });
-  $("#class-warrior").click(function() {
+  $("#class-warrior").click(function () {
     gameClass = "warrior";
   });
-  $("#class-mage").click(function() {
+  $("#class-mage").click(function () {
     gameClass = "mage";
   });
 
   //Handles registration
-  $("#registration").submit( function(e) {
+  $("#registration").submit(function (e) {
     e.preventDefault();
     username = $('#username').val();
     register(username, gameClass);
@@ -102,6 +102,12 @@
     $("#chat-window").show();
     $('#canvas').focus();
   });
+
+  $(document).keydown(function (objEvent) {
+    if (objEvent.key == 'Tab') {  // tab pressed
+      objEvent.preventDefault(); // prevents tab from getting pressed
+    }
+})
 
   //Focuses chat
   $(document).keypress(function(e) {

@@ -65,7 +65,6 @@ let Img = {};
 // event handlers
 canvas.addEventListener("keydown", keyDownHandler, false);
   document.addEventListener("keyup", keyUpHandler, false);
-  canvas.addEventListener("mousedown", mouseDownHandler, false);
   document.addEventListener("mouseup", mouseUpHandler, false);
   document.addEventListener("mousemove", nameMousePos, false);
 
@@ -77,113 +76,172 @@ let keyStates = {
   space: false
 };
 let lastdirection;
-  function keyDownHandler(e) {
-    if (e.keyCode == 68) {
+function keyDownHandler(e) {
+  dispatchForCode(e, keyDownFunction);
+}
+function keyUpHandler(e) {
+  dispatchForCode(e, keyUpFunction);
+}
+function keyDownFunction(code) {
+  switch (code) {
+    case 'd':
       if (!keyStates.d) socket.emit('key-press', { inputkey: 'd', state: true });
       keyStates.d = true;
-    } else if (e.keyCode == 65) {
+      break;
+    case 'a':
       if (!keyStates.a) socket.emit('key-press', { inputkey: 'a', state: true });
       keyStates.a = true;
-    } else if (e.keyCode == 87) {
+      break;
+    case 'w':
       if (!keyStates.w) socket.emit('key-press', { inputkey: 'w', state: true });
       keyStates.w = true;
-    } else if (e.keyCode == 83) {
+      break;
+    case 's':
       if (!keyStates.s) socket.emit('key-press', { inputkey: 's', state: true });
       keyStates.s = true;
-    } else if (e.keyCode == 32) {
+      break;
+    case ' ':
       if (!keyStates.space) socket.emit('key-press', { inputkey: 'space', state: true });
       keyStates.space = true;
-    } else if (e.keyCode == 70) {
+      break;
+    case 'f':
       let mouseDifX = camX - Players[clientID].posX - Players[clientID].width / 2 + mousePosX;
       let mouseDifY = camY - Players[clientID].posY - Players[clientID].height / 2 + mousePosY;
       let direx = Math.atan2(mouseDifX, mouseDifY);
       let vel = Math.min(Math.sqrt(Math.pow(mouseDifX, 2) + Math.pow(mouseDifY, 2)) / 90, 5);
       socket.emit('key-press', { inputkey: 'f', direction: direx, velocity: vel });
-    }
-    else if (e.keyCode == 86) {
+      break;
+    case 'v':
       socket.emit('key-press', { inputkey: 'v', state: true });
-    }
-    else if (e.keyCode == 27) {
-      menuToggle();
-    }
-    else if (e.keyCode == 67) {
+      break;
+    // else if (code == 27) {
+    //   menuToggle();
+    // }
+    case 'c':
       socket.emit('key-press', { inputkey: 'c', state: true });
-    }
-    else if (e.keyCode == 66) {
+      break;
+    case 'b':
       socket.emit('key-press', { inputkey: 'b', state: true });
-    }
-    else if (e.keyCode == 69) { //E
+      break;
+    case 'Tab':
       scoreboardActive = true;
-    }
-    // e.preventDefault();
+      break;
+    default:
+      console.log("input did not match any defined");
+  // e.preventDefault();
   }
-  function keyUpHandler(e) {
-    if (e.keyCode == 68) {
+}
+function keyUpFunction(code) {
+  switch(code) {
+    case 'd':
       socket.emit('key-press', { inputkey: 'd', state: false });
       keyStates.d = false;
-    }
-    else if (e.keyCode == 65) {
+      break;
+    case 'a':
       socket.emit('key-press', { inputkey: 'a', state: false });
       keyStates.a = false;
-    }
-    else if (e.keyCode == 87) {
+      break;
+    case 'w':
       socket.emit('key-press', { inputkey: 'w', state: false });
       keyStates.w = false;
-    }
-    else if (e.keyCode == 83) {
+      break;
+    case 's':
       socket.emit('key-press', { inputkey: 's', state: false });
       keyStates.s = false;
-    }
-    else if (e.keyCode == 32){
+      break;
+    case code == ' ':
       socket.emit('key-press', { inputkey: 'space', state: false });
       keyStates.space = false;
-    }
-    else if (e.keyCode == 86) {
+      break;
+    case 'v':
       socket.emit('key-press', { inputkey: 'v', state: true });
-    }
-    else if (e.keyCode == 67) {
+      break;
+    case 'c':
       socket.emit('key-press', { inputkey: 'c', state: false });
-    }
-    else if (e.keyCode == 66) {
+      break;
+    case 'b':
       socket.emit('key-press', { inputkey: 'b', state: false });
-    }
-    else if (e.keyCode == 70) {
+      break;
+    case 'f':
       // socket.emit('key-press', { inputkey: 'f', state: false });
-    }
-    else if (e.keyCode == 69) { //E
+      break;
+    case 'Tab':
       scoreboardActive = false;
-    }
-    // e.preventDefault();
+      break;
+    default:
+      console.log("input did not match any defined");
   }
-  let mouseDown = false;
-  let lastMouseUpdate = Date.now();
-  function nameMousePos(e) {
-    let mousePos = getMousePos(e);
-    mousePosX = mousePos.x;
-    mousePosY = mousePos.y;
+  // e.preventDefault();
+}
+let mouseDown = false;
+let lastMouseUpdate = Date.now();
+function nameMousePos(e) {
+  let mousePos = getMousePos(e);
+  mousePosX = mousePos.x;
+  mousePosY = mousePos.y;
+};
+function getMousePos(e) {
+  let rect = canvas.getBoundingClientRect();
+  scaleX = canvas.width / rect.width;
+  scaleY = canvas.height / rect.height;
+  return {
+    x: (e.clientX - rect.left) * scaleX,
+    y: (e.clientY - rect.top) * scaleY
   };
-  function getMousePos(e) {
-    let rect = canvas.getBoundingClientRect();
-    scaleX = canvas.width / rect.width;
-    scaleY = canvas.height / rect.height;
-    return {
-      x: (e.clientX - rect.left) * scaleX,
-      y: (e.clientY - rect.top) * scaleY
-    };
+}
+
+$('#canvas').mousedown(function(e) {
+  e.preventDefault();
+  switch (e.which) {
+    case 1: // left mouse btn
+      console.log('Left mouse button pressed');
+      $('#canvas').focus();
+      let direction = Math.atan2(camX - Players[clientID].posX - Players[clientID].width / 2 + mousePosX, camY - Players[clientID].posY - Players[clientID].height / 2 + mousePosY);
+      socket.emit('key-press', { inputkey: 'mousebutton', state: true, direction: direction });
+      audio.arrow.play();
+      break;
+    case 2: // middle mouse btn
+      console.log('Middle mouse button pressed');
+      break;
+    case 3: // right mouse btn
+      console.log('Right Mouse button pressed');
+      break;
+    default:
+      alert('undefined mouse button pressed');
   }
-  function mouseDownHandler(e) {
-    e.preventDefault();
-    e.stopPropagation();
-    $('#canvas').focus();
-    let direction = Math.atan2(camX - Players[clientID].posX - Players[clientID].width / 2 + mousePosX, camY - Players[clientID].posY - Players[clientID].height / 2 + mousePosY);
-    socket.emit('key-press', { inputkey: 'mousebutton', state: true, direction: direction });
-    audio.arrow.play();
-    // checkMenuDown();
+});
+$('#canvas').mouseup(function(e) {
+  e.preventDefault();
+  switch (e.which) {
+    case 1: // left mouse btn
+      console.log('Left mouse button released');
+      socket.emit('key-press', { inputkey: 'mousebutton', state: false });
+      break;
+    case 2: // middle mouse btn
+      console.log('Middle mouse button released');
+      break;
+    case 3: // right mouse btn
+      console.log('Right Mouse button released');
+      break;
+    default:
+      alert('undefined mouse button released');
   }
-  function mouseUpHandler() {
-    socket.emit('key-press', { inputkey: 'mousebutton', state: false });
-    checkMenuUp();
+});
+
+function mouseUpHandler() {
+  socket.emit('key-press', { inputkey: 'mousebutton', state: false });
+}
+var dispatchForCode = function (event, callback) {
+  var code;
+  if (event.key !== undefined) {
+    code = event.key;
+  } else if (event.keyIdentifier !== undefined) {
+    code = event.keyIdentifier;
+  } else if (event.keyCode !== undefined) {
+    code = event.keyCode;
   }
+  callback(code);
+};
 
 function draw() {
   for (let i = 0; i < gameMap.height; i++) {
@@ -267,7 +325,6 @@ function resize() {
   ctx.canvas.height = window.innerHeight;
   ctx.imageSmoothingEnabled = false;
   ctx.mozImageSmoothingEnabled = false;
-  ctx.webkitImageSmoothingEnabled = false;
   offsetMaxX = gameMap.width * tileSize - ctx.canvas.width;
   offsetMaxY = gameMap.height * tileSize - ctx.canvas.height;
 }
@@ -322,9 +379,6 @@ function drawMinimap() {
 function drawCursor() {
   ctx.drawImage(Img.crosshair, mousePosX + camX, mousePosY + camY, 30, 36);
 }
-function menuToggle() {
-  menuActive = !menuActive;
-}
 function drawGui () {
   ctx.textAlign = "start";
   ctx.fillText("HP: " + Players[clientID].hp, 20 + camX, 50 + camY);
@@ -334,111 +388,7 @@ function drawGui () {
   ctx.fillText("PosX: " + Players[clientID].posX, 20 + camX, 250 + camY);
   ctx.fillText("PosY: " + Players[clientID].posY, 20 + camX, 300 + camY);
 }
-function menuButton (text, onClick, mode) {
-  this.bColour = "#fff";
-  this.tColour = "#000";
-  this.width = 80 * 8;
-  this.height = 8 * 8;
-  this.posX = canvas.width / 2 - this.width / 2;
-  this.posY = 200 + 150 * menuArray.indexOf(this);
-  this.img = Img.menuButton;
-  this.clickToggle = false;
 
-  this.text = text;
-  this.mode = mode;
-
-  if (this.mode == "push") {
-    this.onClick = onClick;
-  } else {
-    this.onClick = function() {
-      this.clickToggle = !this.clickToggle;
-      onClick();
-    }
-  }
-
-  this.draw = function() {
-    this.posY = 200 + 150 * menuArray.indexOf(this);
-    ctx.fillStyle = this.bColour;
-    ctx.drawImage(this.img, 0, this.down ? 8 : 0, this.width / 8, this.height / 8, this.posX + camX, this.posY + camY, this.width, this.height);
-    ctx.fillStyle = this.bColour;
-    ctx.textAlign = "center";
-    let text = this.text;
-    if (this.mode == "toggle") {
-      let sik;
-      if (this.clickToggle) {
-        sik = "Off";
-      } else {
-        sik = "On";
-      }
-      text = text + sik;
-    }
-    ctx.fillText(text, this.posX + this.width / 2 + camX, this.posY + (this.down ? 45 : 37) + camY);
-  }
-
-  this.active = false;
-  this.down = false;
-
-  this.changeDown = function(bool) {
-    this.down = bool;
-  }
-
-  this.onDown = function() {
-    this.active = true;
-    if (this.mode == "push") {
-      if (!!this.timeOut) {
-        clearTimeout(this.timeOut);
-      }
-      this.down = true;
-    } else if (this.mode == "toggle") {
-      this.down = true;
-    }
-  }
-
-  this.onUp = function() {
-    this.active = false;
-    if (this.mode == "push") {
-      if (!!this.timeOut) {
-        clearTimeout(this.timeOut);
-      }
-      this.timeOut = setTimeout(function() { this.changeDown(false); this.timeOut = null; }.bind(this), 100);
-    } else if (this.mode == "toggle") {
-      this.down = this.clickToggle;
-    }
-  }
-
-  this.onAbandoned = function() {
-    this.active = false;
-    if (this.mode == "push") {
-      if (!!this.timeOut) {
-        clearTimeout(this.timeOut);
-      }
-      this.down = false;
-    } else if (this.mode == "toggle") {
-      this.down = this.clickToggle;
-    }
-  }
-}
-let menuArray = [];
-  menuArray.push(new menuButton("Kill Enemies", function() { console.log("kill enemies"); }, "push"));
-  menuArray.push(new menuButton("Enemy Spawning: ", function() { console.log("toggle enemy spawn"); }, "toggle"));
-
-function menuUpdate () {
-  ctx.fillStyle = "rgba(0, 0, 0, 0.6)";
-  ctx.fillRect(camX, camY, canvas.width, canvas.height);
-  ctx.drawImage(Img.options, 0, 0, 70, 8, camX + canvas.width / 2 - 70 * 8 / 2, camY + 100, 70 * 8, 8 * 8);
-  ctx.fillStyle = "#fff";
-  ctx.fillText("active: " + menuArray[1].active, canvas.width / 2, 700);
-  ctx.fillText("down: " + menuArray[1].down, canvas.width / 2, 725);
-  ctx.fillText("clickToggle: " + menuArray[1].clickToggle, canvas.width / 2, 750);
-  ctx.fillText("enemies: " + Enemies.length, canvas.width / 2, 800);
-  ctx.fillText("Arrows: " + Players[clientID].money, canvas.width / 2, 820);
-  for (i = 0; i < menuArray.length; i++) {
-    if (menuArray[i].active) {
-      checkIfStillDown(menuArray[i]);
-    }
-    menuArray[i].draw();
-  }
-}
 function scoreboard () {
   $("#scoreboard-players").html("<tr><th>Username</th><th>Health</th><th>Kills</th><th>Deaths</th></tr>");
   for (let player in Players) {
@@ -508,7 +458,7 @@ function Character (packet) {
     let dir = Math.floor((this.aimDirection / Math.PI + 1) * 2 + 0.5);
     if (dir === 4) dir = 0;
     let pics;
-    if (dir == 0 || dir == 2) { pics = 2; } else { pics = 4; }
+    if (dir == 0 || dir == 2) { pics = 4; } else { pics = 2; }
     if (this.class == "mage") {
       this.class = "archer";
     }
@@ -569,7 +519,6 @@ function Particle (packet) {
   this.timer = 500;
   this.exploded = false;
   this.tick = function (deltaTime) {
-    console.log("hek");
     for (let i = 0; i < deltaTime && this.exploded === false; i++) {
       this.timer -= 1;
       this.velX *= 0.997;
