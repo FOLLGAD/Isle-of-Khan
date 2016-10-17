@@ -514,7 +514,7 @@ function Character (packet) {
     }
     ctx.drawImage(
       Img[this.class],
-      Math.floor((this.frame / 200) % pics * 16,
+      Math.floor(this.frame / 200) % pics * 16,
       dir * 32,
       16,
       32,
