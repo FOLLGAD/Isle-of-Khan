@@ -511,10 +511,10 @@ function Character (packet) {
     console.log(this.aimDirection);
     let pics;
     if (dir == 0 || dir == 2) { pics = 2 } else { pics = 3 }
+    if (this.class == "mage") {
+      this.class = "archer";
+    }
     ctx.drawImage(
-      if (this.class == "mage") {
-        this.class = "archer";
-      }
       Img[this.class],
       Math.floor(this.frame / (100 * pics)) * 16,
       dir * 32,
