@@ -497,8 +497,8 @@ function Character (packet) {
   this.walkAnim = function (deltaTime) {
     if (this.walking) {
       this.frame += deltaTime;
-      if (this.frame > 600) {
-        this.frame -= 600;
+      if (this.frame > 800) {
+        this.frame -= 800;
       }
     } else {
       this.frame = 0;
@@ -507,16 +507,14 @@ function Character (packet) {
   this.draw = function() {
     let dir = Math.floor((this.aimDirection / Math.PI + 1) * 2 + 0.5);
     if (dir === 4) dir = 0;
-    console.log(dir);
-    console.log(this.aimDirection);
     let pics;
-    if (dir == 0 || dir == 2) { pics = 2 } else { pics = 3 }
+    if (dir == 0 || dir == 2) { pics = 2; } else { pics = 4; }
     if (this.class == "mage") {
       this.class = "archer";
     }
     ctx.drawImage(
       Img[this.class],
-      Math.floor(this.frame / (100 * pics)) * 16,
+      Math.floor((this.frame / 200) % pics * 16,
       dir * 32,
       16,
       32,
