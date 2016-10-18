@@ -92,10 +92,9 @@ io.on('connection', function (socket) {
           chars[socket.id].walkingRight = input.state;
           break;
         case "f":
-          // console.log(input.direction, input.velocity);
           if (!!input.direction && !!input.velocity) {
-            input.vel = Math.min(input.velocity, 5);
-            bombs.push(new projectiles.Bomb(chars[socket.id].posX, chars[socket.id].posY, input.direction, chars[socket.id].velX, chars[socket.id].velY, socket.id, input.velocity));
+            input.velocity = Math.min(input.velocity, 5);
+            bombs.push(new projectiles.Bomb(chars[socket.id].posX, chars[socket.id].posY, input.direction, 0, 0, socket.id, input.velocity));
           }
           break;
         case "space":
