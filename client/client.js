@@ -105,11 +105,6 @@ function keyDownFunction(code) {
       keyStates.space = true;
       break;
     case 'f':
-      let mouseDifX = camX - Players[clientID].posX - Players[clientID].width / 2 + mousePosX;
-      let mouseDifY = camY - Players[clientID].posY - Players[clientID].height / 2 + mousePosY;
-      let direx = Math.atan2(mouseDifX, mouseDifY);
-      let vel = Math.min(Math.sqrt(Math.pow(mouseDifX, 2) + Math.pow(mouseDifY, 2)) / 90, 5);
-      socket.emit('key-press', { inputkey: 'f', direction: direx, velocity: vel });
       break;
     case 'v':
       socket.emit('key-press', { inputkey: 'v', state: true });
@@ -204,6 +199,11 @@ $('#canvas').mousedown(function(e) {
       console.log('Middle mouse button pressed');
       break;
     case 3: // right mouse btn
+      let mouseDifX = camX - Players[clientID].posX - Players[clientID].width / 2 + mousePosX;
+      let mouseDifY = camY - Players[clientID].posY - Players[clientID].height / 2 + mousePosY;
+      let direx = Math.atan2(mouseDifX, mouseDifY);
+      let vel = Math.min(Math.sqrt(Math.pow(mouseDifX, 2) + Math.pow(mouseDifY, 2)) / 90, 5);
+      socket.emit('key-press', { inputkey: 'f', direction: direx, velocity: vel });
       console.log('Right Mouse button pressed');
       break;
     default:
