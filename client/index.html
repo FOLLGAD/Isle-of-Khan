@@ -3,40 +3,58 @@
   <head>
     <title>Isle of Khan</title>
     <meta charset="UTF-8">
+    <!-- Favicon -->
     <link rel="icon" type="image/png" href="resources/favicon.png"></link>
+    <!-- Bootstrap CSS -->
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-    <link rel="stylesheet" type="text/css" href="css/source.css"></link>
+    <!-- JQuery Custom Scrollbar -->
     <link rel="stylesheet" type="text/css" href="css/jquery.mCustomScrollbar.min.css"></link>
+    <!-- Image Picker (JQuery Plugin) -->
+    <link rel="stylesheet" type="text/css" href="css/image-picker.css">
+    <!-- Main CSS -->
+    <link rel="stylesheet" type="text/css" href="css/source.css"></link>
   </head>
   <body oncontextmenu="return false;">
     <div id="container">
       <div id="menu-screen">
-        <div id="menu-overlay" class="container text-center">
-          <h1>Isle of Khan</h1>
-          <hr />
-            <div class="form-group">
-              <form id="registration" action="">
-                <input style="padding: 5px;" id="username" name="username" type="text" autofocus="true" placeholder="Enter nickname"></input>
-                <h1>Select a class</h1>
-                <div class="row">
-                  <div class="col-xs-4 class-select" id="class-archer">
-                    <img src="resources/archer-menu.png"></img>
-                    <h1>Archer</h1>
-                  </div>
-                  <div class="col-xs-4 class-select" id="class-warrior">
-                    <img src="resources/warrior-menu.png"></img>
-                    <h1>Warrior</h1>
-                  </div>
-                  <div class="col-xs-4 class-select" id="class-mage">
-                    <img src="resources/warrior-menu.png"></img>
-                    <h1>Mage</h1>
-                  </div>
-                </div>
-                <br><button class="btn btn-default">Play</button>
-              </form>
+        <div id="menu-overlay" class="container" style="padding-top:50px">
+          <div class="row">
+            <div class="col-sm-3">
+              <div id="right-column" class="" style="background-color:black">Hello</div>
             </div>
-        </div>
-      </div><!-- ./menu-screen -->
+            <div class="col-sm-6">
+              <div id="main-column" class="text-center">
+                <h1>Isle of Khan</h1>
+                <hr />
+                <div class="form-group">
+                    <form id="registration" action="">
+                      <input style="padding: 5px;" id="username" name="username" type="text" autofocus="true" placeholder="Enter nickname"></input>
+                      <h1>Select a class</h1>
+                      <div class="row">
+                        <div class="col-xs-4 class-select" id="class-archer">
+                          <img src="resources/archer-menu.png"></img>
+                          <h1>Archer</h1>
+                        </div>
+                        <div class="col-xs-4 class-select" id="class-warrior">
+                          <img src="resources/warrior-menu.png"></img>
+                          <h1>Warrior</h1>
+                        </div>
+                        <div class="col-xs-4 class-select" id="class-mage">
+                          <img src="resources/warrior-menu.png"></img>
+                          <h1>Mage</h1>
+                        </div>
+                      </div>
+                      <br><button class="btn btn-default">Play</button>
+                    </form>
+                </div>
+              </div> <!-- ./main column -->
+            </div>
+            <div class="col-sm-3">
+              <div id="left-column" style="background-color:black">Hello</div>
+            </div>
+          </div> <!-- ./row -->
+        </div><!-- ./menu overlay [Absolute]-->
+      </div><!-- ./menu-screen [Relative]-->
       <div id="game-overlay">
         <div id="chat-window" style="display:none">
           <div id="chatmessages" class="mCustomScrollbar" data-mcs-theme="light" data-mcs-axis="y">
@@ -63,6 +81,8 @@
   </body>
   <!-- JQuery -->
   <script src="js/jquery-3.1.1.min.js"></script>
+  <!-- Image Picker (JQuery Plugin) -->
+  <script src="js/image-picker.min.js"></script>
   <!-- JQuery Custom Scrollbar -->
   <script src="js/jquery.mCustomScrollbar.concat.min.js"></script>
   <!-- Bootstrap JS -->
