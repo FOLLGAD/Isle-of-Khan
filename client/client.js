@@ -84,38 +84,38 @@ function keyUpHandler(e) {
 }
 function keyDownFunction(code) {
   switch (code) {
-    case 'd':
+    case 'KeyD':
       if (!keyStates.d) socket.emit('key-press', { inputkey: 'd', state: true });
       keyStates.d = true;
       break;
-    case 'a':
+    case 'KeyA':
       if (!keyStates.a) socket.emit('key-press', { inputkey: 'a', state: true });
       keyStates.a = true;
       break;
-    case 'w':
+    case 'KeyW':
       if (!keyStates.w) socket.emit('key-press', { inputkey: 'w', state: true });
       keyStates.w = true;
       break;
-    case 's':
+    case 'KeyS':
       if (!keyStates.s) socket.emit('key-press', { inputkey: 's', state: true });
       keyStates.s = true;
       break;
-    case ' ':
+    case 'Space':
       if (!keyStates.space) socket.emit('key-press', { inputkey: 'space', state: true });
       keyStates.space = true;
       break;
-    case 'f':
+    case 'KeyF':
       break;
-    case 'v':
+    case 'KeyV':
       socket.emit('key-press', { inputkey: 'v', state: true });
       break;
     // else if (code == 27) {
     //   menuToggle();
     // }
-    case 'c':
+    case 'KeyC':
       socket.emit('key-press', { inputkey: 'c', state: true });
       break;
-    case 'b':
+    case 'KeyB':
       socket.emit('key-press', { inputkey: 'b', state: true });
       break;
     case 'Tab':
@@ -128,36 +128,36 @@ function keyDownFunction(code) {
 }
 function keyUpFunction(code) {
   switch(code) {
-    case 'd':
+    case 'KeyD':
       socket.emit('key-press', { inputkey: 'd', state: false });
       keyStates.d = false;
       break;
-    case 'a':
+    case 'KeyA':
       socket.emit('key-press', { inputkey: 'a', state: false });
       keyStates.a = false;
       break;
-    case 'w':
+    case 'KeyW':
       socket.emit('key-press', { inputkey: 'w', state: false });
       keyStates.w = false;
       break;
-    case 's':
+    case 'KeyS':
       socket.emit('key-press', { inputkey: 's', state: false });
       keyStates.s = false;
       break;
-    case code == ' ':
+    case 'Space':
       socket.emit('key-press', { inputkey: 'space', state: false });
       keyStates.space = false;
       break;
-    case 'v':
+    case 'KeyV':
       socket.emit('key-press', { inputkey: 'v', state: true });
       break;
-    case 'c':
+    case 'KeyC':
       socket.emit('key-press', { inputkey: 'c', state: false });
       break;
-    case 'b':
+    case 'KeyB':
       socket.emit('key-press', { inputkey: 'b', state: false });
       break;
-    case 'f':
+    case 'KeyF':
       // socket.emit('key-press', { inputkey: 'f', state: false });
       break;
     case 'Tab':
@@ -233,10 +233,10 @@ function mouseUpHandler() {
 }
 var dispatchForCode = function (event, callback) {
   var code;
-  if (event.key !== undefined) {
+  if (event.code !== undefined) {
+    code = event.code;
+  } else if (event.key !== undefined) {
     code = event.key;
-  } else if (event.keyIdentifier !== undefined) {
-    code = event.keyIdentifier;
   } else if (event.keyCode !== undefined) {
     code = event.keyCode;
   }
