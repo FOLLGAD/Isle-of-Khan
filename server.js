@@ -124,7 +124,6 @@ io.on('connection', function (socket) {
       clearTimeout(intervalStorage[socket.id]);
       toBeDeleted.push(chars[socket.id].id);
       console.log(socket.id, "left the server.");
-      console.log(toBeDeleted);
     });
   });
 });
