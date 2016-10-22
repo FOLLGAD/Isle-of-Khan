@@ -27,6 +27,8 @@ exports.Character = function (id, posX, posY, username, characterClass) {
   this.canSwim = false;
   this.knockBack = 1;
   this.maxhp = 100;
+  this.intervalStorage;
+  this.timeoutStorage;
   // Amount of inaccuracy for the bow; default = 0.05
   this.bowInaccuracy = 0;
   this.activationDelay = 0;
@@ -44,12 +46,34 @@ exports.Character = function (id, posX, posY, username, characterClass) {
       var spawnY = 600;
       var spawnX = 600;
       this.hp = this.maxhp;
-
     }
-    while(col.areTilesFree(spawnX, spawnY, 64, 64));
+    while (col.areTilesFree(spawnX, spawnY, 64, 64));
     this.posX = spawnX;
     this.posY = spawnY;
   };
+
+  this.attack = function (data) {
+    switch(this.class) {
+      case "archer":
+        console.log(data);
+        clearInterval(this.intervalStorage);
+        clearTimeout(this.timeoutStorage);
+        if (data.state) {
+          this.aimDirection = data.direction;
+          startShooting(this);
+        }
+        break;
+      case "warrior":
+        if (!this.attacking) {
+        }
+        break;
+      case "mage":
+        if (!this.attacking) {
+        }
+        break;
+    }
+  }
+
   this.getDamaged = function (direction, dmg, entity, knockback) {
     this.hp -= dmg;
     let kb;
@@ -127,36 +151,18 @@ exports.Character = function (id, posX, posY, username, characterClass) {
     this.posY += this.velY * deltaTime;
     this.walking = this.walkingRight || this.walkingLeft || this.walkingUp || this.walkingDown;
   }
-  this.activate = function() {
-    let d = new Date();
-    if (mouseDown) {
-      if (bowSelected) {
-        if (lastActivate + this.activationDelay < d.getTime()) {
-          let direction = Math.atan2(camX - this.posX - this.width / 2 + mousePosX, camY - this.posY - this.height/2 + mousePosY);
-          direction += (getRandom()*2 - 1) * this.bowInaccuracy;
-          arrows.push(new Arrow(this.posX + this.width / 2, this.posY + this.height / 2, direction));
-          lastActivate = d.getTime();
-        }
-      }
-    } else if (spacePressed && lastActivate + 100 < d.getTime()) {
-      this.attackingArea();
-    }
-  }
-  this.attackingArea = function() {
-    if (this.direction == "up") {
-      attackingX = this.posX;
-      attackingY = this.posY - this.height;
-    } else if (this.direction == "down") {
-      attackingX = this.posX;
-      attackingY = this.posY + this.height;
-    } else if (this.direction == "right") {
-      attackingX = this.posX + this.width;
-      attackingY = this.posY;
-    } else if (this.direction == "left") {
-      attackingX = this.posX - this.width;
-      attackingY = this.posY;
-    }
-    ctx.fillStyle = "#000";
-    ctx.fillRect(attackingX, attackingY, 8*8, 8*8);
+}
+
+function startShooting(char) {
+  if (Date.now() - char.lastShot > 400) {
+    console.log("if passed");
+    serv.shoot(char);
+    // char.intervalStorage = setInterval(serv.shoot, 400, char);
+  } else {
+    console.log("else permit");
+    char.timeoutStorage = setTimeout(function() {
+      serv.shoot(char);
+      char.intervalStorage = setInterval(serv.shoot, 400, char);
+    }, 400 - Date.now() + char.lastShot);
   }
 }

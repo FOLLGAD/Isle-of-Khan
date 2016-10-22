@@ -65,7 +65,6 @@ let Img = {};
 // event handlers
 canvas.addEventListener("keydown", keyDownHandler, false);
   document.addEventListener("keyup", keyUpHandler, false);
-  document.addEventListener("mouseup", mouseUpHandler, false);
   document.addEventListener("mousemove", nameMousePos, false);
 
 let keyStates = {
@@ -188,49 +187,42 @@ function getMousePos(e) {
 $('#canvas').mousedown(function(e) {
   e.preventDefault();
   switch (e.which) {
-    case 1: // left mouse btn
-      console.log('Left mouse button pressed');
+    case 1: // left mouse button
       $('#canvas').focus();
       let direction = Math.atan2(camX - Players[clientID].posX - Players[clientID].width / 2 + mousePosX, camY - Players[clientID].posY - Players[clientID].height / 2 + mousePosY);
-      socket.emit('key-press', { inputkey: 'mousebutton', state: true, direction: direction });
+      socket.emit('key-press', { inputkey: 'attack', state: true, direction: direction });
       audio.arrow.play();
       break;
-    case 2: // middle mouse btn
-      console.log('Middle mouse button pressed');
+    case 2: // middle mouse button
       break;
-    case 3: // right mouse btn
+    case 3: // right mouse button
       let mouseDifX = camX - Players[clientID].posX - Players[clientID].width / 2 + mousePosX;
       let mouseDifY = camY - Players[clientID].posY - Players[clientID].height / 2 + mousePosY;
       let direx = Math.atan2(mouseDifX, mouseDifY);
       let vel = Math.min(Math.sqrt(Math.pow(mouseDifX, 2) + Math.pow(mouseDifY, 2)) / 90, 5);
-      socket.emit('key-press', { inputkey: 'f', direction: direx, velocity: vel });
-      console.log('Right Mouse button pressed');
+      socket.emit('key-press', { inputkey: 'special', direction: direx, velocity: vel });
       break;
     default:
       alert('undefined mouse button pressed');
   }
 });
 $('#canvas').mouseup(function(e) {
+  console.log("mouseup initiated");
   e.preventDefault();
   switch (e.which) {
-    case 1: // left mouse btn
-      console.log('Left mouse button released');
-      socket.emit('key-press', { inputkey: 'mousebutton', state: false });
+    case 1: // left mouse button
+      socket.emit('key-press', { inputkey: 'attack', state: false });
       break;
-    case 2: // middle mouse btn
-      console.log('Middle mouse button released');
+    case 2: // middle mouse button
       break;
-    case 3: // right mouse btn
-      console.log('Right Mouse button released');
+    case 3: // right mouse button
+      socket.emit('key-press', { inputkey: 'special', state: false });
       break;
     default:
       alert('undefined mouse button released');
   }
 });
 
-function mouseUpHandler() {
-  socket.emit('key-press', { inputkey: 'mousebutton', state: false });
-}
 var dispatchForCode = function (event, callback) {
   var code;
   if (event.code !== undefined) {
@@ -462,9 +454,16 @@ function Character (packet) {
     if (this.class == "mage") {
       this.class = "archer";
     }
+    let pic = Math.floor(this.frame / 200) % pics;
+    if (pic == 2) {
+      pic = 0;
+    }
+    if (pic == 3) {
+      pic = 2;
+    }
     ctx.drawImage(
       Img[this.class],
-      Math.floor(this.frame / 200) % pics * 16,
+      pic * 16,
       dir * 32,
       16,
       32,
@@ -486,6 +485,7 @@ function Character (packet) {
     ctx.fillRect(this.posX - 20, this.posY + this.width / 2 - 100, this.hp, 10);
     ctx.fillStyle = "red";
     ctx.fillText(this.hp, this.posX, this.posY);
+    ctx.fillText(pic, this.posX - 50, this.posY);
     ctx.fillStyle = "white";
   }
 }

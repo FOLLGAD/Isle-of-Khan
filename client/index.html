@@ -135,6 +135,11 @@
     if (key == 13) { // If enter is pressed
       if (!$('#chat-bar').is(":focus")){
         $('#chat-bar').focus();
+        $('#chat-window').css('-webkit-user-select', 'all');
+        $('#chat-window').css('-moz-user-select', 'all');
+        $('#chat-window').css('-khtml-user-select', 'all');
+        $('#chat-window').css('-ms-user-select', 'all');
+        $('#chat-window').css('user-select', 'all');
       }else{
         $('#canvas').focus();
       }

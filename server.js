@@ -30,7 +30,7 @@ const viewPoint = require('./server/viewPoint.js');
 let treesArray = [];
 init.placeTrees(treesArray, map.riverMap.matrix);
 
-let tileSize = 64;
+const tileSize = 64;
 
 let renderDistanceX = 1000;
 let renderDistanceY = 550;
@@ -91,17 +91,17 @@ io.on('connection', function (socket) {
         case "d":
           chars[socket.id].walkingRight = input.state;
           break;
-        case "f":
+        case "special":
           if (!!input.direction && !!input.velocity) {
             input.velocity = Math.min(input.velocity, 5);
             bombs.push(new projectiles.Bomb(chars[socket.id].posX, chars[socket.id].posY, input.direction, 0, 0, socket.id, input.velocity));
           }
           break;
         case "space":
-          chars[socket.id].attacking = input.state;
           break;
-        case "mousebutton":
-          if (input.state && input.direction !== undefined) {
+        case "attack":
+          console.log("attacking with state:", input.state);
+          if (input.state) {
             clearInterval(intervalStorage[socket.id]);
             chars[socket.id].aimDirection = input.direction;
             startShooting(chars[socket.id], socket.id);
@@ -111,12 +111,10 @@ io.on('connection', function (socket) {
           }
           break;
         case "direction-update":
-          if (input.direction !== undefined) {
-            chars[socket.id].aimDirection = input.direction;
-          }
+          chars[socket.id].aimDirection = input.direction;
           break;
         default:
-          console.log("client input did not match any serverside input");
+          console.log(input, "did not match");
       }
     });
     socket.on('disconnect', function () {
