@@ -1,3 +1,4 @@
+/*jshint esversion: 6 */
 let canvas = document.getElementById("canvas");
 let ctx = canvas.getContext("2d");
 
@@ -176,7 +177,7 @@ function nameMousePos(e) {
   let mousePos = getMousePos(e);
   mousePosX = mousePos.x;
   mousePosY = mousePos.y;
-};
+}
 function getMousePos(e) {
   let rect = canvas.getBoundingClientRect();
   scaleX = canvas.width / rect.width;
@@ -292,8 +293,8 @@ function draw() {
   // console.log(drawOrder.length);
 }
 
-let camX;
-let camY;
+var camX;
+var camY;
 
 function viewPort() {
   let vpMinx = 0;
@@ -312,7 +313,7 @@ function viewPort() {
   } else if (camY < 0) {
     camY = 0;
   }
-  ctx.translate(-camX, -camY)
+  ctx.translate(-camX, -camY);
 }
 
 function resize() {
@@ -350,7 +351,7 @@ function drawMinimap() {
     19: "#8FA3A2",
     20: "#8FA3A2",
     21: "#8FA3A2"
-  }
+  };
   minimap.ctx.canvas.width = gameMap.width * minimap.scale + 4;
   minimap.ctx.canvas.height = gameMap.height * minimap.scale + 4;
   minimap.ctx.lineWidth = 4;
@@ -371,9 +372,6 @@ function drawMinimap() {
   }
 }
 
-function drawCursor() {
-  ctx.drawImage(Img.crosshair, mousePosX + camX, mousePosY + camY, 30, 36);
-}
 function drawGui () {
   ctx.textAlign = "start";
   ctx.fillText("HP: " + Players[clientID].hp, 20 + camX, 50 + camY);
@@ -405,7 +403,7 @@ function Bomb (packet) {
   this.height = 64;
   this.draw = function () {
     ctx.drawImage(Img.bomb, this.posX, this.posY, this.width, this.height);
-  }
+  };
 }
 function Arrow (packet) {
   this.posX = packet.posX;
@@ -421,7 +419,7 @@ function Arrow (packet) {
     ctx.rotate(Math.PI - this.direction);
     ctx.drawImage(Img.arrow, -this.width / 2, -this.height / 2, this.width, this.height);
     ctx.restore();
-  }
+  };
 }
 function Character (packet) {
   this.id = packet.id;
@@ -450,12 +448,12 @@ function Character (packet) {
     } else {
       this.frame = 0;
     }
-  }
+  };
   this.draw = function() {
     let dir = Math.floor((this.aimDirection / Math.PI + 1) * 2 + 0.5);
     if (dir === 4) dir = 0;
     let pics;
-    if (dir == 0 || dir == 2) { pics = 4; } else { pics = 2; }
+    if (dir === 0 || dir === 2) { pics = 4; } else { pics = 2; }
     if (this.class == "mage") {
       this.class = "archer";
     }
@@ -492,7 +490,7 @@ function Character (packet) {
     ctx.fillText(this.hp, this.posX, this.posY);
     ctx.fillText(pic, this.posX - 50, this.posY);
     ctx.fillStyle = "white";
-  }
+  };
 }
 function Tree (packet) {
   this.posX = packet.posX;
@@ -501,7 +499,7 @@ function Tree (packet) {
   this.height = 64;
   this.draw = function () {
     ctx.drawImage(Img.tree, this.posX, this.posY - 64, this.width, this.height * 2);
-  }
+  };
 }
 function Coin (packet) {
   this.posX = packet.posX;
@@ -510,7 +508,7 @@ function Coin (packet) {
   this.height = 32;
   this.draw = function() {
     ctx.drawImage(Img.coin, this.posX, this.posY, this.width, this.height);
-  }
+  };
 }
 function Particle (packet) {
   this.posX = packet.x;
@@ -537,10 +535,10 @@ function Particle (packet) {
       Particles.splice(indx, 1);
       return true;
     }
-  }
+  };
   this.draw = function () {
     ctx.drawImage(Img.particle, this.posX, this.posY, this.width * this.size, this.height * this.size);
-  }
+  };
 }
 
 function updateParticles (deltaTime) {
@@ -657,7 +655,7 @@ function deathQueue (msg) {
   if (!!msg) {
     deathMsgArray.push(msg);
   }
-  if (deathTimer == false && deathMsgArray.length !== 0) {
+  if (deathTimer === false && deathMsgArray.length !== 0) {
     deathTimer = true;
     $("#death-messages").html('<h1>' + deathMsgArray[0] + '</h1>');
     $("#death-messages").fadeIn("slow", function() {

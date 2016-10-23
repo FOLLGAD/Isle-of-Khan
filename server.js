@@ -1,18 +1,17 @@
+/*jshint esversion: 6 */
+
 var express = require('express');
 var app = express();
 var server = require('http').createServer(app);
 var io = require('socket.io')(server);
 
 app.use(express.static(__dirname + '/client/'));
-
 app.get('/', function(req, res, next) {
-    res.sendFile(__dirname + '/client/index.html');
+  res.sendFile(__dirname + '/client/index.html');
 });
-
 exports.emit = function (name, param1) {
   io.emit(name, param1);
-}
-
+};
 let port = 8080;
 server.listen(port);
 console.log("server is listening on port", port);
@@ -45,8 +44,8 @@ let intervalStorage = {};
 let toBeDeleted = [];
 
 io.on('connection', function (socket) {
-  var socketId = socket.id;
-  var clientIp = socket.request.connection.remoteAddress;
+  let socketId = socket.id;
+  let clientIp = socket.request.connection.remoteAddress;
   let username;
 
   console.log("User with ID", socket.id, "connected with IP: " + clientIp);
@@ -54,7 +53,7 @@ io.on('connection', function (socket) {
   socket.emit("initialize", { matrix: map.riverMap.matrix, width: map.riverMap.width, height: map.riverMap.height, id: socket.id });
 
   socket.on('register', function (object) {
-    if (object.username == ""){
+    if (object.username === ""){
       let guestCount = 1;
       for (let prop in chars) {
         if (chars[prop].username == "Guest " + guestCount){
@@ -65,7 +64,7 @@ io.on('connection', function (socket) {
     }else{
       username = object.username;
     }
-    console.log("Username: " + username)
+    console.log("Username: " + username);
     clearInterval(intervalStorage[socket.id]);
     clearTimeout(intervalStorage[socket.id]);
     if (chars.hasOwnProperty(socket.id)) {
@@ -164,14 +163,16 @@ function update() {
 
 spawnCoin = function () {
   if (coins.length < 200) {
+    let spawnX;
+    let spawnY;
     do {
-      var spawnX = Math.floor(Math.random() * map.riverMap.width) * 64 + 16;
-      var spawnY = Math.floor(Math.random() * map.riverMap.height) * 64 + 16;
+      spawnX = Math.floor(Math.random() * map.riverMap.width) * 64 + 16;
+      spawnY = Math.floor(Math.random() * map.riverMap.height) * 64 + 16;
     }
     while (collision.areTilesFree(spawnX, spawnY, 32, 32));
     coins.push(new coin.Coin(spawnX, spawnY));
   }
-}
+};
 
 setInterval(spawnCoin, 2000);
 
@@ -240,7 +241,7 @@ setInterval(update, 1000 / 60);
 let monsterInterval;
 let monstersSpawn = false;
 function toggleEnemySpawn() {
-  if (monstersSpawn == true) {
+  if (monstersSpawn === true) {
     clearInterval(monsterInterval);
     monstersSpawn = false;
   } else {

@@ -4,15 +4,15 @@
     <title>Isle of Khan</title>
     <meta charset="UTF-8">
     <!-- Favicon -->
-    <link rel="icon" type="image/png" href="resources/favicon.png"></link>
+    <link rel="icon" type="image/png" href="resources/favicon.png" />
     <!-- Bootstrap CSS -->
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous" />
     <!-- JQuery Custom Scrollbar -->
-    <link rel="stylesheet" type="text/css" href="css/jquery.mCustomScrollbar.min.css"></link>
+    <link rel="stylesheet" type="text/css" href="css/jquery.mCustomScrollbar.min.css" />
     <!-- Image Picker (JQuery Plugin) -->
-    <link rel="stylesheet" type="text/css" href="css/image-picker.css">
+    <link rel="stylesheet" type="text/css" href="css/image-picker.css" />
     <!-- Main CSS -->
-    <link rel="stylesheet" type="text/css" href="css/source.css"></link>
+    <link rel="stylesheet" type="text/css" href="css/source.css" />
   </head>
   <body oncontextmenu="return false;">
     <div id="container">
@@ -28,19 +28,19 @@
                 <hr />
                 <div class="form-group">
                     <form id="registration" action="">
-                      <input style="padding: 5px;" id="username" name="username" type="text" autofocus="true" placeholder="Enter nickname"></input>
+                      <input style="padding: 5px;" id="username" name="username" type="text" autofocus="true" placeholder="Enter nickname">
                       <h1>Select a class</h1>
                       <div class="row">
                         <div class="col-xs-4 class-select" id="class-archer">
-                          <img src="resources/archer-menu.png"></img>
+                          <img src="resources/archer-menu.png" />
                           <h1>Archer</h1>
                         </div>
                         <div class="col-xs-4 class-select" id="class-warrior">
-                          <img src="resources/warrior-menu.png"></img>
+                          <img src="resources/warrior-menu.png" />
                           <h1>Warrior</h1>
                         </div>
                         <div class="col-xs-4 class-select" id="class-mage">
-                          <img src="resources/warrior-menu.png"></img>
+                          <img src="resources/warrior-menu.png" />
                           <h1>Mage</h1>
                         </div>
                       </div>
@@ -93,7 +93,6 @@
   <script src="game/sockets.js"></script>
   <!-- Base game client -->
   <script src="/client.js"></script>
-
   <script>
   //Disables selection
   $(document).bind('selectstart dragstart', function(e) {
@@ -111,7 +110,6 @@
   $("#class-mage").click(function () {
     gameClass = "mage";
   });
-
   //Handles registration
   $("#registration").submit(function (e) {
     e.preventDefault();
@@ -122,13 +120,11 @@
     $("#chat-window").show();
     $('#canvas').focus();
   });
-
   $(document).keydown(function (objEvent) {
     if (objEvent.key == 'Tab') {  // tab pressed
       objEvent.preventDefault(); // prevents tab from getting pressed
     }
-})
-
+  })
   //Focuses chat
   $(document).keypress(function(e) {
     var key = e.which;
@@ -145,7 +141,6 @@
       }
     }
   });
-
   //Sends a chat message
   $("#chat-form").submit( function(e) {
     e.preventDefault();
@@ -155,12 +150,10 @@
       $("#chat-bar").val("");
       return true;
   });
-
     //Adds chat messages
     socket.on('chat-msg', function (msg, sender, date) {
       $("#messagelist").append($("<li>").text("<"+ sender + "> " + msg));
       $("#chatmessages").mCustomScrollbar('scrollTo','bottom'); //Scrolls to bottom when message is recieved
-
     });
   </script>
 </html>
