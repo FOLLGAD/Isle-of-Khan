@@ -382,6 +382,8 @@ function drawGui () {
   ctx.fillText("Deaths: " + Players[clientID].deaths, 20 + camX, 200 + camY);
   ctx.fillText("PosX: " + Players[clientID].posX, 20 + camX, 250 + camY);
   ctx.fillText("PosY: " + Players[clientID].posY, 20 + camX, 300 + camY);
+  ctx.fillText("CamX: " + camX, 20 + camX, 350 + camY);
+  ctx.fillText("CamY: " + camY, 20 + camX, 400 + camY);
 }
 
 function scoreboard () {
