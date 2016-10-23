@@ -13,11 +13,12 @@ let mousePosX;
 let mousePosY;
 
 let audio = {};
- audio.bomb = new Audio('./resources/grenade-sound.mp3');
-// audio.bomb.play();
-audio.arrow = new Audio('./resources/bow-fire.mp3');
-// audio.bomb.play();
-
+{
+  audio.bomb = new Audio('./resources/grenade-sound.mp3');
+  // audio.bomb.play();
+  audio.arrow = new Audio('./resources/bow-fire.mp3');
+  // audio.bomb.play();
+}
 ctx.canvas.width  = window.innerWidth;
 ctx.canvas.height = window.innerHeight;
 
@@ -26,13 +27,13 @@ minimap.ctx.canvas.height = gameMap.height;
 
 minimap.scale = 2;
 
-let Players = {};
-  let Trees = [];
-  let Enemies = [];
-  let Coins = [];
-  let Arrows = [];
-  let Bombs = [];
-  let Particles = [];
+let Players   = {};
+let Trees     = [];
+let Enemies   = [];
+let Coins     = [];
+let Arrows    = [];
+let Bombs     = [];
+let Particles = [];
 
 let Img = {};
   Img.archer = new Image();

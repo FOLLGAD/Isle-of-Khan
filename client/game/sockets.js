@@ -19,7 +19,7 @@ socket.on('particle', function (object) {
     part.direction = direc;
     Particles.push(new Particle(part));
   }
-  // audio.bomb.play();
+  audio.bomb.play();
 });
 
 let clientID;
