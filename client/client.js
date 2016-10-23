@@ -18,6 +18,8 @@ let audio = {};
   // audio.bomb.play();
   audio.arrow = new Audio('./resources/bow-fire.mp3');
   // audio.bomb.play();
+  audio.bomb.volume = 0.1;
+  audio.arrow.volume = 0.1;
 }
 ctx.canvas.width  = window.innerWidth;
 ctx.canvas.height = window.innerHeight;
