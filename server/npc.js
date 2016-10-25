@@ -7,4 +7,4 @@ let Wizard = {
   draw: function() {
     ctx.drawImage(Wizard.img, Wizard.posX, Wizard.posY, Wizard.width, Wizard.height);
   }
-}
+};

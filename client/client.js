@@ -5,7 +5,6 @@ let minimap = {};
 minimap.canvas = document.getElementById("minimap");
 minimap.ctx = minimap.canvas.getContext("2d");
 
-let gameMap = {};
 let tileSize = 64;
 let menuActive = false;
 let scoreboardActive = false;
@@ -29,13 +28,7 @@ minimap.ctx.canvas.height = gameMap.height;
 
 minimap.scale = 2;
 
-let Players   = {};
-let Trees     = [];
-let Enemies   = [];
-let Coins     = [];
-let Arrows    = [];
-let Bombs     = [];
-let Particles = [];
+let Players = {}, Trees = [], Enemies = [], Coins = [], Arrows = [], Bombs = [], Particles = [];
 
 let Img = {};
   Img.archer = new Image();
@@ -199,7 +192,7 @@ $('#canvas').mousedown(function(e) {
     case 1: // left mouse btn
       //Cooldown
       console.log("cooldown: "+arrow.cdTimer);
-      if (arrow.cooldown == false) {
+      if (arrow.cooldown === false) {
         arrow.cdTimer = 0;
         arrow.cooldown = true;
       $('#canvas').focus();
@@ -252,13 +245,13 @@ var dispatchForCode = function (event, callback) {
 
 function draw() {
   for (let i = 0; i < gameMap.height; i++) {
-    let posX = 0;
-    let posY = i * tileSize;
+    let posY = 0;
+    let posX = i * tileSize;
     for (let j = 0; j < gameMap.width; j++) {
-      if ((j - 1) * tileSize < camX + ctx.canvas.width && (j + 1) * tileSize > camX && (i - 1) * tileSize < camY + ctx.canvas.height && (i + 1) * tileSize > camY) {
-        ctx.drawImage(Img.tilemap, (gameMap.matrix[i][j] % 8) * 8, Math.floor(gameMap.matrix[i][j] / 8) * 8, 8, 8, posX, posY, tileSize + 1, tileSize + 1);
+      if ((i - 1) * tileSize < camX + ctx.canvas.width && (i + 1) * tileSize > camX && (j - 1) * tileSize < camY + ctx.canvas.height && (j + 1) * tileSize > camY) {
+        ctx.drawImage(Img.tilemap, ((gameMap.matrix[j * gameMap.width + i] - 1) % 8) * 8, Math.floor((gameMap.matrix[j * gameMap.width + i] - 1) / 8) * 8, 8, 8, posX, posY, tileSize + 1, tileSize + 1);
       }
-      posX += tileSize;
+      posY += tileSize;
     }
   }
   let drawOrder = [];
@@ -374,7 +367,7 @@ function drawMinimap() {
   minimap.ctx.strokeRect(0, 0, minimap.ctx.canvas.width, minimap.ctx.canvas.height);
   for (let i = 0; i < gameMap.width; i++) {
     for (let j = 0; j < gameMap.height; j++) {
-      minimap.ctx.fillStyle = colorRep[gameMap.matrix[j][i]];
+      minimap.ctx.fillStyle = colorRep[gameMap.matrix[j * gameMap.width + i] - 1];
       minimap.ctx.fillRect(i * minimap.scale + 2, j * minimap.scale + 2, minimap.scale, minimap.scale);
     }
   }
@@ -438,23 +431,23 @@ function Arrow (packet) {
   };
 }
 function Character (packet) {
-  this.id = packet.id;
-  this.class = "archer";
+  this.id       = packet.id;
+  this.class    = "archer";
   this.username = packet.username;
   this.posX     = packet.posX;
   this.packPosX = packet.posX;
   this.posY     = packet.posY;
   this.packPosY = packet.posY;
-  this.velX = packet.velX;
-  this.velY = packet.velY;
-  this.kills = packet.kills;
-  this.deaths = packet.deaths;
-  this.coins = packet.coins;
-  this.hp = packet.hp;
-  this.frame = 0;
+  this.velX     = packet.velX;
+  this.velY     = packet.velY;
+  this.kills    = packet.kills;
+  this.deaths   = packet.deaths;
+  this.coins    = packet.coins;
+  this.hp       = packet.hp;
+  this.frame    = 0;
   // Walking Direction: 0=right, 1=left, 2=down, 3=up;
-  this.width = 64;
-  this.height = 64;
+  this.width    = 64;
+  this.height   = 64;
   this.walkAnim = function (deltaTime) {
     if (this.walking) {
       this.frame += deltaTime;
@@ -692,9 +685,8 @@ function arrowCooldown(deltaTime){
   if (arrow.cdTimer >= arrow.endTime) {
     arrow.cooldown = false;
     arrow.cdTimer = 0;
-    console.log("arrow cooldown refreshed.")
+    console.log("arrow cooldown refreshed.");
   }else{
   }
-
-    console.log(arrow.cooldown)
+  console.log(arrow.cooldown);
 }

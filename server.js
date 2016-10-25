@@ -2,6 +2,7 @@ var express = require('express');
 var app = express();
 var server = require('http').createServer(app);
 var io = require('socket.io')(server);
+let fs = require('fs');
 
 app.use(express.static(__dirname + '/client/'));
 app.get('/', function(req, res, next) {
@@ -10,11 +11,15 @@ app.get('/', function(req, res, next) {
 exports.emit = function (name, param1) {
   io.emit(name, param1);
 };
+
 let port = 8080;
 server.listen(port);
 console.log("server is listening on port", port);
 
-const map = require('./server/map.js');
+let map = JSON.parse(fs.readFileSync('./maps/island-map.json', 'utf8'));
+exports.map = map;
+exports.map.tilesize = 64;
+
 const init = require('./server/init.js');
 const character = require('./server/character.js');
 const coin = require('./server/coin.js');
@@ -25,30 +30,22 @@ const projectiles = require('./server/projectiles.js');
 const viewPoint = require('./server/viewPoint.js');
 
 let treesArray = [];
-init.placeTrees(treesArray, map.riverMap.matrix);
+// init.placeTrees(treesArray, map.riverMap.matrix);
 
 const tileSize = 64;
 
-let renderDistanceX = 1000;
-let renderDistanceY = 550;
-let chars = {};
-let coins = [];
-let arrows = [];
-let bombs = [];
-let enemies = [];
+let renderDistanceX = 1000, renderDistanceY = 550;
+let chars = {}, coins = [], arrows = [], bombs = [], enemies = [];
 
 let intervalStorage = {};
-
 let toBeDeleted = [];
 
 io.on('connection', function (socket) {
-  let socketId = socket.id;
-  let clientIp = socket.request.connection.remoteAddress;
-  let username;
+  let clientIp = socket.request.connection.remoteAddress, username;
 
   console.log("User with ID", socket.id, "connected with IP: " + clientIp);
 
-  socket.emit("initialize", { matrix: map.riverMap.matrix, width: map.riverMap.width, height: map.riverMap.height, id: socket.id });
+  socket.emit("initialize", { matrix: map.layers[0], objects: map.layers[1], width: map.width, height: map.height, id: socket.id });
 
   socket.on('register', function (object) {
     if (object.username === ""){
@@ -164,8 +161,8 @@ spawnCoin = function () {
     let spawnX;
     let spawnY;
     do {
-      spawnX = Math.floor(Math.random() * map.riverMap.width) * 64 + 16;
-      spawnY = Math.floor(Math.random() * map.riverMap.height) * 64 + 16;
+      spawnX = Math.floor(Math.random() * map.width) * 64 + 16;
+      spawnY = Math.floor(Math.random() * map.height) * 64 + 16;
     }
     while (collision.areTilesFree(spawnX, spawnY, 32, 32));
     coins.push(new coin.Coin(spawnX, spawnY));
@@ -250,11 +247,11 @@ function toggleEnemySpawn() {
 // toggleEnemySpawn();
 function spawnEnemy() {
   let rand = Math.floor((Math.random() * 2) + 1) * tileSize;
-  let posx = Math.floor(Math.random() * map.riverMap.width) * 64;
-  let posy = Math.floor(Math.random() * map.riverMap.height) * 64;
-  while (posx + rand > map.riverMap.width || posy + rand > map.riverMap.height) {
-    posx = Math.floor(Math.random() * map.riverMap.width) * 64;
-    posy = Math.floor(Math.random() * map.riverMap.height) * 64;
+  let posx = Math.floor(Math.random() * map.width) * 64;
+  let posy = Math.floor(Math.random() * map.height) * 64;
+  while (posx + rand > map.width || posy + rand > map.height) {
+    posx = Math.floor(Math.random() * map.width) * 64;
+    posy = Math.floor(Math.random() * map.height) * 64;
   }
   enemies.push(new enemy.Enemy(posx, posy, rand, rand));
 }
