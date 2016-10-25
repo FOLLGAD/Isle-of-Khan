@@ -6,13 +6,25 @@
   min-width: 300px;
   position: fixed;
   z-index: 200;
-  opacity: 0.6;
   background: none;
   -webkit-user-select: none;
   -moz-user-select: none;
   -khtml-user-select: none;
   -ms-user-select: none;
   user-select: none;
+}
+#leaderboard {
+  text-align:center;
+  color: #fff;
+  top: 0;
+  left: 0;
+  /*width: 150px;*/
+  max-width: 400px;
+  min-width: 300px;
+  position: absolute;
+  z-index: 200;
+  /*opacity: 0.6;*/
+  background-color: rgba(0,0,0,0.6);
 }
 #right-column {
   /*display: none;*/
@@ -50,7 +62,7 @@
   padding:10px;
   margin:0px;
   border:0px;
-  background-color:black;
+  background-color: rgba(0,0,0,0.6);
 }
 /*#container {
   position: relative;
