@@ -696,6 +696,6 @@ function arrowCooldown(deltaTime){
     arrow.cdTimer = 0;
     console.log("arrow cooldown refreshed.");
   }else{
+    
   }
-  console.log(arrow.cooldown);
 }
