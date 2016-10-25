@@ -12,4 +12,4 @@ exports.calculateViewPoint = function (obj) {
   let camX = obj.posX + obj.width / 2;
   let camY = obj.posY + obj.height / 2;
   return { x: camX, y: camY };
-}
+};

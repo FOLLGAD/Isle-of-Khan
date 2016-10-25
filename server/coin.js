@@ -19,11 +19,11 @@ exports.Coin = function (posX, posY) {
         coins.splice(index, 1);
       }
     }
-  }
-}
+  };
+};
 
 exports.tickCoins = function (coins, chars) {
   for (i = 0; i < coins.length; i++) {
     coins[i].checkPlayers(coins, chars);
   }
-}
+};

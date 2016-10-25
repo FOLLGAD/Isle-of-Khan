@@ -48,7 +48,7 @@ exports.Enemy = function (posX, posY, width, height) {
         this.posX = i * tileSize + tileSize;
       }
     }
-  }
+  };
   this.getDamaged = function(direction, dmg, knockback) {
     this.hp -= dmg;
     this.velX += Math.sin(direction) * knockback;
@@ -59,8 +59,8 @@ exports.Enemy = function (posX, posY, width, height) {
       enemies.splice(indx, 1);
     }
     this.dmgAnim = 30;
-  }
-}
+  };
+};
 
 exports.tickEnemies = function (enemies, chars, deltaTime) {
   for (let i = 0; i < enemies.length; i++) {
@@ -111,7 +111,7 @@ exports.tickEnemies = function (enemies, chars, deltaTime) {
   //TODO:2 Move idly about when out of range
   //TODO:3 Avoid obstacles to find a path to the player
 
-}
+};
 
 function toggleEnemies() {
     canActive = !canActive;

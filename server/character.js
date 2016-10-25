@@ -27,8 +27,6 @@ exports.Character = function (id, posX, posY, username, characterClass) {
   this.canSwim = false;
   this.knockBack = 1;
   this.maxhp = 100;
-  this.intervalStorage;
-  this.timeoutStorage;
   // Amount of inaccuracy for the bow; default = 0.05
   this.bowInaccuracy = 0;
   this.activationDelay = 0;
@@ -40,11 +38,12 @@ exports.Character = function (id, posX, posY, username, characterClass) {
     col.checkObjectCollision(this);
   };
   this.respawn = function() {
+    let spawnX, spawnY;
     do {
       //var spawnX = Math.random() * map.riverMap.width * 64;
       //var spawnY = Math.random() * map.riverMap.height * 64;
-      var spawnY = 600;
-      var spawnX = 600;
+      spawnY = 600;
+      spawnX = 600;
       this.hp = this.maxhp;
     }
     while (col.areTilesFree(spawnX, spawnY, 64, 64));
@@ -72,7 +71,7 @@ exports.Character = function (id, posX, posY, username, characterClass) {
         }
         break;
     }
-  }
+  };
 
   this.getDamaged = function (direction, dmg, entity, knockback) {
     this.hp -= dmg;
@@ -98,7 +97,7 @@ exports.Character = function (id, posX, posY, username, characterClass) {
         serv.emit('death-msg', { killer: entity.username, victim: this.username });
       }
     }
-  }
+  };
   this.collision = function(i, j, colDistanceX, colDistanceY) {
     if (Math.abs(colDistanceX) < Math.abs(colDistanceY)) {
       // Flyttas till ner/upp , Y-led
@@ -138,7 +137,7 @@ exports.Character = function (id, posX, posY, username, characterClass) {
     } else if (this.attackingFrame <= 0 && !this.spacePressed){
       this.attacking = false;
     }
-    if (this.velX != 0 && this.velY != 0) {
+    if (this.velX !== 0 && this.velY !== 0) {
       this.velX *= 0.7;
       this.velY *= 0.7;
     }
@@ -150,8 +149,8 @@ exports.Character = function (id, posX, posY, username, characterClass) {
     this.posX += this.velX * deltaTime;
     this.posY += this.velY * deltaTime;
     this.walking = this.walkingRight || this.walkingLeft || this.walkingUp || this.walkingDown;
-  }
-}
+  };
+};
 
 function startShooting(char) {
   if (Date.now() - char.lastShot > 400) {
