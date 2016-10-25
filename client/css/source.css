@@ -120,7 +120,7 @@
 body {
   background: #333333;
   font-family: GameFont;
-  overflow: hiddenadc
+  overflow: hidden
   ;
 }
 html, body {
@@ -311,7 +311,7 @@ bottom: 15px;
 margin-left: auto;
 margin-right: auto;
 width: 100%;
-overflow-wrap: none;
+word-wrap: none;
 }
 
 

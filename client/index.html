@@ -97,6 +97,7 @@
           </form>
         </div>
         <div id="hotbar">
+        </div>
           <div id="ability-arrow" class="ability pixel-scale"></div>
           <div id="ability-bomb" class="ability pixel-scale"></img>
         </div>
@@ -155,6 +156,7 @@
   });
   $(document).keydown(function (objEvent) {
     if (objEvent.key == 'Tab') {  // tab pressed
+      console.log("tab pressed");
       objEvent.preventDefault(); // prevents tab from getting pressed
     }
 })
