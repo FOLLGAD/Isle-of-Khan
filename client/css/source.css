@@ -14,6 +14,12 @@
   -ms-user-select: none;
   user-select: none;
 }
+#right-column {
+  display: none;
+}
+#left-column {
+  display: none;
+}
 #chatmessages {
   bottom: 26px;
   left: 0;
