@@ -202,7 +202,10 @@
         $('#chat-window').css('user-select', 'all');
       }else{
         $('#canvas').focus();
-    //Disables selection
+      }
+    }
+  })
+      //Disables selection
     $(document).bind('selectstart dragstart', function(e) {
       e.preventDefault();
       return false;
