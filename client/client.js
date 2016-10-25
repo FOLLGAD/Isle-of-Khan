@@ -1,3 +1,4 @@
+/*jshint esversion: 6 */
 let canvas = document.getElementById("canvas");
 let ctx = canvas.getContext("2d");
 
@@ -13,11 +14,14 @@ let mousePosX;
 let mousePosY;
 
 let audio = {};
- audio.bomb = new Audio('./resources/grenade-sound.mp3');
-// audio.bomb.play();
-audio.arrow = new Audio('./resources/bow-fire.mp3');
-// audio.bomb.play();
-
+{
+  audio.bomb = new Audio('./resources/grenade-sound.mp3');
+  // audio.bomb.play();
+  audio.arrow = new Audio('./resources/bow-fire.mp3');
+  // audio.bomb.play();
+  audio.bomb.volume = 0.1;
+  audio.arrow.volume = 0.1;
+}
 ctx.canvas.width  = window.innerWidth;
 ctx.canvas.height = window.innerHeight;
 
@@ -26,13 +30,13 @@ minimap.ctx.canvas.height = gameMap.height;
 
 minimap.scale = 2;
 
-let Players = {};
-  let Trees = [];
-  let Enemies = [];
-  let Coins = [];
-  let Arrows = [];
-  let Bombs = [];
-  let Particles = [];
+let Players   = {};
+let Trees     = [];
+let Enemies   = [];
+let Coins     = [];
+let Arrows    = [];
+let Bombs     = [];
+let Particles = [];
 
 let Img = {};
   Img.archer = new Image();
@@ -71,7 +75,6 @@ let arrow = {
 // event handlers
 canvas.addEventListener("keydown", keyDownHandler, false);
   document.addEventListener("keyup", keyUpHandler, false);
-  document.addEventListener("mouseup", mouseUpHandler, false);
   document.addEventListener("mousemove", nameMousePos, false);
 
 let keyStates = {
@@ -180,7 +183,7 @@ function nameMousePos(e) {
   let mousePos = getMousePos(e);
   mousePosX = mousePos.x;
   mousePosY = mousePos.y;
-};
+}
 function getMousePos(e) {
   let rect = canvas.getBoundingClientRect();
   scaleX = canvas.width / rect.width;
@@ -194,55 +197,53 @@ function getMousePos(e) {
 $('#canvas').mousedown(function(e) {
   e.preventDefault();
   switch (e.which) {
+<<<<<<< HEAD
     case 1: // left mouse btn
       //Cooldown
       console.log("cooldown: "+arrow.cdTimer);
       if (arrow.cooldown == false) {
         arrow.cdTimer = 0;
         arrow.cooldown = true;
+=======
+    case 1: // left mouse button
+>>>>>>> origin/Multi-player
       $('#canvas').focus();
       let direction = Math.atan2(camX - Players[clientID].posX - Players[clientID].width / 2 + mousePosX, camY - Players[clientID].posY - Players[clientID].height / 2 + mousePosY);
-      socket.emit('key-press', { inputkey: 'mousebutton', state: true, direction: direction });
+      socket.emit('key-press', { inputkey: 'attack', state: true, direction: direction });
       audio.arrow.play();
 
       }
       break;
-    case 2: // middle mouse btn
-      console.log('Middle mouse button pressed');
+    case 2: // middle mouse button
       break;
-    case 3: // right mouse btn
+    case 3: // right mouse button
       let mouseDifX = camX - Players[clientID].posX - Players[clientID].width / 2 + mousePosX;
       let mouseDifY = camY - Players[clientID].posY - Players[clientID].height / 2 + mousePosY;
       let direx = Math.atan2(mouseDifX, mouseDifY);
       let vel = Math.min(Math.sqrt(Math.pow(mouseDifX, 2) + Math.pow(mouseDifY, 2)) / 90, 5);
-      socket.emit('key-press', { inputkey: 'f', direction: direx, velocity: vel });
-      console.log('Right Mouse button pressed');
+      socket.emit('key-press', { inputkey: 'special', direction: direx, velocity: vel });
       break;
     default:
       alert('undefined mouse button pressed');
   }
 });
 $('#canvas').mouseup(function(e) {
+  console.log("mouseup initiated");
   e.preventDefault();
   switch (e.which) {
-    case 1: // left mouse btn
-      console.log('Left mouse button released');
-      socket.emit('key-press', { inputkey: 'mousebutton', state: false });
+    case 1: // left mouse button
+      socket.emit('key-press', { inputkey: 'attack', state: false });
       break;
-    case 2: // middle mouse btn
-      console.log('Middle mouse button released');
+    case 2: // middle mouse button
       break;
-    case 3: // right mouse btn
-      console.log('Right Mouse button released');
+    case 3: // right mouse button
+      socket.emit('key-press', { inputkey: 'special', state: false });
       break;
     default:
       alert('undefined mouse button released');
   }
 });
 
-function mouseUpHandler() {
-  socket.emit('key-press', { inputkey: 'mousebutton', state: false });
-}
 var dispatchForCode = function (event, callback) {
   var code;
   if (event.code !== undefined) {
@@ -309,8 +310,8 @@ function draw() {
   // console.log(drawOrder.length);
 }
 
-let camX;
-let camY;
+var camX;
+var camY;
 
 function viewPort() {
   let vpMinx = 0;
@@ -329,7 +330,7 @@ function viewPort() {
   } else if (camY < 0) {
     camY = 0;
   }
-  ctx.translate(-camX, -camY)
+  ctx.translate(-camX, -camY);
 }
 
 function resize() {
@@ -367,7 +368,7 @@ function drawMinimap() {
     19: "#8FA3A2",
     20: "#8FA3A2",
     21: "#8FA3A2"
-  }
+  };
   minimap.ctx.canvas.width = gameMap.width * minimap.scale + 4;
   minimap.ctx.canvas.height = gameMap.height * minimap.scale + 4;
   minimap.ctx.lineWidth = 4;
@@ -388,9 +389,6 @@ function drawMinimap() {
   }
 }
 
-function drawCursor() {
-  ctx.drawImage(Img.crosshair, mousePosX + camX, mousePosY + camY, 30, 36);
-}
 function drawGui () {
   ctx.textAlign = "start";
   ctx.fillText("HP: " + Players[clientID].hp, 20 + camX, 50 + camY);
@@ -399,6 +397,8 @@ function drawGui () {
   ctx.fillText("Deaths: " + Players[clientID].deaths, 20 + camX, 200 + camY);
   ctx.fillText("PosX: " + Players[clientID].posX, 20 + camX, 250 + camY);
   ctx.fillText("PosY: " + Players[clientID].posY, 20 + camX, 300 + camY);
+  ctx.fillText("CamX: " + camX, 20 + camX, 350 + camY);
+  ctx.fillText("CamY: " + camY, 20 + camX, 400 + camY);
 }
 
 function scoreboard () {
@@ -420,7 +420,7 @@ function Bomb (packet) {
   this.height = 64;
   this.draw = function () {
     ctx.drawImage(Img.bomb, this.posX, this.posY, this.width, this.height);
-  }
+  };
 }
 function Arrow (packet) {
   this.posX = packet.posX;
@@ -436,7 +436,7 @@ function Arrow (packet) {
     ctx.rotate(Math.PI - this.direction);
     ctx.drawImage(Img.arrow, -this.width / 2, -this.height / 2, this.width, this.height);
     ctx.restore();
-  }
+  };
 }
 function Character (packet) {
   this.id = packet.id;
@@ -465,18 +465,25 @@ function Character (packet) {
     } else {
       this.frame = 0;
     }
-  }
+  };
   this.draw = function() {
     let dir = Math.floor((this.aimDirection / Math.PI + 1) * 2 + 0.5);
     if (dir === 4) dir = 0;
     let pics;
-    if (dir == 0 || dir == 2) { pics = 4; } else { pics = 2; }
+    if (dir === 0 || dir === 2) { pics = 4; } else { pics = 2; }
     if (this.class == "mage") {
       this.class = "archer";
     }
+    let pic = Math.floor(this.frame / 200) % pics;
+    if (pic == 2) {
+      pic = 0;
+    }
+    if (pic == 3) {
+      pic = 2;
+    }
     ctx.drawImage(
       Img[this.class],
-      Math.floor(this.frame / 200) % pics * 16,
+      pic * 16,
       dir * 32,
       16,
       32,
@@ -498,8 +505,9 @@ function Character (packet) {
     ctx.fillRect(this.posX - 20, this.posY + this.width / 2 - 100, this.hp, 10);
     ctx.fillStyle = "red";
     ctx.fillText(this.hp, this.posX, this.posY);
+    ctx.fillText(pic, this.posX - 50, this.posY);
     ctx.fillStyle = "white";
-  }
+  };
 }
 function Tree (packet) {
   this.posX = packet.posX;
@@ -508,7 +516,7 @@ function Tree (packet) {
   this.height = 64;
   this.draw = function () {
     ctx.drawImage(Img.tree, this.posX, this.posY - 64, this.width, this.height * 2);
-  }
+  };
 }
 function Coin (packet) {
   this.posX = packet.posX;
@@ -517,7 +525,7 @@ function Coin (packet) {
   this.height = 32;
   this.draw = function() {
     ctx.drawImage(Img.coin, this.posX, this.posY, this.width, this.height);
-  }
+  };
 }
 function Particle (packet) {
   this.posX = packet.x;
@@ -544,10 +552,10 @@ function Particle (packet) {
       Particles.splice(indx, 1);
       return true;
     }
-  }
+  };
   this.draw = function () {
     ctx.drawImage(Img.particle, this.posX, this.posY, this.width * this.size, this.height * this.size);
-  }
+  };
 }
 
 function updateParticles (deltaTime) {
@@ -665,7 +673,7 @@ function deathQueue (msg) {
   if (!!msg) {
     deathMsgArray.push(msg);
   }
-  if (deathTimer == false && deathMsgArray.length !== 0) {
+  if (deathTimer === false && deathMsgArray.length !== 0) {
     deathTimer = true;
     $("#death-messages").html('<h1>' + deathMsgArray[0] + '</h1>');
     $("#death-messages").fadeIn("slow", function() {

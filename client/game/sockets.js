@@ -1,8 +1,9 @@
+/*jshint esversion: 6 */
 //recieves death-msg through an elaborate function which recieves them and then displays them.
 let socket = io();
 
 socket.on('death-msg', function (object) {
-  if (object.killer == object.victim) {
+  if (object.killer === object.victim) {
     // deathmsg function here
     deathQueue('<span style="color:red">' + object.victim + "</span> commited suicide");
   }else{
@@ -19,7 +20,7 @@ socket.on('particle', function (object) {
     part.direction = direc;
     Particles.push(new Particle(part));
   }
-  // audio.bomb.play();
+  audio.bomb.play();
 });
 
 let clientID;
