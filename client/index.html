@@ -58,7 +58,6 @@
       <div id="game-overlay">
         <div id="chat-window" style="display:none">
           <div id="chatmessages" class="mCustomScrollbar" data-mcs-theme="light" data-mcs-axis="y">
-          <!--<div id="chatmessages">-->
             <ul id="messagelist">
             </ul>
           </div>
@@ -66,6 +65,10 @@
             <input id="chat-bar" type="text" placeholder="Enter a chat message" autocomplete="off">
             <input id="chat-submit" type="hidden">
           </form>
+        </div>
+        <div id="hotbar">
+          <div id="ability-arrow" class="ability pixel-scale"></div>
+          <div id="ability-bomb" class="ability pixel-scale"></img>
         </div>
         <canvas id="canvas" class="game-canvas" tabindex="1"></canvas>
         <canvas id="minimap" class="game-canvas" tabindex="1"></canvas>
@@ -128,7 +131,6 @@
       objEvent.preventDefault(); // prevents tab from getting pressed
     }
 })
-
   //Focuses chat
   $(document).keypress(function(e) {
     var key = e.which;
@@ -157,5 +159,23 @@
       $("#chatmessages").mCustomScrollbar('scrollTo','bottom'); //Scrolls to bottom when message is recieved
 
     });
+  //GUI Scaling
+    window.addEventListener("resize", resize);
+function resize() {
+    screenWidth = mathRound(window.innerWidth);
+    screenHeight = mathRound(window.innerHeight);
+    calculateUIScale();
+    var a = Math.max(screenWidth / maxScreenWidth, screenHeight / maxScreenHeight);
+    c.width = screenWidth;
+    c.height = screenHeight;
+    graph.setTransform(a, 0, 0, a, (screenWidth - maxScreenWidth * a) / 2, (screenHeight - maxScreenHeight * a) / 2);
+    document.getElementById("startMenuWrapper").style.transform = "perspective(1px) translate(-50%, -50%) scale(" + uiScale + ")";
+    document.getElementById("gameStatWrapper").style.transform = "perspective(1px) translate(-50%, -50%) scale(" + uiScale + ")";
+    graph.imageSmoothingEnabled = !1;
+    graph.webkitImageSmoothingEnabled = !1;
+    graph.mozImageSmoothingEnabled = !1;
+    drawMenuBackground()
+}
+resize();
   </script>
 </html>

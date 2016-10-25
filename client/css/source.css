@@ -40,6 +40,7 @@
 }
 #chat-bar{
   width:100%;
+  height: 40px;
   padding:10px;
   margin:0px;
   border:0px;
@@ -162,7 +163,7 @@ th{
 }
 #game-overlay {
   height:0px;
-  overflow:visible;
+  overflow:none;
   pointer-events:none;
   background:none !important;
 }
@@ -174,14 +175,23 @@ th{
   margin-top: 5px;
   width: 100%;
 }
-.class-select img {
-  width: 100%;
-  height: 100%;
+img {
   image-rendering: -moz-crisp-edges;
   image-rendering: -webkit-crisp-edges;
   -ms-interpolation-mode: nearest-neighbor;
   image-rendering: pixelated;
   image-rendering: optimizeSpeed;
+}
+.pixel-scale {
+  image-rendering: -moz-crisp-edges;
+  image-rendering: -webkit-crisp-edges;
+  -ms-interpolation-mode: nearest-neighbor;
+  image-rendering: pixelated;
+  image-rendering: optimizeSpeed;
+}
+.class-select img {
+  width: 100%;
+  height: 100%;
   -webkit-transition: all .3s ease; /* Safari and Chrome */
   -moz-transition: all .3s ease; /* Firefox */
   -o-transition: all .3s ease; /* IE 9 */
@@ -208,4 +218,30 @@ th{
   bottom:30px;
   left:0px;
   visibility:hidden;
+}
+#hotbar{
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  position: absolute;
+  z-index: 100;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+  width: 500px;
+  height: 40px;
+  padding: 3px;
+}
+.ability {
+  width: 40px;
+  height: 40px;
+  margin: 0px 2px 0px 2px;
+}
+#ability-arrow{
+  background-image: url("../resources/arrow.png");
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  display:inline-block;
 }

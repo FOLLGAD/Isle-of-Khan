@@ -48,7 +48,7 @@ let Img = {};
   Img.arrow = new Image();
   Img.arrow.src = '/resources/arrow.png';
   Img.coin = new Image();
-  Img.coin.src = '/resources/coin.png';
+  Img.coin.src = '/resources/heart.png';
   Img.wizard = new Image();
   Img.wizard.src = '/resources/wizard.png';
   Img.menuButton = new Image();
@@ -62,6 +62,12 @@ let Img = {};
   Img.particle = new Image();
   Img.particle.src = '/resources/particle.png';
 
+//Initizialise hotbar
+let arrow = {
+  cooldown: false,
+  cdTimer: 0,
+  endTime: 1000,
+};
 // event handlers
 canvas.addEventListener("keydown", keyDownHandler, false);
   document.addEventListener("keyup", keyUpHandler, false);
@@ -189,11 +195,17 @@ $('#canvas').mousedown(function(e) {
   e.preventDefault();
   switch (e.which) {
     case 1: // left mouse btn
-      console.log('Left mouse button pressed');
+      //Cooldown
+      console.log("cooldown: "+arrow.cdTimer);
+      if (arrow.cooldown == false) {
+        arrow.cdTimer = 0;
+        arrow.cooldown = true;
       $('#canvas').focus();
       let direction = Math.atan2(camX - Players[clientID].posX - Players[clientID].width / 2 + mousePosX, camY - Players[clientID].posY - Players[clientID].height / 2 + mousePosY);
       socket.emit('key-press', { inputkey: 'mousebutton', state: true, direction: direction });
       audio.arrow.play();
+
+      }
       break;
     case 2: // middle mouse btn
       console.log('Middle mouse button pressed');
@@ -610,6 +622,7 @@ function update() {
   $("#scoreboard").hide();
   }
   scoreboard();
+  arrowCooldown(deltaTime);
   // drawCursor();
   ctx.restore();
 }
@@ -666,4 +679,15 @@ function deathQueue (msg) {
       }, 1000);
     });
   }
+}
+function arrowCooldown(deltaTime){
+  arrow.cdTimer = arrow.cdTimer + deltaTime;
+  if (arrow.cdTimer >= arrow.endTime) {
+    arrow.cooldown = false;
+    arrow.cdTimer = 0;
+    console.log("arrow cooldown refreshed.")
+  }else{
+  }
+
+    console.log(arrow.cooldown)
 }
