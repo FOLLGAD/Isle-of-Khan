@@ -33,7 +33,7 @@
                       <!-- <h2>Select a class</h2> -->
                       <div class="row">
                         <div class="col-xs-4">
-                          <div class="class-select" id="class-archer"">
+                          <div class="class-select" id="class-archer">
                             <div class="hovereffect">
                                 <img class="img-responsive" src="resources/archer-menu.png" alt="">
                                 <div class="overlay">
@@ -145,6 +145,7 @@
   <!-- Base game client -->
   <script src="/client.js"></script>
   <script>
+<<<<<<< HEAD
   //Disables selection
   $(document).bind('selectstart dragstart', function(e) {
     e.preventDefault();
@@ -202,38 +203,95 @@
         $('#chat-window').css('user-select', 'all');
       }else{
         $('#canvas').focus();
-      }
-    }
-  });
-  //Sends a chat message
-  $("#chat-form").submit( function(e) {
-    e.preventDefault();
-      if (!!$("#chat-bar").val().replace(/\s/g, '').length) {
-        socket.emit('chat-msg', $("#chat-bar").val());
-      }
-      $("#chat-bar").val("");
-      return true;
-  });
-    //Adds chat messages
-    socket.on('chat-msg', function (msg, sender, date) {
-      $("#messagelist").append($("<li>").text("<"+ sender + "> " + msg));
-      $("#chatmessages").mCustomScrollbar('scrollTo','bottom'); //Scrolls to bottom when message is recieved
+=======
+    //Disables selection
+    $(document).bind('selectstart dragstart', function(e) {
+      e.preventDefault();
+      return false;
     });
-  //GUI Scaling
-// var screenWidth = window.innerWidth
-//   , screenHeight = window.innerHeight
-//   , gameWidth = 0
-//   , gameHeight = 0
-//   , mouseX = 0
-//   , mouseY = 0
-//   , maxScreenWidth = 1920
-//   , originalScreenWidth = maxScreenWidth
-//   , maxScreenHeight = 1080
-//   , originalScreenHeight = maxScreenHeight
-//   , viewMult = 1
-//   , uiScale = 1;
-// function calculateUIScale() {
-//     uiScale = (screenHeight + screenWidth) / (originalScreenWidth + originalScreenHeight) * 1.25
-// }
+    //Selects class
+    var gameClass;
+    $("#class-archer").click(function () {
+      gameClass = "archer";
+      style = "solid";
+      $("#class-archer").css({"border-style": style});
+      $("#class-warrior").css({"border-style": "none"});
+      $("#class-mage").css({"border-style": "none"});
+    });
+    $("#class-warrior").click(function () {
+      gameClass = "warrior";
+      $("#class-archer").css({"border-style": "none"});
+      $("#class-warrior").css({"border-style": style});
+      $("#class-mage").css({"border-style": "none"});
+    });
+    $("#class-mage").click(function () {
+      gameClass = "mage";
+      $("#class-archer").css({"border-style": "none"});
+      $("#class-warrior").css({"border-style": "none"});
+      $("#class-mage").css({"border-style": style});
+    });
+    //Handles registration
+    $("#registration").submit(function (e) {
+      e.preventDefault();
+      username = $('#username').val();
+      register(username, gameClass);
+      $('#menu-screen').fadeOut('slow', function(){ $('#menu-screen').remove();
+       });
+      $("#chat-window").show();
+      $('#canvas').focus();
+    });
+    $(document).keydown(function (objEvent) {
+      if (objEvent.key == 'Tab') {  // tab pressed
+        console.log("tab pressed");
+        objEvent.preventDefault(); // prevents tab from getting pressed
+>>>>>>> origin/Multi-player
+      }
+  })
+    //Focuses chat
+    $(document).keypress(function(e) {
+      var key = e.which;
+      if (key == 13) { // If enter is pressed
+        if (!$('#chat-bar').is(":focus")){
+          $('#chat-bar').focus();
+          $('#chat-window').css('-webkit-user-select', 'all');
+          $('#chat-window').css('-moz-user-select', 'all');
+          $('#chat-window').css('-khtml-user-select', 'all');
+          $('#chat-window').css('-ms-user-select', 'all');
+          $('#chat-window').css('user-select', 'all');
+        }else{
+          $('#canvas').focus();
+        }
+      }
+    });
+    //Sends a chat message
+    $("#chat-form").submit( function(e) {
+      e.preventDefault();
+        if (!!$("#chat-bar").val().replace(/\s/g, '').length) {
+          socket.emit('chat-msg', $("#chat-bar").val());
+        }
+        $("#chat-bar").val("");
+        return true;
+    });
+      //Adds chat messages
+      socket.on('chat-msg', function (msg, sender, date) {
+        $("#messagelist").append($("<li>").text("<"+ sender + "> " + msg));
+        $("#chatmessages").mCustomScrollbar('scrollTo','bottom'); //Scrolls to bottom when message is recieved
+      });
+    //GUI Scaling
+  // var screenWidth = window.innerWidth
+  //   , screenHeight = window.innerHeight
+  //   , gameWidth = 0
+  //   , gameHeight = 0
+  //   , mouseX = 0
+  //   , mouseY = 0
+  //   , maxScreenWidth = 1920
+  //   , originalScreenWidth = maxScreenWidth
+  //   , maxScreenHeight = 1080
+  //   , originalScreenHeight = maxScreenHeight
+  //   , viewMult = 1
+  //   , uiScale = 1;
+  // function calculateUIScale() {
+  //     uiScale = (screenHeight + screenWidth) / (originalScreenWidth + originalScreenHeight) * 1.25
+  // }
   </script>
 </html>

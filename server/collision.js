@@ -1,9 +1,10 @@
-let map = require('./map.js');
+let serv = require('../server.js');
+let map = serv.map;
 
 exports.checkObjectCollision = function (object) {
-  if (object.posX + object.width > map.riverMap.width * map.tilesize) { object.posX = map.riverMap.width * map.tilesize - object.width; }
+  if (object.posX + object.width > map.width * map.tilesize) { object.posX = map.width * map.tilesize - object.width; }
   if (object.posX < 0) { object.posX = 0; }
-  if (object.posY + object.height > map.riverMap.height * map.tilesize) { object.posY = map.riverMap.height * map.tilesize - object.height; }
+  if (object.posY + object.height > map.height * map.tilesize) { object.posY = map.height * map.tilesize - object.height; }
   if (object.posY < 0) { object.posY = 0; }
   let tiles = tilesSurrounding(object.posX, object.posY, object.width, object.height);
   for (var i = 0; i < tiles.width; i++) {
@@ -52,11 +53,11 @@ function tilesSurrounding(posX, posY, width, height) {
 }
 
 function isTileWall(i, j, canSwim) {
-  if (i < 0 || j < 0 || i >= map.riverMap.width || j >= map.riverMap.height) {
+  if (i < 0 || j < 0 || i >= map.width || j >= map.height) {
     return true;
-  } else if (map.riverMap.matrix[j][i] === 6) {
+  } else if (map.layers[0].data[j * map.width + i] === 6 + 1) {
     return true;
-  } else if (map.riverMap.matrix[j][i] === 7) {
+  } else if (map.layers[0].data[j * map.width + i] === 7 + 1) {
     return !canSwim;
   } else {
     return false;
@@ -66,7 +67,7 @@ function isTileWall(i, j, canSwim) {
 function checkTileCollision(i, j, object) {
   let colDistanceX = (i * map.tilesize + map.tilesize / 2) - (object.posX + object.width / 2);
   let colDistanceY = (j * map.tilesize + map.tilesize / 2) - (object.posY + object.height / 2);
-  if (Math.abs(colDistanceX) < object.width/2 + map.tilesize / 2 && Math.abs(colDistanceY) < object.height / 2 + map.tilesize / 2) {
+  if (Math.abs(colDistanceX) < object.width / 2 + map.tilesize / 2 && Math.abs(colDistanceY) < object.height / 2 + map.tilesize / 2) {
     if (!!object.collision(i, j, colDistanceX, colDistanceY)) {
       return true;
     }

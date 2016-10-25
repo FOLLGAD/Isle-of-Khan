@@ -20,12 +20,14 @@ socket.on('particle', function (object) {
     part.direction = direc;
     Particles.push(new Particle(part));
   }
+  audio.bomb.pause();
+  audio.bomb.currentTime = 0;
   audio.bomb.play();
 });
-
-let clientID;
+let gameMap = {}, clientID;
 socket.on('initialize', function (data) {
-  gameMap.matrix = data.matrix;
+  gameMap.matrix = data.matrix.data;
+  gameMap.objects = data.objects;
   gameMap.width = data.width;
   gameMap.height = data.height;
   clientID = data.id;
