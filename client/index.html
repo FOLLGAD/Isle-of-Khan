@@ -210,59 +210,6 @@
       e.preventDefault();
       return false;
     });
-    //Selects class
-    var gameClass;
-    $("#class-archer").click(function () {
-      gameClass = "archer";
-      style = "solid";
-      $("#class-archer").css({"border-style": style});
-      $("#class-warrior").css({"border-style": "none"});
-      $("#class-mage").css({"border-style": "none"});
-    });
-    $("#class-warrior").click(function () {
-      gameClass = "warrior";
-      $("#class-archer").css({"border-style": "none"});
-      $("#class-warrior").css({"border-style": style});
-      $("#class-mage").css({"border-style": "none"});
-    });
-    $("#class-mage").click(function () {
-      gameClass = "mage";
-      $("#class-archer").css({"border-style": "none"});
-      $("#class-warrior").css({"border-style": "none"});
-      $("#class-mage").css({"border-style": style});
-    });
-    //Handles registration
-    $("#registration").submit(function (e) {
-      e.preventDefault();
-      username = $('#username').val();
-      register(username, gameClass);
-      $('#menu-screen').fadeOut('slow', function(){ $('#menu-screen').remove();
-       });
-      $("#chat-window").show();
-      $('#canvas').focus();
-    });
-    $(document).keydown(function (objEvent) {
-      if (objEvent.key == 'Tab') {  // tab pressed
-        console.log("tab pressed");
-        objEvent.preventDefault(); // prevents tab from getting pressed
-      }
-  })
-    //Focuses chat
-    $(document).keypress(function(e) {
-      var key = e.which;
-      if (key == 13) { // If enter is pressed
-        if (!$('#chat-bar').is(":focus")){
-          $('#chat-bar').focus();
-          $('#chat-window').css('-webkit-user-select', 'all');
-          $('#chat-window').css('-moz-user-select', 'all');
-          $('#chat-window').css('-khtml-user-select', 'all');
-          $('#chat-window').css('-ms-user-select', 'all');
-          $('#chat-window').css('user-select', 'all');
-        }else{
-          $('#canvas').focus();
-        }
-      }
-    });
     //Sends a chat message
     $("#chat-form").submit( function(e) {
       e.preventDefault();
