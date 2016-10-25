@@ -14,7 +14,8 @@
     <!-- Main CSS -->
     <link rel="stylesheet" type="text/css" href="css/source.css" />
   </head>
-  <body oncontextmenu="return false;">
+  <!-- <body oncontextmenu="return false;"> -->
+  <body>
     <div id="container">
       <div id="menu-screen">
         <div id="menu-overlay" class="container" style="padding-top:50px">
@@ -28,10 +29,11 @@
                 <hr />
                 <div class="form-group">
                     <form id="registration" action="">
-                      <input style="padding: 5px;" id="username" name="username" type="text" autofocus="true" placeholder="Enter nickname">
-                      <h1>Select a class</h1>
+                      <input style="padding: 10px;margin-bottom: 20px;" id="username" name="username" type="text" autofocus="true" placeholder="Enter nickname">
+                      <!-- <h2>Select a class</h2> -->
                       <div class="row">
-                        <div class="col-xs-4 class-select" id="class-archer">
+                        <div class="col-xs-4">
+                          <div class="class-select" id="class-archer"">
                             <div class="hovereffect">
                                 <img class="img-responsive" src="resources/archer-menu.png" alt="">
                                 <div class="overlay">
@@ -44,8 +46,10 @@
                                    <a class="info" href="#">Select</a>
                                 </div>
                             </div>
+                          </div>
                         </div>
-                        <div class="col-xs-4 class-select" id="class-warrior">
+                        <div class="col-xs-4">
+                          <div class="class-select" id="class-warrior">
                             <div class="hovereffect">
                                 <img class="img-responsive" src="resources/warrior-menu.png" alt="">
                                 <div class="overlay">
@@ -58,8 +62,10 @@
                                    <a class="info" href="#">Select</a>
                                 </div>
                             </div>
+                          </div>
                         </div>
-                        <div class="col-xs-4 class-select" id="class-mage">
+                        <div class="col-xs-4">
+                          <div class="class-select" id="class-mage">
                             <div class="hovereffect">
                                 <img class="img-responsive" src="resources/archer-menu.png" alt="">
                                 <div class="overlay">
@@ -72,6 +78,7 @@
                                    <a class="info" href="#">Select</a>
                                 </div>
                             </div>
+                          </div>
                         </div>
                       </div>
                       <br><button class="btn btn-primary btn-lg">Enter Game</button>
@@ -137,12 +144,22 @@
   var gameClass;
   $("#class-archer").click(function () {
     gameClass = "archer";
+    style = "solid";
+    $("#class-archer").css({"border-style": style});
+    $("#class-warrior").css({"border-style": "none"});
+    $("#class-mage").css({"border-style": "none"});
   });
   $("#class-warrior").click(function () {
     gameClass = "warrior";
+    $("#class-archer").css({"border-style": "none"});
+    $("#class-warrior").css({"border-style": style});
+    $("#class-mage").css({"border-style": "none"});
   });
   $("#class-mage").click(function () {
     gameClass = "mage";
+    $("#class-archer").css({"border-style": "none"});
+    $("#class-warrior").css({"border-style": "none"});
+    $("#class-mage").css({"border-style": style});
   });
   //Handles registration
   $("#registration").submit(function (e) {

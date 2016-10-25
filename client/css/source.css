@@ -177,11 +177,11 @@ th{
 }
 .class-select {
   position: relative;
-  /*height:500px;*/
+  height:300px;
+  border-color: #337ab7;
 }
 .class-select h1 {
   margin-top: 5px;
-  width: 100%;
 }
 img {
   image-rendering: -moz-crisp-edges;
@@ -205,6 +205,7 @@ img {
   -o-transition: all .3s ease; /* IE 9 */
   -ms-transition: all .3s ease; /* Opera */
   transition: all .3s ease;
+  margin: 0px 0px 100px 0px;
 }
 .img-hover-enlarge img:hover {
   -webkit-backface-visibility: hidden;
