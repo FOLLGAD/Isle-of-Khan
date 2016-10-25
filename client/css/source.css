@@ -15,10 +15,10 @@
   user-select: none;
 }
 #right-column {
-  display: none;
+  /*display: none;*/
 }
 #left-column {
-  display: none;
+  /*display: none;*/
 }
 #chatmessages {
   bottom: 26px;
@@ -120,6 +120,7 @@
 body {
   background: #333333;
   font-family: GameFont;
+  overflow: hidden;
 }
 html, body {
   width:  100%;
@@ -169,7 +170,7 @@ th{
 }
 #game-overlay {
   height:0px;
-  overflow:none;
+  overflow: hidden;
   pointer-events:none;
   background:none !important;
 }

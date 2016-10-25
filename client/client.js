@@ -197,21 +197,16 @@ function getMousePos(e) {
 $('#canvas').mousedown(function(e) {
   e.preventDefault();
   switch (e.which) {
-<<<<<<< HEAD
     case 1: // left mouse btn
       //Cooldown
       console.log("cooldown: "+arrow.cdTimer);
       if (arrow.cooldown == false) {
         arrow.cdTimer = 0;
         arrow.cooldown = true;
-=======
-    case 1: // left mouse button
->>>>>>> origin/Multi-player
       $('#canvas').focus();
       let direction = Math.atan2(camX - Players[clientID].posX - Players[clientID].width / 2 + mousePosX, camY - Players[clientID].posY - Players[clientID].height / 2 + mousePosY);
       socket.emit('key-press', { inputkey: 'attack', state: true, direction: direction });
       audio.arrow.play();
-
       }
       break;
     case 2: // middle mouse button
@@ -340,6 +335,11 @@ function resize() {
   ctx.mozImageSmoothingEnabled = false;
   offsetMaxX = gameMap.width * tileSize - ctx.canvas.width;
   offsetMaxY = gameMap.height * tileSize - ctx.canvas.height;
+    //   screenWidth = Math.round(window.innerWidth);
+    // screenHeight = Math.round(window.innerHeight);
+    // calculateUIScale();
+    // var a = Math.max(screenWidth / maxScreenWidth, screenHeight / maxScreenHeight);
+    // $("#menu-screen").css({transform: "scale(" + uiScale * 0.85 + ")"});
 }
 
 function drawMinimap() {

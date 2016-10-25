@@ -159,22 +159,20 @@
       $("#chatmessages").mCustomScrollbar('scrollTo','bottom'); //Scrolls to bottom when message is recieved
     });
   //GUI Scaling
-    window.addEventListener("resize", resize);
-function resize() {
-    screenWidth = mathRound(window.innerWidth);
-    screenHeight = mathRound(window.innerHeight);
-    calculateUIScale();
-    var a = Math.max(screenWidth / maxScreenWidth, screenHeight / maxScreenHeight);
-    c.width = screenWidth;
-    c.height = screenHeight;
-    graph.setTransform(a, 0, 0, a, (screenWidth - maxScreenWidth * a) / 2, (screenHeight - maxScreenHeight * a) / 2);
-    document.getElementById("startMenuWrapper").style.transform = "perspective(1px) translate(-50%, -50%) scale(" + uiScale + ")";
-    document.getElementById("gameStatWrapper").style.transform = "perspective(1px) translate(-50%, -50%) scale(" + uiScale + ")";
-    graph.imageSmoothingEnabled = !1;
-    graph.webkitImageSmoothingEnabled = !1;
-    graph.mozImageSmoothingEnabled = !1;
-    drawMenuBackground()
-}
-resize();
+// var screenWidth = window.innerWidth
+//   , screenHeight = window.innerHeight
+//   , gameWidth = 0
+//   , gameHeight = 0
+//   , mouseX = 0
+//   , mouseY = 0
+//   , maxScreenWidth = 1920
+//   , originalScreenWidth = maxScreenWidth
+//   , maxScreenHeight = 1080
+//   , originalScreenHeight = maxScreenHeight
+//   , viewMult = 1
+//   , uiScale = 1;
+// function calculateUIScale() {
+//     uiScale = (screenHeight + screenWidth) / (originalScreenWidth + originalScreenHeight) * 1.25
+// }
   </script>
 </html>
