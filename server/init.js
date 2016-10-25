@@ -16,7 +16,7 @@ exports.placeTrees = function (array, mapArray) {
     posX = 0;
     posY += tileSize;
   }
-}
+};
 
 function Tree (x, y) {
   this.posX = x;
@@ -27,5 +27,5 @@ function Tree (x, y) {
   this.fuckit = "nej";
   this.draw = function (img) {
     ctx.drawImage(img, this.posX, this.posY, this.width, this.height);
-  }
+  };
 }

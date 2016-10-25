@@ -1,10 +1,10 @@
 let map = require('./map.js');
 
 exports.checkObjectCollision = function (object) {
-  if (object.posX + object.width > map.riverMap.width * map.tilesize) { object.posX = map.riverMap.width * map.tilesize - object.width }
-  if (object.posX < 0) { object.posX = 0 }
-  if (object.posY + object.height > map.riverMap.height * map.tilesize) { object.posY = map.riverMap.height * map.tilesize - object.height }
-  if (object.posY < 0) { object.posY = 0 }
+  if (object.posX + object.width > map.riverMap.width * map.tilesize) { object.posX = map.riverMap.width * map.tilesize - object.width; }
+  if (object.posX < 0) { object.posX = 0; }
+  if (object.posY + object.height > map.riverMap.height * map.tilesize) { object.posY = map.riverMap.height * map.tilesize - object.height; }
+  if (object.posY < 0) { object.posY = 0; }
   let tiles = tilesSurrounding(object.posX, object.posY, object.width, object.height);
   for (var i = 0; i < tiles.width; i++) {
     for (let j = 0; j < tiles.height; j++) {
@@ -13,7 +13,7 @@ exports.checkObjectCollision = function (object) {
       }
     }
   }
-}
+};
 
 exports.checkArrowTileCollision = function (object, array) {
   let tiles = tilesSurrounding(object.posX, object.posY, object.width, object.height);
@@ -24,7 +24,7 @@ exports.checkArrowTileCollision = function (object, array) {
       }
     }
   }
-}
+};
 
 exports.areTilesFree = function (x, y, width, height) {
   let tiles = tilesSurrounding(x, y, width, height);
@@ -33,7 +33,7 @@ exports.areTilesFree = function (x, y, width, height) {
       return isTileWall(tiles.x + i, tiles.y + j, false);
     }
   }
-}
+};
 
 // remake for specifically arrows.
 
@@ -83,7 +83,7 @@ exports.checkForPlayerDmg = function (obj1, obj2) {
       }
     }
   }
-}
+};
 
 exports.checkCircularEntityCollision = function (obj1, obj2, owner) {
   let disX = obj1.posX + obj1.width / 2 - obj2.posX - obj2.width / 2;
@@ -96,4 +96,4 @@ exports.checkCircularEntityCollision = function (obj1, obj2, owner) {
     let knockback = Math.round(intensity);
     obj2.getDamaged(direction, dmg, owner, knockback);
   }
-}
+};
