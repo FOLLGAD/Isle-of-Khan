@@ -41,10 +41,10 @@ exports.Character = function (id, posX, posY, username, characterClass) {
   };
   this.respawn = function() {
     do {
-      //var spawnX = Math.random() * map.riverMap.width * 64;
-      //var spawnY = Math.random() * map.riverMap.height * 64;
-      var spawnY = 600;
-      var spawnX = 600;
+      var spawnX = Math.random() * map.riverMap.width * 64;
+      var spawnY = Math.random() * map.riverMap.height * 64;
+      // var spawnY = 600;
+      // var spawnX = 600;
       this.hp = this.maxhp;
     }
     while (col.areTilesFree(spawnX, spawnY, 64, 64));

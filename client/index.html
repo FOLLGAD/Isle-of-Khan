@@ -142,6 +142,7 @@
   });
   //Selects class
   var gameClass;
+  var style;
   $("#class-archer").click(function () {
     gameClass = "archer";
     style = "solid";
@@ -170,6 +171,7 @@
      });
     $("#chat-window").show();
     $('#canvas').focus();
+    $("body").attr("oncontextmenu", "return false;");
   });
   $(document).keydown(function (objEvent) {
     if (objEvent.key == 'Tab') {  // tab pressed
