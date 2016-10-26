@@ -79,6 +79,5 @@ socket.on('packet', function (packet) {
     update();
     asdf = true;
   }
-  console.log(Trees);
   lastPacket = packet.sent;
 });
