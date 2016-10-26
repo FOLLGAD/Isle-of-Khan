@@ -12,14 +12,10 @@ let mousePosX;
 let mousePosY;
 
 let audio = {};
-{
-  audio.bomb = new Audio('./resources/grenade-sound.mp3');
-  // audio.bomb.play();
-  audio.arrow = new Audio('./resources/bow-fire.mp3');
-  // audio.bomb.play();
-  audio.bomb.volume = 0.1;
-  audio.arrow.volume = 0.1;
-}
+audio.bomb = new Audio('./resources/grenade-sound.mp3');
+audio.arrow = new Audio('./resources/bow-fire.mp3');
+audio.bomb.volume = 0.1;
+audio.arrow.volume = 0.1;
 ctx.canvas.width  = window.innerWidth;
 ctx.canvas.height = window.innerHeight;
 
@@ -258,9 +254,12 @@ function draw() {
   for (let i in Players) {
     drawOrder.push(Players[i]);
   }
+  console.log(Trees.length);
   for (let i = 0; i < Trees.length; i++) {
+    console.log(Trees[i].posX, Trees[i].posY, Trees[i].width, Trees[i].height);
     if (Trees[i].posX < camX + canvas.width + tileSize && Trees[i].posX + Trees[i].width > camX - tileSize && Trees[i].posY < camY + canvas.height + tileSize && Trees[i].posY + Trees[i].height > camY - tileSize) {
       drawOrder.push(Trees[i]);
+      console.log("trees order");
     }
   }
   for (let i = 0; i < Enemies.length; i++) {
@@ -525,7 +524,7 @@ function Tree (packet) {
   this.width = 64;
   this.height = 64;
   this.draw = function () {
-    ctx.drawImage(Img.tree, this.posX, this.posY - 64, this.width, this.height * 2);
+    ctx.drawImage(Img.tree, this.posX, this.posY - this.height, this.width, this.height * 2);
   };
 }
 function Coin (packet) {
@@ -706,6 +705,6 @@ function arrowCooldown(deltaTime){
     arrow.cdTimer = 0;
     console.log("arrow cooldown refreshed.");
   }else{
-    
+
   }
 }

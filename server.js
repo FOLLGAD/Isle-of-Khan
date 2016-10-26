@@ -30,7 +30,17 @@ const projectiles = require('./server/projectiles.js');
 const viewPoint = require('./server/viewPoint.js');
 
 let treesArray = [];
-// init.placeTrees(treesArray, map.riverMap.matrix);
+function placeTrees() {
+  for (let i = 0; i < map.layers[1].objects.length; i++) {
+    treesArray.push({
+      posX: map.layers[1].objects[i].x * 8,
+      posY: map.layers[1].objects[i].y * 8 - map.tilesize,
+      width: 64,
+      height: 64
+    });
+  }
+}
+placeTrees();
 
 const tileSize = 64;
 

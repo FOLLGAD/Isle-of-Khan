@@ -55,12 +55,22 @@ function tilesSurrounding(posX, posY, width, height) {
 function isTileWall(i, j, canSwim) {
   if (i < 0 || j < 0 || i >= map.width || j >= map.height) {
     return true;
-  } else if (map.layers[0].data[j * map.width + i] === 6 + 1) {
+  } else if (checkForTrees(i, j)) {
     return true;
   } else if (map.layers[0].data[j * map.width + i] === 7 + 1) {
     return !canSwim;
   } else {
     return false;
+  }
+}
+function checkForTrees(x, y) {
+  x *= 8;
+  y *= 8;
+  for (let i = 0; i < map.layers[1].objects.length; i++) {
+    if (map.layers[1].objects[i].x === x &&
+        map.layers[1].objects[i].y - 8 === y) {
+      return true;
+    }
   }
 }
 

@@ -8,8 +8,6 @@ exports.Character = function (id, posX, posY, username, characterClass) {
   this.id = id;
   this.username = username;
   this.class = characterClass;
-  // this.posX = posX;
-  // this.posY = posY;
   this.height = 64;
   this.width = 64;
   this.velX = 0;
@@ -19,7 +17,6 @@ exports.Character = function (id, posX, posY, username, characterClass) {
   this.deaths = 0;
   this.aimDirection = 0;
   this.walking = false;
-  //walkspeed default = 7
   this.walkSpeed = 0.5;
   this.hp = 100;
   this.idle = true;
@@ -42,37 +39,15 @@ exports.Character = function (id, posX, posY, username, characterClass) {
     do {
       spawnX = Math.random() * map.riverMap.width * 64;
       spawnY = Math.random() * map.riverMap.height * 64;
-      // var spawnY = 600;
-      // var spawnX = 600;
       this.hp = this.maxhp;
     }
     while (col.areTilesFree(spawnX, spawnY, 64, 64));
     this.posX = spawnX;
     this.posY = spawnY;
   };
-
   this.attack = function (data) {
-    switch(this.class) {
-      case "archer":
-        console.log(data);
-        clearInterval(this.intervalStorage);
-        clearTimeout(this.timeoutStorage);
-        if (data.state) {
-          this.aimDirection = data.direction;
-          startShooting(this);
-        }
-        break;
-      case "warrior":
-        if (!this.attacking) {
-        }
-        break;
-      case "mage":
-        if (!this.attacking) {
-        }
-        break;
-    }
+    classes[this.class].attack(this, data);
   };
-
   this.getDamaged = function (direction, dmg, entity, knockback) {
     this.hp -= dmg;
     let kb;
@@ -155,14 +130,26 @@ exports.Character = function (id, posX, posY, username, characterClass) {
 
 function startShooting(char) {
   if (Date.now() - char.lastShot > 400) {
-    console.log("if passed");
     serv.shoot(char);
-    // char.intervalStorage = setInterval(serv.shoot, 400, char);
   } else {
-    console.log("else permit");
     char.timeoutStorage = setTimeout(function() {
       serv.shoot(char);
       char.intervalStorage = setInterval(serv.shoot, 400, char);
     }, 400 - Date.now() + char.lastShot);
   }
 }
+
+let Classes = {};
+Classes.archer = {
+  attack: function(char) {
+    clearInterval(char.intervalStorage);
+    clearTimeout(char.timeoutStorage);
+    if (data.state) {
+      char.aimDirection = data.direction;
+      startShooting(char);
+    }
+  }
+};
+Classes.warrior = {
+  
+};
