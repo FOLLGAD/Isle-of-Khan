@@ -403,13 +403,22 @@ function scoreboard () {
   //ctx.drawImage(Img.options, 0, 0, 70, 8, camX + canvas.width / 2 - 70 * 8 / 2, camY + 100, 70 * 8, 8 * 8);
 }
 function leaderboard () {
-  $("#leaderboard-players").html("<tr><th>Username</th><th>Health</th><th>Kills</th><th>Deaths</th></tr>");
-  for (let player in Players) {
-    $("#scoreboard-players").append("<tr><td>"+Players[player].username+"</td><td>"+Players[player].hp+"</td><td>"+Players[player].kills+"</td><td>"+Players[player].deaths+"</td></tr>");
+  $("#leaderboard-players").empty();
+  var playerArr = Object.keys(Players).map(function (key) { return Players[key]; });
+  playerArr.sort(function (a, b) {
+    if (b.kills > a.kills) {
+      return 1;
+    }
+    if (b.kills < a.kills) {
+      return -1;
+    }
+    // a must be equal to b
+    return 0;
+  });
+  for (let i = 0; i < playerArr.length && i < 10; i++) {
+    let position = i+1;
+    $("#leaderboard-players").append("<p>"+position+". "+playerArr[i].username +': <span style="color:green">' + playerArr[i].kills + '</span>/<span style="color:red">' + playerArr[i].deaths + "</span></p>");
   }
-  //ctx.fillStyle = "rgba(0, 0, 0, 0.6)";
-  //ctx.fillRect(camX + canvas.width/2, camY + 100, canvas.width/2-100, canvas.height/2);
-  //ctx.drawImage(Img.options, 0, 0, 70, 8, camX + canvas.width / 2 - 70 * 8 / 2, camY + 100, 70 * 8, 8 * 8);
 }
 
 function Bomb (packet) {
@@ -631,6 +640,7 @@ function update() {
   $("#scoreboard").hide();
   }
   scoreboard();
+  leaderboard();
   arrowCooldown(deltaTime);
   // drawCursor();
   ctx.restore();
