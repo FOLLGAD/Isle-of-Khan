@@ -157,7 +157,7 @@ function update() {
 }
 
 spawnCoin = function () {
-  if (coins.length < 75) {
+  if (coins.length < 25) {
     let spawnX;
     let spawnY;
     do {
