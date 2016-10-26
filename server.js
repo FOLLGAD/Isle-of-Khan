@@ -167,7 +167,7 @@ function update() {
 }
 
 spawnCoin = function () {
-  if (coins.length < 200) {
+  if (coins.length < 25) {
     let spawnX;
     let spawnY;
     do {
@@ -179,7 +179,7 @@ spawnCoin = function () {
   }
 };
 
-setInterval(spawnCoin, 2000);
+setInterval(spawnCoin, 1);
 
 // Packet sending
 function createEntityPacket(object) {
