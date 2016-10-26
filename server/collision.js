@@ -31,9 +31,10 @@ exports.areTilesFree = function (x, y, width, height) {
   let tiles = tilesSurrounding(x, y, width, height);
   for (var i = 0; i < tiles.width; i++) {
     for (let j = 0; j < tiles.height; j++) {
-      return isTileWall(tiles.x + i, tiles.y + j, false);
+      if(isTileWall(tiles.x + i, tiles.y + j, false)) return true;
     }
   }
+  return false;
 };
 
 // remake for specifically arrows.

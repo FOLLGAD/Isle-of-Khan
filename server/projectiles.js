@@ -21,19 +21,19 @@ exports.Arrow = function (posX, posY, direction, id) {
     let index = arrows.indexOf(this);
     arrows.splice(index, 1);
     return true;
-  }
+  };
   this.tick = function (arrows, deltaTime) {
     this.posX += this.velX * deltaTime;
     this.posY += this.velY * deltaTime;
-  }
+  };
   this.onPenetration = function (subtract, arrows) {
     this.penetration -= subtract;
     if (this.penetration < 0 || subtract === -1) {
       indx = arrows.indexOf(this);
       arrows.splice(indx, 1);
     }
-  }
-}
+  };
+};
 
 exports.tickArrows = function (arrows, deltaTime, enemies, chars) {
   for (i = 0; i < arrows.length; i++) {
@@ -69,8 +69,8 @@ exports.Bomb = function (posX, posY, direction, inivelX, inivelY, id, vel) {
   this.width = 64;
   this.height = 64;
   this.speed = 5;
-  this.velX = Math.sin(direction) * vel + inivelX;
-  this.velY = Math.cos(direction) * vel + inivelY;
+  this.velX = Math.sin(direction) * vel * 0.5;
+  this.velY = Math.cos(direction) * vel * 0.5;
   this.timer = 650;
   this.canSwim = false;
   this.radius = 250;
@@ -119,8 +119,8 @@ exports.Bomb = function (posX, posY, direction, inivelX, inivelY, id, vel) {
       }
       this.velX = -this.velX;
     }
-  }
-}
+  };
+};
 
 function spawnBomb() {
   let direx = Math.atan2(camX - chars[0].posX - chars[0].width / 2 + mousePosX, camY - chars[0].posY - chars[0].height/2 + mousePosY);
@@ -128,8 +128,8 @@ function spawnBomb() {
 }
 
 exports.tickBombs = function (bombs, deltaTime, enemies, chars) {
-  let pow = Math.pow(0.99, deltaTime);
+  let pow = Math.pow(0.995, deltaTime);
   for (i = 0; i < bombs.length; i++) {
     bombs[i].tick(bombs, deltaTime, enemies, chars, pow);
   }
-}
+};

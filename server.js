@@ -241,6 +241,7 @@ function createEntityPacket(object) {
   });
 }
 
+// FPS
 setInterval(update, 1000 / 30);
 
 let monsterInterval;

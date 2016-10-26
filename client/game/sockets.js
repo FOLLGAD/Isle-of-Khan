@@ -58,6 +58,8 @@ socket.on('packet', function (packet) {
     }
     for (let prop in packet.players[i]) {
       Players[packet.players[i].id][prop] = packet.players[i][prop];
+      Players[packet.players[i].id].packPosX = packet.players[i].posX;
+      Players[packet.players[i].id].packPosY = packet.players[i].posY;
     }
   }
   for (let i = 0; i < packet.trees.length; i++) {

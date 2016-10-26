@@ -340,6 +340,7 @@ function drawMinimap() {
   minimap.ctx.clearRect(0, 0, minimap.canvas.width, minimap.canvas.height);
   minimap.canvas.style.opacity = 0.8;
   let colorRep = {
+    tree: "#006818",
     0: "#11A033",
     1: "#11A033",
     2: "#11A033",
@@ -372,6 +373,10 @@ function drawMinimap() {
       minimap.ctx.fillStyle = colorRep[gameMap.matrix[j * gameMap.width + i] - 1];
       minimap.ctx.fillRect(i * minimap.scale + 2, j * minimap.scale + 2, minimap.scale, minimap.scale);
     }
+  }
+  for (let i = 0; i < Trees; i++) {
+    minimap.ctx.fillStyle = colorRep.tree;
+    minimap.ctx.fillRect(Trees[i].posX / gameMap.tilesize * minimap.scale, Trees[i].posY / gameMap.tilesize * minimap.scale, minimap.scale, minimap.scale);
   }
   for (let prop in Players) {
     if (prop === clientID) {
@@ -416,11 +421,10 @@ function leaderboard () {
     if (b.kills < a.kills) {
       return -1;
     }
-    // a must be equal to b
-    return 0;
+    return 0; // a must be equal to b
   });
   for (let i = 0; i < playerArr.length && i < 10; i++) {
-    let position = i+1;
+    let position = i + 1;
     $("#leaderboard-players").append("<p>"+position+". "+playerArr[i].username +': <span style="color:green">' + playerArr[i].kills + '</span>/<span style="color:red">' + playerArr[i].deaths + "</span></p>");
   }
 }
@@ -578,54 +582,12 @@ function updateParticles (deltaTime) {
   }
 }
 
-function checkMenuUp () {
-  if (menuActive) {
-    let lMousePosX = mousePosX;
-    let lMousePosY = mousePosY;
-    for (i = 0; i < menuArray.length; i++) {
-      if (menuArray[i].active) {
-        if (lMousePosX > menuArray[i].posX && lMousePosX < menuArray[i].posX + menuArray[i].width && lMousePosY > menuArray[i].posY && lMousePosY < menuArray[i].posY + menuArray[i].height) {
-          menuArray[i].onClick();
-          menuArray[i].onUp();
-        } else {
-          menuArray[i].onAbandoned();
-        }
-      }
-    }
-  }
-}
-
-function checkIfStillDown (obj) {
-  if (mouseDown) {
-    // let lMousePosX = mousePosX;
-    // let lMousePosY = mousePosY;
-    // if (lMousePosX > obj.posX && lMousePosX < obj.posX + obj.width && lMousePosY > obj.posY && lMousePosY < obj.posY + obj.height) {
-    // } else {
-    // }
-  } else {
-    obj.onAbandoned();
-  }
-}
-
-function checkMenuDown () {
-  if (menuActive) {
-    let lMousePosX = mousePosX;
-    let lMousePosY = mousePosY;
-    for (let i = 0; i < menuArray.length; i++) {
-      if (lMousePosX > menuArray[i].posX && lMousePosX < menuArray[i].posX + menuArray[i].width && lMousePosY > menuArray[i].posY && lMousePosY < menuArray[i].posY + menuArray[i].height) {
-        menuArray[i].onDown();
-      }
-    }
-  }
-}
-
 let lastTime = Date.now();
 function update() {
   requestAnimationFrame(update);
   let deltaTime = Date.now() - lastTime;
   lastTime = Date.now();
   let sincePacket = Date.now() - lastPacket;
-  // clientSmoothing(sincePacket);
   //ctx.font="30px sans-serif"; NOT WORKING?
   ctx.save();
   resize();
@@ -645,7 +607,8 @@ function update() {
   }
   scoreboard();
   leaderboard();
-  arrowCooldown(deltaTime);
+  clientSmoothing(sincePacket);
+  // arrowCooldown(deltaTime);
   // drawCursor();
   ctx.restore();
 }
@@ -661,10 +624,11 @@ setInterval(function () {
 }, 100);
 
 function clientSmoothing (sincePacket) {
-  console.log(sincePacket);
   for (let i in Players) {
-    Players[i].posX = Players[i].packPosX + Players[i].velX * sincePacket;
-    Players[i].posY = Players[i].packPosY + Players[i].velY * sincePacket;
+    if (Math.abs(Players[i].velX) < 1 && Math.abs(Players[i].velY) < 1) {
+      Players[i].posX = Players[i].packPosX + Players[i].velX * sincePacket;
+      Players[i].posY = Players[i].packPosY + Players[i].velY * sincePacket;
+    }
   }
   for (let i = 0; i < Enemies.length; i++) {
     Enemies[i].posX = Enemies[i].posX + Enemies[i].velX * sincePacket;
