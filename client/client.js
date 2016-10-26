@@ -11,6 +11,8 @@ let scoreboardActive = false;
 let mousePosX;
 let mousePosY;
 
+let DEBUG_MODE = false;
+
 let audio = {};
 audio.bomb = new Audio('./resources/grenade-sound.mp3');
 audio.arrow = new Audio('./resources/bow-fire.mp3');
@@ -80,6 +82,7 @@ function keyUpHandler(e) {
   dispatchForCode(e, keyUpFunction);
 }
 function keyDownFunction(code) {
+  console.log(code);
   switch (code) {
     case 'KeyD':
       if (!keyStates.d) socket.emit('key-press', { inputkey: 'd', state: true });
@@ -159,6 +162,9 @@ function keyUpFunction(code) {
       break;
     case 'Tab':
       scoreboardActive = false;
+      break;
+    case 'Backquote':
+      DEBUG_MODE = !DEBUG_MODE;
       break;
     default:
       console.log("input did not match any defined");
@@ -254,12 +260,9 @@ function draw() {
   for (let i in Players) {
     drawOrder.push(Players[i]);
   }
-  console.log(Trees.length);
   for (let i = 0; i < Trees.length; i++) {
-    console.log(Trees[i].posX, Trees[i].posY, Trees[i].width, Trees[i].height);
     if (Trees[i].posX < camX + canvas.width + tileSize && Trees[i].posX + Trees[i].width > camX - tileSize && Trees[i].posY < camY + canvas.height + tileSize && Trees[i].posY + Trees[i].height > camY - tileSize) {
       drawOrder.push(Trees[i]);
-      console.log("trees order");
     }
   }
   for (let i = 0; i < Enemies.length; i++) {
@@ -381,15 +384,17 @@ function drawMinimap() {
 }
 
 function drawGui () {
-  ctx.textAlign = "start";
-  ctx.fillText("HP: " + Players[clientID].hp, 20 + camX, 50 + camY);
-  ctx.fillText("Coins: " + Players[clientID].coins, 20 + camX, 100 + camY);
-  ctx.fillText("Kills: " + Players[clientID].kills, 20 + camX, 150 + camY);
-  ctx.fillText("Deaths: " + Players[clientID].deaths, 20 + camX, 200 + camY);
-  ctx.fillText("PosX: " + Players[clientID].posX, 20 + camX, 250 + camY);
-  ctx.fillText("PosY: " + Players[clientID].posY, 20 + camX, 300 + camY);
-  ctx.fillText("CamX: " + camX, 20 + camX, 350 + camY);
-  ctx.fillText("CamY: " + camY, 20 + camX, 400 + camY);
+  if (DEBUG_MODE) {
+    ctx.textAlign = "start";
+    ctx.fillText("HP: " + Players[clientID].hp, 20 + camX, 50 + camY);
+    ctx.fillText("Coins: " + Players[clientID].coins, 20 + camX, 100 + camY);
+    ctx.fillText("Kills: " + Players[clientID].kills, 20 + camX, 150 + camY);
+    ctx.fillText("Deaths: " + Players[clientID].deaths, 20 + camX, 200 + camY);
+    ctx.fillText("PosX: " + Players[clientID].posX, 20 + camX, 250 + camY);
+    ctx.fillText("PosY: " + Players[clientID].posY, 20 + camX, 300 + camY);
+    ctx.fillText("CamX: " + camX, 20 + camX, 350 + camY);
+    ctx.fillText("CamY: " + camY, 20 + camX, 400 + camY);
+  }
 }
 
 function scoreboard () {
