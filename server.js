@@ -51,12 +51,15 @@ let intervalStorage = {};
 let toBeDeleted = [];
 
 io.on('connection', function (socket) {
-  let clientIp = socket.request.connection.remoteAddress, username;
-
+  let clientIp = socket.request.connection.remoteAddress, username, socketID = socket.id;
   console.log("User with ID", socket.id, "connected with IP: " + clientIp);
-
-  socket.emit("initialize", { matrix: map.layers[0], objects: map.layers[1], width: map.width, height: map.height, id: socket.id });
-
+  socket.emit("initialize", {
+    matrix: map.layers[0],
+    objects: map.layers[1],
+    width: map.width,
+    height: map.height,
+    id: socket.id
+  });
   socket.on('register', function (object) {
     if (object.username === ""){
       let guestCount = 1;
@@ -69,7 +72,7 @@ io.on('connection', function (socket) {
     }else{
       username = object.username;
     }
-    console.log("Username: " + username);
+    console.log("user registered as: " + username);
     clearInterval(intervalStorage[socket.id]);
     clearTimeout(intervalStorage[socket.id]);
     if (chars.hasOwnProperty(socket.id)) {
@@ -104,7 +107,6 @@ io.on('connection', function (socket) {
         case "space":
           break;
         case "attack":
-          console.log("attacking with state:", input.state);
           if (input.state) {
             clearInterval(intervalStorage[socket.id]);
             chars[socket.id].aimDirection = input.direction;
@@ -121,11 +123,11 @@ io.on('connection', function (socket) {
           console.log(input, "did not match");
       }
     });
-    socket.on('disconnect', function () {
-      clearInterval(intervalStorage[socket.id]);
-      clearTimeout(intervalStorage[socket.id]);
-      toBeDeleted.push(chars[socket.id].id);
-      console.log(socket.id, "left the server.");
+    socket.on('disconnect', function (socket) {
+      console.log("user", socketID, "with the ip", clientIp, "left the server.");
+      clearInterval(intervalStorage[socketID]);
+      clearTimeout(intervalStorage[socketID]);
+      toBeDeleted.push(socketID);
     });
   });
 });

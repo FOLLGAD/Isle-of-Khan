@@ -49,7 +49,7 @@ exports.tickArrows = function (arrows, deltaTime, enemies, chars) {
   //
   // }
   arrowCollision(arrows, chars);
-}
+};
 function arrowCollision (arrows, entities) {
   let knockback = 5;
   for (let prop in entities) {

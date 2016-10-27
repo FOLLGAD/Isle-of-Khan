@@ -82,7 +82,6 @@ function keyUpHandler(e) {
   dispatchForCode(e, keyUpFunction);
 }
 function keyDownFunction(code) {
-  console.log(code);
   switch (code) {
     case 'KeyD':
       if (!keyStates.d) socket.emit('key-press', { inputkey: 'd', state: true });
@@ -122,7 +121,6 @@ function keyDownFunction(code) {
       scoreboardActive = true;
       break;
     default:
-      console.log("input did not match any defined");
   // e.preventDefault();
   }
 }
@@ -167,7 +165,6 @@ function keyUpFunction(code) {
       DEBUG_MODE = !DEBUG_MODE;
       break;
     default:
-      console.log("input did not match any defined");
   }
   // e.preventDefault();
 }
@@ -193,14 +190,13 @@ $('#canvas').mousedown(function(e) {
   switch (e.which) {
     case 1: // left mouse btn
       //Cooldown
-      console.log("cooldown: "+arrow.cdTimer);
       if (arrow.cooldown === false) {
         arrow.cdTimer = 0;
-        arrow.cooldown = true;
-      $('#canvas').focus();
-      let direction = Math.atan2(camX - Players[clientID].posX - Players[clientID].width / 2 + mousePosX, camY - Players[clientID].posY - Players[clientID].height / 2 + mousePosY);
-      socket.emit('key-press', { inputkey: 'attack', state: true, direction: direction });
-      audio.arrow.play();
+        // arrow.cooldown = true;
+        $('#canvas').focus();
+        let direction = Math.atan2(camX - Players[clientID].posX - Players[clientID].width / 2 + mousePosX, camY - Players[clientID].posY - Players[clientID].height / 2 + mousePosY);
+        socket.emit('key-press', { inputkey: 'attack', state: true, direction: direction });
+        audio.arrow.play();
       }
       break;
     case 2: // middle mouse button
@@ -217,7 +213,6 @@ $('#canvas').mousedown(function(e) {
   }
 });
 $('#canvas').mouseup(function(e) {
-  console.log("mouseup initiated");
   e.preventDefault();
   switch (e.which) {
     case 1: // left mouse button
@@ -296,7 +291,6 @@ function draw() {
   for (i = 0; i < drawOrder.length; i++) {
     drawOrder[i].draw(Img[drawOrder[i].img]);
   }
-  // console.log(drawOrder.length);
 }
 
 var camX;
@@ -374,9 +368,9 @@ function drawMinimap() {
       minimap.ctx.fillRect(i * minimap.scale + 2, j * minimap.scale + 2, minimap.scale, minimap.scale);
     }
   }
-  for (let i = 0; i < Trees; i++) {
+  for (let i = 0; i < gameMap.objects.objects.length; i++) {
     minimap.ctx.fillStyle = colorRep.tree;
-    minimap.ctx.fillRect(Trees[i].posX / gameMap.tilesize * minimap.scale, Trees[i].posY / gameMap.tilesize * minimap.scale, minimap.scale, minimap.scale);
+    minimap.ctx.fillRect((gameMap.objects.objects[i].x / 8) * minimap.scale + 2, (gameMap.objects.objects[i].y / 8) * minimap.scale + 2 - 2, minimap.scale, minimap.scale);
   }
   for (let prop in Players) {
     if (prop === clientID) {
@@ -607,7 +601,7 @@ function update() {
   }
   scoreboard();
   leaderboard();
-  clientSmoothing(sincePacket);
+  if (!DEBUG_MODE) clientSmoothing(sincePacket);
   // arrowCooldown(deltaTime);
   // drawCursor();
   ctx.restore();
@@ -672,8 +666,6 @@ function arrowCooldown(deltaTime){
   if (arrow.cdTimer >= arrow.endTime) {
     arrow.cooldown = false;
     arrow.cdTimer = 0;
-    console.log("arrow cooldown refreshed.");
   }else{
-
   }
 }
