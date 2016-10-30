@@ -16,8 +16,10 @@ let DEBUG_MODE = false;
 let audio = {};
 audio.bomb = new Audio('./resources/grenade-sound.mp3');
 audio.arrow = new Audio('./resources/bow-fire.mp3');
+audio.sword = new Audio('./resources/sword-sound.mp3');
 audio.bomb.volume = 0.1;
 audio.arrow.volume = 0.1;
+audio.sword.volume = 0.1;
 ctx.canvas.width  = window.innerWidth;
 ctx.canvas.height = window.innerHeight;
 

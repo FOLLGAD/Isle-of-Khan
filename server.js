@@ -107,14 +107,7 @@ io.on('connection', function (socket) {
         case "space":
           break;
         case "attack":
-          if (input.state) {
-            clearInterval(intervalStorage[socket.id]);
-            chars[socket.id].aimDirection = input.direction;
-            startShooting(chars[socket.id], socket.id);
-          } else {
-            clearInterval(intervalStorage[socket.id]);
-            clearTimeout(intervalStorage[socket.id]);
-          }
+          playerAttack(input, socket.id);
           break;
         case "direction-update":
           chars[socket.id].aimDirection = input.direction;
@@ -131,6 +124,55 @@ io.on('connection', function (socket) {
     });
   });
 });
+
+function playerAttack (input, id) {
+  switch(chars[id].class) {
+    case "archer":
+      if (input.state) {
+        clearInterval(intervalStorage[id]);
+        chars[id].aimDirection = input.direction;
+        startShooting(chars[id], id);
+      } else {
+        clearInterval(intervalStorage[id]);
+        clearTimeout(intervalStorage[id]);
+      }
+      break;
+    case "warrior":
+      // sword action
+      if (!input.state) break;
+      let offset = 0.25 * Math.PI;
+      let swordstart = chars[id].aimDirection - offset;
+      if (swordstart < -Math.Pi) swordstart += Math.PI * 2;
+      let swordlength = offset * 2;
+      checkSwordCollision(chars[id], swordstart, swordlength);
+      break;
+    case "mage":
+      // some magic shit
+      break;
+    default:
+      console.log("unknown class action");
+  }
+}
+
+function checkSwordCollision (attacker, start, length) {
+  for (let prop in chars) {
+    let eldisX = attacker.posX - chars[prop].posX;
+    let eldisY = attacker.posY - chars[prop].posY;
+    let dist = Math.sqrt(eldisX * eldisX + eldisY * eldisY);
+    if (dist < 256) {
+      let dir = Math.atan2(-eldisX, -eldisY);
+      let startandlength = start + length;
+      if (startandlength > Math.PI) startandlength = startandlength - Math.PI * 2;
+      if (chars[prop].id !== attacker.id && start < dir && startandlength > dir) {
+        console.log("attacked. direction:",dir);
+        console.log("distance:",dist);
+        console.log("started:",start);
+        console.log("start + length:",startandlength);
+        chars[prop].getDamaged(dir, 40, attacker.id, 10);
+      }
+    }
+  }
+}
 
 function startShooting(char, id) {
   if (Date.now() - char.lastShot > 400) {
