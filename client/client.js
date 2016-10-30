@@ -120,6 +120,7 @@ function keyDownFunction(code) {
       socket.emit('key-press', { inputkey: 'b', state: true });
       break;
     case 'Tab':
+      $("#scoreboard").show();
       scoreboardActive = true;
       break;
     default:
@@ -161,6 +162,7 @@ function keyUpFunction(code) {
       // socket.emit('key-press', { inputkey: 'f', state: false });
       break;
     case 'Tab':
+      $("#scoreboard").hide();
       scoreboardActive = false;
       break;
     case 'Backquote':
@@ -588,6 +590,7 @@ function update() {
   ctx.save();
   resize();
   updateParticles(deltaTime);
+  if (!DEBUG_MODE) clientSmoothing(sincePacket);
   viewPort();
   ctx.clearRect(camX, camY, canvas.width, canvas.height);
   for (let prop in Players) {
@@ -596,14 +599,8 @@ function update() {
   draw();
   drawGui();
   if (menuActive) menuUpdate();
-  if (scoreboardActive) {
-    $("#scoreboard").show();
-  }else{
-  $("#scoreboard").hide();
-  }
   scoreboard();
   leaderboard();
-  if (!DEBUG_MODE) clientSmoothing(sincePacket);
   // arrowCooldown(deltaTime);
   // drawCursor();
   ctx.restore();
