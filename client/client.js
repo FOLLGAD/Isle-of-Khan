@@ -590,7 +590,7 @@ function update() {
   ctx.save();
   resize();
   updateParticles(deltaTime);
-  if (!DEBUG_MODE) clientSmoothing(sincePacket);
+  if (DEBUG_MODE) clientSmoothing(sincePacket);
   viewPort();
   ctx.clearRect(camX, camY, canvas.width, canvas.height);
   for (let prop in Players) {
