@@ -69,6 +69,18 @@ canvas.addEventListener("keydown", keyDownHandler, false);
   document.addEventListener("keyup", keyUpHandler, false);
   document.addEventListener("mousemove", nameMousePos, false);
 
+var dispatchForCode = function (event, callback) {
+  var code;
+  if (event.code !== undefined) {
+    code = event.code;
+  } else if (event.key !== undefined) {
+    code = event.key;
+  } else if (event.keyCode !== undefined) {
+    code = event.keyCode;
+  }
+  callback(code);
+};
+
 let keyStates = {
   w: false,
   a: false,
@@ -189,60 +201,57 @@ function getMousePos(e) {
   };
 }
 
-$('#canvas').mousedown(function(e) {
+$('#canvas').mousedown(mouseAbilities);
+$('#canvas').mouseup(mouseAbilities);
+function mouseAbilities (e) {
+  if (e.type == 'mousedown') down = true;
+  else down = false;
   e.preventDefault();
+  $('#canvas').focus(); // Puts the canvas in focus whenever a mouseevent is triggered
   switch (e.which) {
     case 1: // left mouse btn
-      //Cooldown
-      if (arrow.cooldown === false) {
-        arrow.cdTimer = 0;
-        // arrow.cooldown = true;
-        $('#canvas').focus();
-        let direction = Math.atan2(camX - Players[clientID].posX - Players[clientID].width / 2 + mousePosX, camY - Players[clientID].posY - Players[clientID].height / 2 + mousePosY);
-        socket.emit('key-press', { inputkey: 'attack', state: true, direction: direction });
-        audio.arrow.play();
+      let direction = Math.atan2(camX - Players[clientID].posX - Players[clientID].width / 2 + mousePosX, camY - Players[clientID].posY - Players[clientID].height / 2 + mousePosY);
+      switch (Players[clientID].class) {
+        case 'archer':
+          if (down) {
+            socket.emit('shootArrow', { state: true, direction: direction });
+            audio.arrow.play();
+          } else {
+            socket.emit('shootArrow', { state: false });
+          }
+          break;
+        case 'warrior':
+          if (down) {
+            socket.emit('useSword', { state: true, direction: direction });
+            audio.sword.play();
+          } else {
+            socket.emit('useSword', { state: false });
+          }
+          break;
+        case 'mage':
+          if (down) {
+            socket.emit('shootSpell', { state: true, direction: direction });
+          } else {
+            socket.emit('shootSpell', { state: false });
+          }
+          break;
       }
       break;
     case 2: // middle mouse button
       break;
     case 3: // right mouse button
-      let mouseDifX = camX - Players[clientID].posX - Players[clientID].width / 2 + mousePosX;
-      let mouseDifY = camY - Players[clientID].posY - Players[clientID].height / 2 + mousePosY;
-      let direx = Math.atan2(mouseDifX, mouseDifY);
-      let vel = Math.min(Math.sqrt(Math.pow(mouseDifX, 2) + Math.pow(mouseDifY, 2)) / 90, 5);
-      socket.emit('key-press', { inputkey: 'special', direction: direx, velocity: vel });
+      if(down) {
+        let mouseDifX = camX - Players[clientID].posX - Players[clientID].width / 2 + mousePosX;
+        let mouseDifY = camY - Players[clientID].posY - Players[clientID].height / 2 + mousePosY;
+        let direx = Math.atan2(mouseDifX, mouseDifY);
+        let vel = Math.min(Math.sqrt(Math.pow(mouseDifX, 2) + Math.pow(mouseDifY, 2)) / 90, 5);
+        socket.emit('throwBomb', { direction: direx, velocity: vel });
+      }
       break;
     default:
       alert('undefined mouse button pressed');
   }
-});
-$('#canvas').mouseup(function(e) {
-  e.preventDefault();
-  switch (e.which) {
-    case 1: // left mouse button
-      socket.emit('key-press', { inputkey: 'attack', state: false });
-      break;
-    case 2: // middle mouse button
-      break;
-    case 3: // right mouse button
-      socket.emit('key-press', { inputkey: 'special', state: false });
-      break;
-    default:
-      alert('undefined mouse button released');
-  }
-});
-
-var dispatchForCode = function (event, callback) {
-  var code;
-  if (event.code !== undefined) {
-    code = event.code;
-  } else if (event.key !== undefined) {
-    code = event.key;
-  } else if (event.keyCode !== undefined) {
-    code = event.keyCode;
-  }
-  callback(code);
-};
+}
 
 function draw() {
   for (let i = 0; i < gameMap.height; i++) {
@@ -580,7 +589,7 @@ function updateParticles (deltaTime) {
   }
 }
 
-let lastTime = Date.now();
+var lastTime = Date.now();
 function update() {
   requestAnimationFrame(update);
   let deltaTime = Date.now() - lastTime;
@@ -619,6 +628,7 @@ setInterval(function () {
 function clientSmoothing (sincePacket) {
   for (let i in Players) {
     if (Math.abs(Players[i].velX) < 1 && Math.abs(Players[i].velY) < 1) {
+      console.log(sincePacket);
       Players[i].posX = Players[i].packPosX + Players[i].velX * sincePacket;
       Players[i].posY = Players[i].packPosY + Players[i].velY * sincePacket;
     }

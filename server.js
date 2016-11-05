@@ -73,12 +73,12 @@ io.on('connection', function (socket) {
       username = object.username;
     }
     console.log("user registered as: " + username);
-    clearInterval(intervalStorage[socket.id]);
-    clearTimeout(intervalStorage[socket.id]);
-    if (chars.hasOwnProperty(socket.id)) {
-      delete chars[socket.id];
+    clearInterval(intervalStorage[socketID]);
+    clearTimeout(intervalStorage[socketID]);
+    if (chars.hasOwnProperty(socketID)) {
+      delete chars[socketID];
     }
-    chars[socket.id] = new character.Character(socket.id, 500, 500, username, object.class);
+    chars[socketID] = new character.Character(socketID, 500, 500, username, object.class);
 
     socket.on("chat-msg", function (msg) {
       io.emit("chat-msg", msg, username, new Date());
@@ -87,35 +87,66 @@ io.on('connection', function (socket) {
     socket.on('key-press', function (input) {
       switch (input.inputkey) {
         case "w":
-          chars[socket.id].walkingUp = input.state;
+          chars[socketID].walkingUp = input.state;
           break;
         case "a":
-          chars[socket.id].walkingLeft = input.state;
+          chars[socketID].walkingLeft = input.state;
           break;
         case "s":
-          chars[socket.id].walkingDown = input.state;
+          chars[socketID].walkingDown = input.state;
           break;
         case "d":
-          chars[socket.id].walkingRight = input.state;
+          chars[socketID].walkingRight = input.state;
           break;
         case "special":
-          if (!!input.direction && !!input.velocity) {
-            input.velocity = Math.min(input.velocity, 5);
-            bombs.push(new projectiles.Bomb(chars[socket.id].posX, chars[socket.id].posY, input.direction, 0, 0, socket.id, input.velocity));
-          }
           break;
         case "space":
           break;
         case "attack":
-          playerAttack(input, socket.id);
+          playerAttack(input, socketID);
           break;
         case "direction-update":
-          chars[socket.id].aimDirection = input.direction;
+          chars[socketID].aimDirection = input.direction;
           break;
         default:
           console.log(input, "did not match");
       }
     });
+
+    // vvv --- ABILITIES --- vvv
+    socket.on('shootArrow', function (obj) {
+      if (chars[socketID].class === 'archer') {
+          if (input.state) {
+            clearInterval(intervalStorage[id]);
+            chars[socketID].aimDirection = input.direction;
+            startShooting(chars[socketID], id);
+          } else {
+            clearInterval(intervalStorage[id]);
+            clearTimeout(intervalStorage[id]);
+          }
+      }
+    });
+    socket.on('useSword', function (obj) {
+      if (chars[socketID].class === 'warrior' && obj.state) {
+        let offset = 0.25 * Math.PI;
+        let swordstart = chars[socketID].aimDirection - offset;
+        if (swordstart < -Math.Pi) swordstart += Math.PI * 2;
+        let swordlength = offset * 2;
+        checkSwordCollision(chars[socketID], swordstart, swordlength);
+      }
+    });
+    socket.on('shootSpell', function (obj) {
+      if (chars[socketID].class === 'mage') {
+        // Do some spelley shite ;D
+      }
+    });
+    socket.on('throwBomb', function (obj) {
+      if (!!obj.direction && !!obj.velocity) {
+        obj.velocity = Math.min(obj.velocity, 5);
+        bombs.push(new projectiles.Bomb(chars[socketID].posX, chars[socketID].posY, obj.direction, 0, 0, socketID, obj.velocity));
+      }
+    });
+
     socket.on('disconnect', function (socket) {
       console.log("user", socketID, "with the ip", clientIp, "left the server.");
       clearInterval(intervalStorage[socketID]);
@@ -128,23 +159,9 @@ io.on('connection', function (socket) {
 function playerAttack (input, id) {
   switch(chars[id].class) {
     case "archer":
-      if (input.state) {
-        clearInterval(intervalStorage[id]);
-        chars[id].aimDirection = input.direction;
-        startShooting(chars[id], id);
-      } else {
-        clearInterval(intervalStorage[id]);
-        clearTimeout(intervalStorage[id]);
-      }
       break;
     case "warrior":
       // sword action
-      if (!input.state) break;
-      let offset = 0.25 * Math.PI;
-      let swordstart = chars[id].aimDirection - offset;
-      if (swordstart < -Math.Pi) swordstart += Math.PI * 2;
-      let swordlength = offset * 2;
-      checkSwordCollision(chars[id], swordstart, swordlength);
       break;
     case "mage":
       // some magic shit
