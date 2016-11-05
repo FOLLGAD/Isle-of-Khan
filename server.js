@@ -116,13 +116,13 @@ io.on('connection', function (socket) {
     // vvv --- ABILITIES --- vvv
     socket.on('shootArrow', function (obj) {
       if (chars[socketID].class === 'archer') {
-          if (input.state) {
-            clearInterval(intervalStorage[id]);
-            chars[socketID].aimDirection = input.direction;
-            startShooting(chars[socketID], id);
+          if (obj.state) {
+            clearInterval(intervalStorage[socketID]);
+            chars[socketID].aimDirection = obj.direction;
+            startShooting(chars[socketID], socketID);
           } else {
-            clearInterval(intervalStorage[id]);
-            clearTimeout(intervalStorage[id]);
+            clearInterval(intervalStorage[socketID]);
+            clearTimeout(intervalStorage[socketID]);
           }
       }
     });
