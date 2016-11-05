@@ -81,5 +81,5 @@ socket.on('packet', function (packet) {
     update();
     asdf = true;
   }
-  lastPacket = packet.sent;
+  lastPacket = Date.now();
 });
