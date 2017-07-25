@@ -45,7 +45,7 @@ placeTrees();
 const tileSize = 64;
 
 let renderDistanceX = 1000, renderDistanceY = 550;
-let chars = {}, coins = [], arrows = [], bombs = [], enemies = [];
+let chars = {}, coins = [], arrows = [], bombs = [], enemies = [], events = [];
 
 let intervalStorage = {};
 let toBeDeleted = [];
@@ -204,7 +204,10 @@ function startShooting(char, id) {
 }
 
 function shoot(char) {
-  arrows.push(new projectiles.Arrow(char.posX + char.width / 2, char.posY + char.height / 2, char.aimDirection, char.id));
+  let posX = char.posX + char.width / 2,
+  posY = char.posY + char.height / 2;
+  arrows.push(new projectiles.Arrow(posX, posY, char.aimDirection, char.id));
+  events.push({type: "arrowSound", posX: posX, posY: posY})
   char.lastShot = Date.now();
 }
 
@@ -251,6 +254,7 @@ function createEntityPacket(object) {
   packetOrder.coin = [];
   packetOrder.arrow = [];
   packetOrder.bomb = [];
+  packetOrder.event = [];
   let viewPort = viewPoint.calculateViewPoint(object);
   for (let i in chars) {
     // if (chars[i].posX < viewPort.x + renderDistanceX && chars[i].posX + chars[i].width > viewPort.x - renderDistanceX && chars[i].posY < viewPort.y + renderDistanceY && chars[i].posY + chars[i].height > viewPort.y - renderDistanceY) {
@@ -278,6 +282,11 @@ function createEntityPacket(object) {
       packetOrder.arrow.push(arrows[i]);
     }
   }
+  for (i = 0; i < events.length; i++) {
+    if (events[i].posX < viewPort.x + renderDistanceX && events[i].posX > viewPort.x - renderDistanceX && events[i].posY < viewPort.y + renderDistanceY && events[i].posY > viewPort.y - renderDistanceY) {
+      packetOrder.event.push(events[i]);
+    }
+  }
   for (i = 0; i < bombs.length; i++) {
     if (bombs[i].posX < viewPort.x + renderDistanceX && bombs[i].posX + bombs[i].width > viewPort.x - renderDistanceX && bombs[i].posY < viewPort.y + renderDistanceY && bombs[i].posY + bombs[i].height > viewPort.y - renderDistanceY) {
       if (bombs[i].exploded) {
@@ -298,8 +307,10 @@ function createEntityPacket(object) {
     arrows: packetOrder.arrow,
     bombs: packetOrder.bomb,
     sent: Date.now(),
-    delete: toBeDeleted
+    delete: toBeDeleted,
+    events: packetOrder.event
   });
+  events = [];
 }
 
 // FPS

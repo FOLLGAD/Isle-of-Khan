@@ -42,12 +42,16 @@ function register(regName, gameClass) {
 let asdf = false;
 let lastPacket = Date.now();
 socket.on('packet', function (packet) {
+  if (packet.events.length > 0) {
+    console.log(packet.events)
+  }
   // Players = {};
   Trees = [];
   Enemies = [];
   Coins = [];
   Arrows = [];
   Bombs = [];
+  Events = [];
   for (let i = 0; i < packet.delete.length; i++) {
     delete Players[packet.delete[i]];
   }
@@ -76,6 +80,11 @@ socket.on('packet', function (packet) {
   }
   for (let i = 0; i < packet.bombs.length; i++) {
     Bombs.push(new Bomb(packet.bombs[i]));
+  }
+  for (let i = 0; i < packet.events.length; i++) {
+    console.log("pushed event")
+    Events.push(new Event(packet.events[i]));
+    console.log(Events)
   }
   if (!asdf) {
     update();

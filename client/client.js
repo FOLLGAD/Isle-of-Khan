@@ -28,7 +28,7 @@ minimap.ctx.canvas.height = gameMap.height;
 
 minimap.scale = 2;
 
-let Players = {}, Trees = [], Enemies = [], Coins = [], Arrows = [], Bombs = [], Particles = [];
+let Players = {}, Trees = [], Enemies = [], Coins = [], Arrows = [], Bombs = [], Particles = [], Events = [];
 
 let Img = {};
   Img.archer = new Image();
@@ -57,6 +57,8 @@ let Img = {};
   Img.bomb.src = '/resources/bomb.png';
   Img.particle = new Image();
   Img.particle.src = '/resources/particle.png';
+  Img.shortSword = new Image();
+  Img.shortSword.src = '/resources/short-sword.png';
 
 //Initizialise hotbar
 let arrow = {
@@ -215,7 +217,7 @@ function mouseAbilities (e) {
         case 'archer':
           if (down) {
             socket.emit('shootArrow', { state: true, direction: direction });
-            audio.arrow.play();
+            // audio.arrow.play();
           } else {
             socket.emit('shootArrow', { state: false });
           }
@@ -303,6 +305,13 @@ function draw() {
   });
   for (i = 0; i < drawOrder.length; i++) {
     drawOrder[i].draw(Img[drawOrder[i].img]);
+  }
+    for (let i = 0; i < Events.length; i++) {
+    console.log("from events in draw", Events)
+    if (Events[i].posX < camX + canvas.width + tileSize && Events[i].posX > camX - tileSize && Events[i].posY < camY + canvas.height + tileSize && Events[i].posY > camY - tileSize) {
+      console.log("inside view")
+      Events[i].trigger()
+    }
   }
 }
 
@@ -446,6 +455,25 @@ function Bomb (packet) {
   this.draw = function () {
     ctx.drawImage(Img.bomb, this.posX, this.posY, this.width, this.height);
   };
+}
+      let asdd = 0;
+function Event (packet) {
+  this.posX = packet.posX;
+  this.posY = packet.posY;
+  this.type = packet.type;
+  this.triggered = false;
+  this.trigger = function () {
+    console.log("Event triggered")
+    if (this.type == "arrowSound" && !this.triggered) {
+      this.triggered = true;
+      asdd++
+      console.log(asdd)
+      console.log("play Sound")
+      let sound = audio.arrow.cloneNode(false);
+      sound.volume = 0.1;
+      sound.play();
+    }
+  }
 }
 function Arrow (packet) {
   this.posX = packet.posX;
