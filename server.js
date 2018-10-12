@@ -2,7 +2,6 @@ var express = require('express');
 var app = express();
 var server = require('http').createServer(app);
 var io = require('socket.io')(server);
-let fs = require('fs');
 
 app.use(express.static(__dirname + '/client/'));
 app.get('/', function(req, res, next) {
@@ -16,7 +15,7 @@ let port = 8080;
 server.listen(port);
 console.log("server is listening on port", port);
 
-let map = JSON.parse(fs.readFileSync('./maps/island-map.json', 'utf8'));
+let map = require('./maps/island-map.json');
 exports.map = map;
 exports.map.tilesize = 64;
 
