@@ -559,7 +559,7 @@ function Character (packet) {
       if (this.class == "warrior") {
         ctx.drawImage(Img.shortSword, -40, -40);
       } else if (this.class == "archer") {
-        ctx.drawImage(Img.bow, -40, -40);
+        // ctx.drawImage(Img.bow, -40, -40);
       }
       ctx.restore();
 
