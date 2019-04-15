@@ -58,7 +58,9 @@ let Img = {};
   Img.particle = new Image();
   Img.particle.src = '/resources/particle.png';
   Img.shortSword = new Image();
-  Img.shortSword.src = '/resources/short-sword.png';
+  Img.shortSword.src = '/resources/weapons/short-sword.png';
+  Img.bow = new Image();
+  Img.bow.src = '/resources/weapons/bow.png';
 
 //Initizialise hotbar
 let arrow = {
@@ -217,7 +219,7 @@ function mouseAbilities (e) {
         case 'archer':
           if (down) {
             socket.emit('shootArrow', { state: true, direction: direction });
-            // audio.arrow.play();
+            audio.arrow.play();
           } else {
             socket.emit('shootArrow', { state: false });
           }
@@ -545,6 +547,22 @@ function Character (packet) {
       this.width,
       this.height * 2
     );
+    console.log("attacking?", this.attacking)
+    console.log("draw that shit", this)
+      let handLength = 50;
+      let xRange = Math.sin(this.aimDirection) * handLength
+      let yRange = Math.cos(this.aimDirection) * handLength
+      console.log(xRange, yRange)
+      ctx.save();
+      ctx.translate(this.posX + this.width / 2 + xRange, this.posY + yRange);
+      ctx.rotate(Math.PI + Math.PI/4 - this.aimDirection);
+      if (this.class == "warrior") {
+        ctx.drawImage(Img.shortSword, -40, -40);
+      } else if (this.class == "archer") {
+        ctx.drawImage(Img.bow, -40, -40);
+      }
+      ctx.restore();
+
     ctx.font = "12px GameFont";
     ctx.textAlign = "center";
     ctx.fillStyle = "white";
@@ -555,10 +573,10 @@ function Character (packet) {
     ctx.fillStyle = "black";
     ctx.fillRect(this.posX - 20, this.posY + this.width / 2 - 100, 10 * 10, 10);
     ctx.fillStyle = "green";
-    ctx.fillRect(this.posX - 20, this.posY + this.width / 2 - 100, this.hp, 10);
-    ctx.fillStyle = "red";
-    ctx.fillText(this.hp, this.posX, this.posY);
-    ctx.fillText(pic, this.posX - 50, this.posY);
+    ctx.fillRect(this.posX - 20, this.posY + this.width / 2 - 100, this.hp/this.maxhp*100, 10);
+    // ctx.fillStyle = "red";
+    // ctx.fillText(this.hp, this.posX, this.posY);
+    // ctx.fillText(pic, this.posX - 50, this.posY);
     ctx.fillStyle = "white";
   };
 }

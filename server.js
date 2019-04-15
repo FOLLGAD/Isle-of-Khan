@@ -126,7 +126,10 @@ io.on('connection', function (socket) {
       }
     });
     socket.on('useSword', function (obj) {
+      console.log("hello?", chars[socketID])
       if (chars[socketID].class === 'warrior' && obj.state) {
+        chars[socketID].attacking = true
+
         let offset = 0.25 * Math.PI;
         let swordstart = chars[socketID].aimDirection - offset;
         if (swordstart < -Math.Pi) swordstart += Math.PI * 2;
@@ -154,21 +157,6 @@ io.on('connection', function (socket) {
     });
   });
 });
-
-function playerAttack (input, id) {
-  switch(chars[id].class) {
-    case "archer":
-      break;
-    case "warrior":
-      // sword action
-      break;
-    case "mage":
-      // some magic shit
-      break;
-    default:
-      console.log("unknown class action");
-  }
-}
 
 function checkSwordCollision (attacker, start, length) {
   for (let prop in chars) {

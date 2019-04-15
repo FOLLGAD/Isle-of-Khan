@@ -18,12 +18,12 @@ exports.Character = function (id, posX, posY, username, characterClass) {
   this.aimDirection = 0;
   this.walking = false;
   this.walkSpeed = 0.5;
-  this.hp = 100;
   this.idle = true;
   this.attacking = false;
   this.canSwim = false;
   this.knockBack = 1;
-  this.maxhp = 100;
+  this.maxhp = (this.class == "warrior" ? 200 : 100);
+  this.hp = this.maxhp;
   // Amount of inaccuracy for the bow; default = 0.05
   this.bowInaccuracy = 0;
   this.activationDelay = 0;
@@ -108,8 +108,9 @@ exports.Character = function (id, posX, posY, username, characterClass) {
       this.velX = 0;
     }
     if (this.spacePressed) {
+      console.log("space pressed")
       this.attacking = true;
-    } else if (this.attackingFrame <= 0 && !this.spacePressed){
+    } else {
       this.attacking = false;
     }
     if (this.velX !== 0 && this.velY !== 0) {
