@@ -8,7 +8,6 @@ exports.placeTrees = function (array, mapArray) {
   for (let i = 0; i < mapArray.length; i++) {
     for (let j = 0; j < mapArray[i].length; j++) {
       if (mapArray[i][j] == 6) {
-        console.log("placing tree at ", i * tileSize, j * tileSize);
         array.push(new Tree (j * tileSize, (i) * tileSize));
       }
       posX += tileSize;

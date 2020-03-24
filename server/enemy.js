@@ -54,7 +54,6 @@ exports.Enemy = function (posX, posY, width, height) {
     this.velX += Math.sin(direction) * knockback;
     this.velY += Math.cos(direction) * knockback;
     if (this.hp <= 0) {
-      console.log("splicing");
       let indx = enemies.indexOf(this);
       enemies.splice(indx, 1);
     }

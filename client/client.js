@@ -309,9 +309,7 @@ function draw() {
     drawOrder[i].draw(Img[drawOrder[i].img]);
   }
     for (let i = 0; i < Events.length; i++) {
-    console.log("from events in draw", Events)
     if (Events[i].posX < camX + canvas.width + tileSize && Events[i].posX > camX - tileSize && Events[i].posY < camY + canvas.height + tileSize && Events[i].posY > camY - tileSize) {
-      console.log("inside view")
       Events[i].trigger()
     }
   }
@@ -465,12 +463,9 @@ function Event (packet) {
   this.type = packet.type;
   this.triggered = false;
   this.trigger = function () {
-    console.log("Event triggered")
     if (this.type == "arrowSound" && !this.triggered) {
       this.triggered = true;
       asdd++
-      console.log(asdd)
-      console.log("play Sound")
       let sound = audio.arrow.cloneNode(false);
       sound.volume = 0.1;
       sound.play();
@@ -547,12 +542,9 @@ function Character (packet) {
       this.width,
       this.height * 2
     );
-    console.log("attacking?", this.attacking)
-    console.log("draw that shit", this)
       let handLength = 50;
       let xRange = Math.sin(this.aimDirection) * handLength
       let yRange = Math.cos(this.aimDirection) * handLength
-      console.log(xRange, yRange)
       ctx.save();
       ctx.translate(this.posX + this.width / 2 + xRange, this.posY + yRange);
       ctx.rotate(Math.PI + Math.PI/4 - this.aimDirection);
@@ -674,7 +666,6 @@ setInterval(function () {
 function clientSmoothing (sincePacket) {
   for (let i in Players) {
     if (Math.abs(Players[i].velX) < 1 && Math.abs(Players[i].velY) < 1) {
-      console.log(sincePacket);
       Players[i].posX = Players[i].packPosX + Players[i].velX * sincePacket;
       Players[i].posY = Players[i].packPosY + Players[i].velY * sincePacket;
     }
@@ -708,7 +699,6 @@ function deathQueue (msg) {
       setTimeout(function() {
         $("#death-messages").fadeOut("slow", function() {
           $("#death-messages h1").empty();
-          console.log(deathMsgArray.splice(0, 1));
           deathTimer = false;
           deathQueue();
         });

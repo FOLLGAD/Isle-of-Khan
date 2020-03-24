@@ -108,7 +108,6 @@ exports.Character = function (id, posX, posY, username, characterClass) {
       this.velX = 0;
     }
     if (this.spacePressed) {
-      console.log("space pressed")
       this.attacking = true;
     } else {
       this.attacking = false;
