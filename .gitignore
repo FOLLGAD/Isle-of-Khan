@@ -48,3 +48,5 @@ Temporary Items
 *.tern-project
 .tern-project
 *.jshintrc
+
+node_modules
